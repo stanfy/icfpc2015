@@ -9,7 +9,8 @@ To make sure that you all know, where this repository is and all rights are corr
 1. Paul Taykalo  (95% of time, From 7 August to 10 August) (Objective-C, Java, Swift O_o, Python, Haskell, Scala)
 2. Vixentael (80%)
 3. Alexander Voronov (85%)
-4. Oleg Taykalo (partly Friday, full saturday, full sunday) 
+4. Oleg Taykalo (partly Friday, full saturday, full sunday)   
+
 # Channels    
 Now in [Skype chat](skype:?chat&blob=qqIo9yVSdTI-ybN2qQM0mCCxDlt1WymCt_X7-H5Ty_gQ3UdPo-jn1aogtPUkviXSVxzMpe935cKETxWrPg)
 
