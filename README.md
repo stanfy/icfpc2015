@@ -6,8 +6,8 @@ Dates: This year, the contest starts on [Friday 7 August 2015 at 12:00 UTC](http
 # Participants  
 To make sure that you all know, where this repository is and all rights are correct, please add yourself to the participants list:  
 
-1. Paul Taykalo  (95% of time, From 7 August to 10 August)
-2. Vixentael (80%)
+1. Paul Taykalo  (95% of time, From 7 August to 10 August) (Objective-C, Java, Swift O_o, Python, Haskell, Scala)
+2. ...
 
 # Channels    
 Now in [Skype chat](skype:?chat&blob=qqIo9yVSdTI-ybN2qQM0mCCxDlt1WymCt_X7-H5Ty_gQ3UdPo-jn1aogtPUkviXSVxzMpe935cKETxWrPg)
