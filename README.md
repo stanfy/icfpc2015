@@ -10,7 +10,7 @@ To make sure that you all know, where this repository is and all rights are corr
 2. Vixentael (80%)
 3. Alexander Voronov (85%)
 4. Oleg Taykalo (partly Friday, full saturday, full sunday)   
-5. Olexandr Tereshchuk (70%)
+5. Olexandr Tereshchuk (30%)
 6. Misha Pustovit (40%)
 
 # Channels    
