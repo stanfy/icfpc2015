@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.5.0"
+  },
+  "applications": {
+    "ICFPHelper": {
+      "applicationId": "OAzrWb00wk6z5OAnLDzozhWoIi0QSzog537YHgah",
+      "masterKey": "d20ABeIbow1BWZoXm3ENL6p4wfMKtLidzDQxD9ad"
+    },
+    "_default": {
+      "link": "ICFPHelper"
+    }
+  }
+}
