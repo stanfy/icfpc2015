@@ -12,9 +12,11 @@ To make sure that you all know, where this repository is and all rights are corr
 4. Oleg Taykalo (partly Friday, full saturday, full sunday)   
 5. Olexandr Tereshchuk (30%)
 6. Misha Pustovit (40%)
+7. Pasha Bashmakov (20%) - across all time zones
 
 # Channels    
 Now in [Slack chat](https://stanfy-icfp2015.slack.com/messages)
 
 # Language  
 Java/Scala/Kotlin/Groovy )
+
