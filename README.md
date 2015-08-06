@@ -14,7 +14,7 @@ To make sure that you all know, where this repository is and all rights are corr
 6. Misha Pustovit (40%)
 
 # Channels    
-Now in [Skype chat](skype:?chat&blob=qqIo9yVSdTI-ybN2qQM0mCCxDlt1WymCt_X7-H5Ty_gQ3UdPo-jn1aogtPUkviXSVxzMpe935cKETxWrPg)
+Now in [Slack chat](https://stanfy-icfp2015.slack.com/messages)
 
 # Language  
-Scala )
+Java/Scala/Kotlin/Groovy )
