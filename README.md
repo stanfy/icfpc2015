@@ -20,3 +20,7 @@ Now in [Slack chat](https://stanfy-icfp2015.slack.com/messages)
 # Language  
 Java/Scala/Kotlin/Groovy )
 
+# Sqwiggle - online video presence tool
+Quick for press and talks + always see who is available for quick talk.
+Channel: https://www.sqwiggle.com/signup/fe4552c9dffc7f3a8e525b07165c0439
+
