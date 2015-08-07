@@ -166,6 +166,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		1737CA318F6887BBDE2916FD /* Problems */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Problems;
+			sourceTree = "<group>";
+		};
 		7327FD221B6CAF1E00D693ED = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +206,7 @@
 				7327FD2E1B6CAF1E00D693ED /* Supporting Files */,
 				1737C9705461F892CA41EA07 /* Model */,
 				1737C0ACB7A2E23335C9D495 /* Parse */,
+				1737CA318F6887BBDE2916FD /* Problems */,
 			);
 			path = icfp2015view;
 			sourceTree = "<group>";
