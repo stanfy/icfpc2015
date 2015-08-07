@@ -49,19 +49,18 @@ function pivot(i, j, color) {
         cellSize / 3, color);
 }
 
-function drawUnit(unit) {
-
+function drawUnit(unit, origin) {
     unit.members.forEach(function (member) {
-        fill(member.x, member.y, unitColor)
+        fill(member.x + origin.x, member.y + origin.y, unitColor)
     });
 
 }
 
-function drawPivot(unit) {
-    pivot(unit.pivot.x, unit.pivot.y, pivotColor);
+function drawPivot(unit, origin) {
+    pivot(unit.pivot.x + origin.x, unit.pivot.y + origin.y, pivotColor);
 }
 
-function drawMap(map) {
+function drawMap(map, state) {
 
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -72,13 +71,17 @@ function drawMap(map) {
         fill(item.x, item.y, filledColor)
     });
 
-    //map.units.forEach(function (unit) {
-    //    drawUnit(unit)
-    //});
-    //map.units.forEach(function (unit) {
-    //    drawPivot(unit)
-    //});
+    // Draw state
+    if (state) {
+        var unit = state.unit;
+        var origin = state.unitOrigin;
+        if (unit && origin) {
+            drawUnit(unit,origin)
+            drawPivot(unit, origin)
+        }
+    }
 }
+
 function resize() {
 
     var canvas = document.getElementById('c');
@@ -155,7 +158,7 @@ function getInitialState() {
     loadJSON("initial", function(state) {
         console.log("State is updated to " + JSON.stringify(state))
         current_state = state;
-        drawMap(state.board);
+        drawMap(state.board, state.state);
     }, current_board, "POST");
 }
 
@@ -164,7 +167,7 @@ function getNextState() {
     loadJSON("state", function(state) {
         console.log("State is updated to " + JSON.stringify(current_state))
         current_state = state;
-        drawMap(state.board);
+        drawMap(state.board, state.state);
     }, current_state, "POST");
 }
 

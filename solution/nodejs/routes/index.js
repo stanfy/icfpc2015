@@ -12,7 +12,8 @@ router.post('/initial', function (req, res, next) {
     var board = req.body;
     console.error(board  + "---");
     var state = brain.initTransform(board);
-    res.json(state);
+    var nextState = brain.placeUnitOnTop(state, board.units[0]);
+    res.json(nextState);
 });
 
 router.post('/state', function (req, res, next) {
