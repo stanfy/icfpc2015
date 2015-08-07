@@ -1,44 +1,8 @@
-[ 
-  { "problemId": 0,
-  "seed":      0,   
-   "tag":       "test10",   
-   "solution":  "alacthulhu"
-  },
-  { "problemId": 1,
-  "seed":      0,   
-   "tag":       "test11",   
-   "solution":  "cthulhu"
-  },
-  { "problemId": 2,
-  "seed":      0,   
-   "tag":       "test12",   
-   "solution":  "пalois"
-  },
-  { "problemId": 3,
-  "seed":      0,   
-   "tag":       "test13",   
-   "solution":  "eas2h2alaas2h2alalaalalalalalalalaal"
-  },
-  { "problemId": 4,
-  "seed":      0,   
-   "tag":       "test14",   
-   "solution":  "cthulas2h2lalalaalalalalalalalaal"
-  },
-  { "problemId": 5,
-  "seed":      0,   
-   "tag":       "test15",   
-   "solution":  "cthuas2h2alalaalalalalalalalaal"
-  },
-  { "problemId": 6,
-  "seed":      0,   
-   "tag":       "test16",   
-   "solution":  "cthulhualalalalaalalalalalalalaal"
-  },
-  { "problemId": 7,
-  "seed":      0,   
-   "tag":       "test17",   
-   "solution":  "alalalaas2h2hualalalalaalalalalalalalaal"
+[
+  {
+    "solution" : "ogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaogaoga",
+    "problemId" : 0,
+    "seed" : 0,
+    "tag" : "st-0-0-460662589.148505"
   }
-
 ]
-

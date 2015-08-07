@@ -26,7 +26,7 @@ int main(int argc, const char *argv[]) {
 
         NSString * filePath = task.filePath;
         if (!filePath || ![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-            filePath = @"/Users/hdf/projects/icfp2015/problems/problem_6.json";
+            filePath = @"/Users/hdf/projects/icfp2015/problems/problem_0.json";
         }
         
         Board *board = [BoardCreator createBoardFromFile:filePath];

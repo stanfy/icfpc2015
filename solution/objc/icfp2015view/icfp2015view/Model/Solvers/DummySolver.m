@@ -25,7 +25,7 @@
 }
 
 - (NSString * )tagForBoardID:(NSNumber * )boardID seed:(NSNumber * )seed {
-    return [NSString stringWithFormat:@"%@-%@-%f", boardID, seed, [NSDate timeIntervalSinceReferenceDate]];
+    return [NSString stringWithFormat:@"st-%@-%@-%f", boardID, seed, [NSDate timeIntervalSinceReferenceDate]];
 }
 
 
@@ -41,11 +41,23 @@
         Solution * s = [Solution solutionWithProblemId:boardID
                                                   seed:seed
                                                    tag:[self tagForBoardID:boardID seed:seed]
-                                              commands:@"123"];
+                                              commands:[self randomCommand]];
         [array addObject:s];
     }
 
     return array;
+}
+
+
+- (NSString * )randomCommand {
+    NSInteger length = arc4random_uniform(100);
+    NSMutableString * str = [NSMutableString string];
+    for (int i = 0; i < length; i++) {
+        NSInteger odd = arc4random_uniform(10);
+        //[str appendString:(odd > 5) ? @"a" : @"l"];
+        [str appendString:@"oga"];
+    }
+    return str;
 }
 
 
