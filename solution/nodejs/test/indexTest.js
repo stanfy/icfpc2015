@@ -33,9 +33,5 @@ describe("initial", function () {
 
     });
 
-    context('when board is specified', function () {
-
-    });
-
 
 });
