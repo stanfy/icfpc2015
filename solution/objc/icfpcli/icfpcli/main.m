@@ -10,6 +10,9 @@
 #import "LinearCongruentGenerator.h"
 #import "CommandLineTask.h"
 #import "ArgumentsParser.h"
+#import "Board.h"
+#import "BoardCreator.h"
+
 
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
@@ -26,6 +29,14 @@ int main(int argc, const char *argv[]) {
         NSLog(@"Hello, World!");
 
         NSLog(@"task = %@", task);
+
+        // board
+        NSString * problemPath = [[NSBundle mainBundle] pathForResource:@"problem_0" ofType:@"json"];
+        NSString * problemJson = [[NSString alloc] initWithData:[[NSData alloc] initWithContentsOfFile:problemPath]
+                                                       encoding:NSUTF8StringEncoding];
+        
+        Board * board = [BoardCreator createBoardFromJson:problemJson];
+        NSLog(@"board %@", board);
     }
     return 0;
 }
