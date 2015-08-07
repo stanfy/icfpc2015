@@ -1,4 +1,4 @@
-package com.stanfy.icfp2015
+package com.stanfy.icfp2015.example
 
 /**
  * Created by ptaykalo on 8/1/15.
