@@ -11,6 +11,7 @@
 #import "CommandLineTask.h"
 #import "ArgumentsParser.h"
 #import "DummySolver.h"
+#import "Board.h"
 #import "BoardCreator.h"
 
 int main(int argc, const char *argv[]) {
@@ -26,7 +27,8 @@ int main(int argc, const char *argv[]) {
         Board *board = [BoardCreator createBoardFromFile:task.filePath];
         DummySolver *solver = [DummySolver solverWithBoard:board];
         Solution *solution = [solver solve];
-
+        
+        NSLog(@"board = %@", board);
         NSLog(@"task = %@", task);
         NSLog(@"solution = %@", solution);
     }

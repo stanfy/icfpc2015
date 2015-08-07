@@ -21,9 +21,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    NSString * json = [BoardsConfigCollection problem0];
-    Board * board = [BoardCreator createBoardFromJson:json];
-    
+    NSString * problemPath = [[NSBundle mainBundle] pathForResource:@"problem_0" ofType:@"json"];
+    NSString * problemJson = [[NSString alloc] initWithData:[[NSData alloc] initWithContentsOfFile:problemPath]
+                                                   encoding:NSUTF8StringEncoding];
+
+    Board * board = [BoardCreator createBoardFromJson:problemJson];
+
     NSLog(@"board %@", board);
     return YES;
 }
