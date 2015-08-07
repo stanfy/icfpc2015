@@ -3,6 +3,14 @@
 1. Ei!  
 2. 
 
+# Taken from map
+
+1.Ei!
+3.Ia!
+5.R'lyeh
+7.Yuggot
+
+
 # Tried words
 
 1. cthulhu  
