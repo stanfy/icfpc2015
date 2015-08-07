@@ -1,8 +1,44 @@
 [ 
   { "problemId": 0,
   "seed":      0,   
-   "tag":       "test3_z",   
-   "solution":  "alalalalalalalalalalalalalalalaalalalalalalalalalalalalalalalaalalalalalalalalalalalalalalalalalalalalalalalalalalalalalalal"
+   "tag":       "test5",   
+   "solution":  "ei!alalalalalalaalalalalalalalaal"
+  },
+  { "problemId": 1,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "cthulhu"
+  },
+  { "problemId": 2,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "пalois"
+  },
+  { "problemId": 3,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "ei!alalalalalalaalalalalalalalaal"
+  },
+  { "problemId": 4,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "ei!alalalalalalaalalalalalalalaal"
+  },
+  { "problemId": 5,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "ei!alalalalalalaalalalalalalalaal"
+  },
+  { "problemId": 6,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "ei!alalalalalalaalalalalalalalaal"
+  },
+  { "problemId": 7,
+  "seed":      0,   
+   "tag":       "test4",   
+   "solution":  "ei!alalalalalalaalalalalalalalaal"
   }
+
 ]
 
