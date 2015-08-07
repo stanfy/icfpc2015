@@ -3,11 +3,17 @@
 1. Ei!  
 2. 
 
-# Probably  
+# Tried words
 
 1. cthulhu  
 2. AS2H2
 3. Galois
+4. bee
+5. aleister
+6. davar
+7. pentagram
+8. lambda
+9. oga
 
 
 # Alphabet
