@@ -1,0 +1,8 @@
+Simple textmode board visualizer.
+
+Example usages:
+
+
+    $ cat problem_3.json | ./visualizer.py
+
+    $ ./visualizer.py problem_3.json
