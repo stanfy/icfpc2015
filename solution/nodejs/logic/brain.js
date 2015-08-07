@@ -21,12 +21,13 @@ exports.initTransform = function (board) {
     }
 
     return {
-        board:board,
+        board: board,
         state: {
             state: "ok",
-            score:0,
-            unitIndex:0,
-            seed:0
+            unit: board.units[0],
+            score: 0,
+            unitIndex: 0,
+            seed: 0
         }
     }
 }

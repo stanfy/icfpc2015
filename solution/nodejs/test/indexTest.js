@@ -8,7 +8,11 @@ describe("initial", function () {
     context("by default", function () {
         var board = {};
         var validBoard = {
-            sourceSeeds:[123]
+            sourceSeeds:[123],
+            units:[{
+                pivot:{x:1,y:2},
+                members:[{x:1,y:2}]
+            }]
         };
 
         it("return intial state", function () {
@@ -17,6 +21,7 @@ describe("initial", function () {
             assert.equal(brain.initTransform(validBoard).state.state, "ok", "State's state should be ok");
             assert.equal(brain.initTransform(validBoard).state.score, 0);
             assert.equal(brain.initTransform(validBoard).state.unitIndex, 0);
+            assert.notEqual(brain.initTransform(validBoard).state.unit, undefined);
             assert.notEqual(brain.initTransform(validBoard).state.seed, undefined);
             assert.notEqual(brain.initTransform(validBoard).board, undefined);
         });
