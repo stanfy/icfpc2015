@@ -21,12 +21,6 @@ int main(int argc, const char *argv[]) {
 
         CommandLineTask *task = [[[ArgumentsParser alloc] initWithArguments:arguments] taskFromArguments];
 
-        LinearCongruentGenerator *gen = [LinearCongruentGenerator generatorWithSeed:17];
-        for (int i = 0; i < 20; ++i) {
-            NSLog(@" %d", [gen nextValue]);
-        }
-        NSLog(@"Hello, World!");
-
         // Board?
         //
         Board *board = [BoardCreator createBoardFromFile:task.filePath];

@@ -24,8 +24,8 @@
     return [[self alloc] initWithBoard:board];
 }
 
-- (Solution *)solve {
-    return [Solution new];
+- (NSArray *)solve {
+    return @[[Solution new]];
 }
 
 

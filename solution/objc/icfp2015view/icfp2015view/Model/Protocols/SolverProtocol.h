@@ -9,9 +9,8 @@
 
 @protocol SolverProtocol <NSObject>
 /*
-Generates Solution
+Generates array of solutions
  */
-
-- (Solution *)solve;
+- (NSArray *)solve;
 
 @end
