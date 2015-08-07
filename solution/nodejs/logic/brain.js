@@ -1,6 +1,10 @@
 /**
  * Created by ptaykalo on 8/7/15.
  */
+var Long = require("long");
+var lcg = require('../logic/lcg');
+
+
 exports.initTransform = function (board) {
     if (!board) {
         return {
@@ -59,4 +63,30 @@ exports.placeUnitOnTop = function (state, unit) {
     };
 
     return result;
-};
+}
+
+
+/*
+Returns state with next unit
+ */
+exports.getNextUnit = function (state) {
+
+    var seedL = new Long(state.state.seed);
+    var lcgValue = lcg.lcgValue(seedL);
+    var nexSeed = lcgValue.seed;
+    var value = lcgValue.value;
+    var unit = state.board.units[value % state.board.units];
+
+    var result = {
+        board: state.board,
+        state: {
+            state: "waiting for placing figure",
+            unit: unit,
+            score: state.score,
+            seed: nexSeed
+        }
+    };
+
+    return result;
+}
+

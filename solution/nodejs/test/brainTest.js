@@ -19,11 +19,15 @@ describe("brain", function () {
             validBoard = {
                 width: 10,
                 height: 10,
-                sourceSeeds: [123],
+                sourceSeeds: [17],
                 units: [{
                     pivot: {x: 1, y: 2},
                     members: [{x: 1, y: 2}]
-                }]
+                },
+                    {
+                        pivot: {x: 0, y: 0},
+                        members: [{x: 0, y: 0}]
+                    }]
             };
 
             state = {
@@ -45,7 +49,6 @@ describe("brain", function () {
             assert.notEqual(state.state, undefined, "State is required");
             assert.equal(result.state.state, "ok", "State's state should be ok");
             assert.equal(result.state.score, state.state.score, "We shouldn't alter score on placing");
-            assert.equal(result.state.unitIndex, 0, "We shouldn't alter unit inex");
             assert.notEqual(result.state.unit, undefined, "We should provide unit");
             assert.notEqual(result.board, undefined, "We should provide board in result");
         });
@@ -53,6 +56,7 @@ describe("brain", function () {
         it('should set original unit in result', function () {
             var result = brain.placeUnitOnTop(state, unit)
             assert.equal(result.state.unit, unit, "We should put original unit in result");
+            assert.equal(result.state.seed, result.state.seed, "We should put original seed");
         });
 
         it('should set units position', function () {
@@ -119,6 +123,14 @@ describe("brain", function () {
             });
         });
 
+        context('When asked for new unit', function () {
+            it('return state with unit from the board', function () {
+                result = brain.getNextUnit(state);
+                assert.equal(result.state.unitOrigin, undefined, "After next unit put, we should set off unit Origin");
+                assert.notEqual(result.state.seed, state.state.seed, "We should upate seed to the new value");
+                assert.equal(result.state.state, "waiting for placing figure", "We shoudl update state for specific case");
+            });
+        });
 
 
     });

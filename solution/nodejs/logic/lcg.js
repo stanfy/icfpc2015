@@ -4,6 +4,13 @@
  */
 var Long = require("long");
 
+//var seed = Long.fromInt(17,true);
+//for (var i = 1; i < 20; i++) {
+//    var lcgValue = lcg.lcgValue(seed);
+//    console.error(lcgValue.value);
+//    seed = lcgValue.seed
+//}
+
 exports.lcgValue = function (seed) {
     var s = seed;
     //console.error("============");

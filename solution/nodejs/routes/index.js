@@ -14,13 +14,8 @@ router.post('/initial', function (req, res, next) {
     var board = req.body;
     console.error(board  + "---");
     var state = brain.initTransform(board);
-    var nextState = brain.placeUnitOnTop(state, board.units[0]);
-    var seed = Long.fromInt(17,true);
-    for (var i = 1; i < 20; i++) {
-        var lcgValue = lcg.lcgValue(seed);
-        console.error(lcgValue.value);
-        seed = lcgValue.seed
-    }
+    var stateWithUnit = brain.getNextUnit(state);
+    var nextState = brain.placeUnitOnTop(stateWithUnit, stateWithUnit.state.unit);
     res.json(nextState);
 });
 

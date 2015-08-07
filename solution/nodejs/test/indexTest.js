@@ -20,7 +20,6 @@ describe("initial", function () {
             assert.notEqual(brain.initTransform(validBoard).state, undefined, "State is required");
             assert.equal(brain.initTransform(validBoard).state.state, "ok", "State's state should be ok");
             assert.equal(brain.initTransform(validBoard).state.score, 0);
-            assert.equal(brain.initTransform(validBoard).state.unitIndex, 0);
             assert.notEqual(brain.initTransform(validBoard).state.unit, undefined);
             assert.notEqual(brain.initTransform(validBoard).state.seed, undefined);
             assert.notEqual(brain.initTransform(validBoard).board, undefined);
