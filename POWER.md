@@ -5,10 +5,10 @@
 
 # Taken from map
 
-1.Ei!
-3.Ia!
-5.R'lyeh
-7.Yuggot
+1. Ei!
+3. Ia!
+5. R'lyeh
+7. Yuggot
 
 
 # Tried words
