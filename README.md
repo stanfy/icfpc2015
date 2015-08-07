@@ -13,6 +13,7 @@ To make sure that you all know, where this repository is and all rights are corr
 5. Olexandr Tereshchuk (30%)
 6. Misha Pustovit (40%)
 7. Pasha Bashmakov (20%) - across all time zones
+8. Oleksiy Syvokon (70%) -- Fri, Sat, Sun (Python, Clojure, Some Haskell)
 
 # Channels    
 Now in [Slack chat](https://stanfy-icfp2015.slack.com/messages)
