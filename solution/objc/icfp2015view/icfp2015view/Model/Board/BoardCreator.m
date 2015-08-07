@@ -14,10 +14,16 @@
     NSData *jsonData = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSError *e;
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&e];
-
-    Board * board = [Board createFromDictionary:dict];
+    Board *board = [Board createFromDictionary:dict];
 
     return board;
 }
+
++ (Board *)createBoardFromFile:(NSString *)filePath {
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:filePath]] options:0 error:nil];
+    Board *board = [Board createFromDictionary:dict];
+    return board;
+}
+
 
 @end

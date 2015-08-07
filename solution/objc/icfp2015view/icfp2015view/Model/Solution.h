@@ -7,4 +7,6 @@
 
 
 @interface Solution : NSObject
+
+
 @end
