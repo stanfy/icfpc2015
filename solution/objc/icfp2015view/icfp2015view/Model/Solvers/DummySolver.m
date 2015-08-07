@@ -24,14 +24,23 @@
     return [[self alloc] initWithBoard:board];
 }
 
+- (NSString * )tagForBoardID:(NSNumber * )boardID seed:(NSNumber * )seed {
+    return [NSString stringWithFormat:@"%@-%@-%f", boardID, seed, [NSDate timeIntervalSinceReferenceDate]];
+}
+
+
+#pragma mark - result
 
 - (NSArray *)solve {
 
+    NSNumber * boardID = self.board.ID;
     NSMutableArray * array = [NSMutableArray array];
+
     for (NSNumber * seed in self.board.sourceSeeds) {
-        Solution * s = [Solution solutionWithProblemId:self.board.ID
+
+        Solution * s = [Solution solutionWithProblemId:boardID
                                                   seed:seed
-                                                   tag:@"123"
+                                                   tag:[self tagForBoardID:boardID seed:seed]
                                               commands:@"123"];
         [array addObject:s];
     }
