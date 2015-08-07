@@ -1,4 +1,3 @@
-var map = {"height":9,"width":10,"sourceSeeds":[0],"units":[{"members":[{"x":0,"y":0},{"x":1,"y":0},{"x":2,"y":0}],"pivot":{"x":1,"y":0}}],"id":23,"filled":[{"x":1,"y":3},{"x":2,"y":3},{"x":3,"y":3},{"x":4,"y":3},{"x":5,"y":3},{"x":6,"y":3},{"x":7,"y":3},{"x":8,"y":3},{"x":1,"y":5},{"x":2,"y":5},{"x":3,"y":5},{"x":4,"y":5},{"x":5,"y":5},{"x":6,"y":5},{"x":7,"y":5},{"x":8,"y":5},{"x":1,"y":7},{"x":2,"y":7},{"x":3,"y":7},{"x":4,"y":7},{"x":5,"y":7},{"x":6,"y":7},{"x":7,"y":7},{"x":8,"y":7}],"sourceLength":100}
 var canvas = document.getElementById('c');
 var cellSize = 40;
 var gapSize = 5;
@@ -57,6 +56,11 @@ function drawPivot(unit){
 }
 
 function drawMap(map){
+
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
     drawBoard(map.width, map.height, cellSize, gapSize);
     map.filled.forEach(function(item){ fill(item.x, item.y, filledColor)});
     
@@ -93,11 +97,11 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
- function loadJSON(callback) {   
+function loadMap(callback, id) {
 
     var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
-    xobj.open('GET', 'http://localhost:3000/initial', true); // Replace 'my_data' with the path to your file
+    xobj.open('GET', 'http://localhost:3000/problems/problem_' + id + '.json', true); // Replace 'my_data' with the path to your file
     xobj.onreadystatechange = function () {
           if (xobj.readyState == 4 && xobj.status == "200") {
             // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
@@ -107,18 +111,23 @@ document.addEventListener('keydown', function(event) {
     xobj.send(null);  
  }
 
+function init() {
+    loadMap(function(response) {
+        // Parse JSON string into object
+        var actual_JSON = JSON.parse(response);
+        drawMap(actual_JSON);
+    }, 5);
+};
 
-
+function refresh(){
+    loadMap(function(response) {
+        // Parse JSON string into object
+        var actual_JSON = JSON.parse(response);
+        drawMap(actual_JSON);
+    },document.getElementById('mapNumber').value);
+}
 window.addEventListener('resize', resize, false);
 resize();
-
-function init() {
- loadJSON(function(response) {
-  // Parse JSON string into object
-    var actual_JSON = JSON.parse(response);
-    drawMap(actual_JSON.board);
- });
-};
 init();
 
 
