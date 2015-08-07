@@ -11,8 +11,9 @@ object LinearCongruentialGenerator {
     override def hasNext: Boolean = true
 
     override def next(): Int = {
+      val nextSeed = seed >> 16
       seed = (seed * 1103515245 + 12345) & Int.MaxValue
-      seed >> 16
+      nextSeed
     }
   }
 
