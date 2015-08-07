@@ -18,5 +18,9 @@ object Main {
     println("Board height = " + board.height)
     println("Board sourceLength = " + board.sourceLength)
     println("Board sourceSeeds = " + board.sourceSeeds)
+
+
+    println("Board cells = " + board.filledCells)
+    println("Board units = " + board.units)
   }
 }
