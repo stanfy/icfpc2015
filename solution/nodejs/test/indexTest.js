@@ -15,6 +15,7 @@ describe("initial", function () {
             assert.equal(brain.initTransform(board).state.score, 0);
             assert.equal(brain.initTransform(board).state.unitIndex, 0);
             assert.notEqual(brain.initTransform(board).state.seed, undefined);
+            assert.notEqual(brain.initTransform(board).board, undefined);
         });
 
         it('fail in case if board is not specified', function () {

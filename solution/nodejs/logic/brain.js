@@ -12,6 +12,7 @@ exports.initTransform = function (board) {
     }
 
     return {
+        board:board,
         state: {
             state: "ok",
             score:0,
