@@ -27,3 +27,9 @@ Channel: https://www.sqwiggle.com/signup/fe4552c9dffc7f3a8e525b07165c0439
 # Process
 Read [here](PROCESS.md)
 
+# Submisison
+https://davar.icfpcontest.org/#/teams
+
+Submit solutions to: https://davar.icfpcontest.org/teams/6/solutions
+
+Your API token is: zSbouMJS0cYhLXgghheLt9alzo8aAHtpku9hiWAVR6U=
