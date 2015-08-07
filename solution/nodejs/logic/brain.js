@@ -11,6 +11,15 @@ exports.initTransform = function (board) {
         }
     }
 
+    if (!board.sourceSeeds || board.sourceSeeds.length == 0) {
+        return {
+            state: {
+                state: "error",
+                message: "sourceSeeds are required"
+            }
+        }
+    }
+
     return {
         board:board,
         state: {

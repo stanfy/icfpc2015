@@ -7,21 +7,25 @@ var assert = require('assert');
 describe("initial", function () {
     context("by default", function () {
         var board = {};
+        var validBoard = {
+            sourceSeeds:[123]
+        };
 
         it("return intial state", function () {
-            assert.notEqual(brain.initTransform(board), undefined, "Something broken");
-            assert.notEqual(brain.initTransform(board).state, undefined, "State is required");
-            assert.equal(brain.initTransform(board).state.state, "ok", "State's state should be ok");
-            assert.equal(brain.initTransform(board).state.score, 0);
-            assert.equal(brain.initTransform(board).state.unitIndex, 0);
-            assert.notEqual(brain.initTransform(board).state.seed, undefined);
-            assert.notEqual(brain.initTransform(board).board, undefined);
+            assert.notEqual(brain.initTransform(validBoard), undefined, "Something broken");
+            assert.notEqual(brain.initTransform(validBoard).state, undefined, "State is required");
+            assert.equal(brain.initTransform(validBoard).state.state, "ok", "State's state should be ok");
+            assert.equal(brain.initTransform(validBoard).state.score, 0);
+            assert.equal(brain.initTransform(validBoard).state.unitIndex, 0);
+            assert.notEqual(brain.initTransform(validBoard).state.seed, undefined);
+            assert.notEqual(brain.initTransform(validBoard).board, undefined);
         });
 
         it('fail in case if board is not specified', function () {
             assert.equal(brain.initTransform().state.state, "error");
             assert.notEqual(brain.initTransform().state.message, undefined);
         });
+
     });
 
     context('when board is specified', function () {
