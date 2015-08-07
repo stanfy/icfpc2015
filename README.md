@@ -19,11 +19,15 @@ To make sure that you all know, where this repository is and all rights are corr
 Now in [Slack chat](https://stanfy-icfp2015.slack.com/messages)
 
 # Language  
-Java/Scala/Kotlin/Groovy )
+Java/Scala/Kotlin/Groovy ..
 
 # Sqwiggle - online video presence tool
 Quick for press and talks + always see who is available for quick talk.
 Channel: https://www.sqwiggle.com/signup/fe4552c9dffc7f3a8e525b07165c0439
+
+# Trello
+https://trello.com/b/7ayQ86lb/icfp2015
+
 
 # Process
 Read [here](PROCESS.md)
@@ -35,7 +39,6 @@ Submit solutions to: https://davar.icfpcontest.org/teams/6/solutions
 
 Your API token is: zSbouMJS0cYhLXgghheLt9alzo8aAHtpku9hiWAVR6U=
 
-# Power
+# Power words
 
 [Power](POWER.md)
-
