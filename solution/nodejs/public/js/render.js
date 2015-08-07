@@ -6,66 +6,78 @@ var defaultColor = '#eee';
 var filledColor = '#FFD700';
 var unitColor = '#66FF99';
 var pivotColor = '#6600FF';
+
+var current_board = null;
+var current_state = null;
+
 function draw(canvas, x, y, size, color) {
-  if (canvas.getContext){
-    var ctx = canvas.getContext('2d');
-    ctx.fillStyle = color;
-      
-    ctx.beginPath();
-    ctx.moveTo(x + size/2, y + 0);
-    ctx.lineTo(x + size,   y + size/4);
-    ctx.lineTo(x + size,   y + size/4*3);
-    ctx.lineTo(x + size/2, y + size);
-    ctx.lineTo(x + 0,      y + size/4*3);
-    ctx.lineTo(x + 0,      y + size/4);
-    ctx.lineTo(x + size/2, y + 0);
-    ctx.closePath();
-    ctx.fill();
-  }
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = color;
+
+        ctx.beginPath();
+        ctx.moveTo(x + size / 2, y + 0);
+        ctx.lineTo(x + size, y + size / 4);
+        ctx.lineTo(x + size, y + size / 4 * 3);
+        ctx.lineTo(x + size / 2, y + size);
+        ctx.lineTo(x + 0, y + size / 4 * 3);
+        ctx.lineTo(x + 0, y + size / 4);
+        ctx.lineTo(x + size / 2, y + 0);
+        ctx.closePath();
+        ctx.fill();
+    }
 }
 
 function drawBoard(h, v, size, gap) {
     for (var i = 0; i < h; i++) {
         for (var j = 0; j < v; j++) {
-            fill(i,j, defaultColor);
+            fill(i, j, defaultColor);
         }
     }
 }
 
-function fill(i, j, color){
-    draw(canvas, 
-               j%2 * (cellSize + gapSize)/2 + i * (cellSize + gapSize), 
-               j * (cellSize - cellSize/4 + gapSize), 
-               cellSize, color);
+function fill(i, j, color) {
+    draw(canvas,
+        j % 2 * (cellSize + gapSize) / 2 + i * (cellSize + gapSize),
+        j * (cellSize - cellSize / 4 + gapSize),
+        cellSize, color);
 }
-function pivot(i,j, color){
- draw(canvas, 
-               j%2 * (cellSize + gapSize)/2 + i * (cellSize + gapSize) + cellSize /3, 
-               j * (cellSize - cellSize/4 + gapSize) + cellSize /3, 
-               cellSize / 3, color); 
-}
-
-function drawUnit(unit){
- 
-  unit.members.forEach(function(member){fill(member.x, member.y, unitColor)});
-
+function pivot(i, j, color) {
+    draw(canvas,
+        j % 2 * (cellSize + gapSize) / 2 + i * (cellSize + gapSize) + cellSize / 3,
+        j * (cellSize - cellSize / 4 + gapSize) + cellSize / 3,
+        cellSize / 3, color);
 }
 
-function drawPivot(unit){
-  pivot(unit.pivot.x, unit.pivot.y, pivotColor);
+function drawUnit(unit) {
+
+    unit.members.forEach(function (member) {
+        fill(member.x, member.y, unitColor)
+    });
+
 }
 
-function drawMap(map){
+function drawPivot(unit) {
+    pivot(unit.pivot.x, unit.pivot.y, pivotColor);
+}
+
+function drawMap(map) {
 
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
     drawBoard(map.width, map.height, cellSize, gapSize);
-    map.filled.forEach(function(item){ fill(item.x, item.y, filledColor)});
-    
-    map.units.forEach(function(unit){drawUnit(unit)});
-    map.units.forEach(function(unit){drawPivot(unit)});
+    map.filled.forEach(function (item) {
+        fill(item.x, item.y, filledColor)
+    });
+
+    map.units.forEach(function (unit) {
+        drawUnit(unit)
+    });
+    map.units.forEach(function (unit) {
+        drawPivot(unit)
+    });
 }
 function resize() {
 
@@ -88,44 +100,76 @@ function resize() {
 };
 
 
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 37) {
+document.addEventListener('keydown', function (event) {
+    if (event.keyCode == 37) {
         alert('Left was pressed');
     }
-    else if(event.keyCode == 39) {
+    else if (event.keyCode == 39) {
         alert('Right was pressed');
     }
 });
 
-function loadMap(callback, id) {
 
+function loadJSON(path, callback, jsonObject, method) {
     var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-    xobj.open('GET', 'http://localhost:3000/problems/problem_' + id + '.json', true); // Replace 'my_data' with the path to your file
+    xobj.overrideMimeType("application/json");
+    xobj.open(method ? method : 'GET', 'http://localhost:3000/'+ path , true); // Replace 'my_data' with the path to your file
+    xobj.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
+        if (xobj.readyState == 4 && xobj.status == "200") {
             // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(xobj.responseText);
-          }
+            var actual_JSON = JSON.parse(xobj.responseText);
+            callback(actual_JSON);
+        }
     };
-    xobj.send(null);  
- }
+    if (jsonObject) {
+        var body = JSON.stringify(jsonObject);
+        xobj.send(body);
+    } else {
+        xobj.send(null);
+    }
+}
+
+function loadMap(callback, id) {
+    loadJSON('problems/problem_' + id + '.json', function(result) {
+        current_board = result;
+        getInitialState()
+    })
+}
 
 function init() {
-    loadMap(function(response) {
-        // Parse JSON string into object
-        var actual_JSON = JSON.parse(response);
+    loadMap(function (actual_JSON) {
         drawMap(actual_JSON);
     }, 5);
 };
 
-function refresh(){
-    loadMap(function(response) {
+function refresh() {
+    loadMap(function (actual_JSON) {
         // Parse JSON string into object
-        var actual_JSON = JSON.parse(response);
         drawMap(actual_JSON);
-    },document.getElementById('mapNumber').value);
+    }, document.getElementById('mapNumber').value);
 }
+
+function getInitialState() {
+    console.log("Current board is " + JSON.stringify(current_board))
+    loadJSON("initial", function(state) {
+        console.log("State is updated to " + JSON.stringify(state))
+        current_state = state;
+        drawMap(state.board);
+    }, current_board, "POST");
+}
+
+function getNextState() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state", function(state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board);
+    }, current_state, "POST");
+}
+
+
+
 window.addEventListener('resize', resize, false);
 resize();
 init();

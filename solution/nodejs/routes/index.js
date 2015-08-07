@@ -8,39 +8,17 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.get('/initial', function (req, res, next) {
+router.post('/initial', function (req, res, next) {
     var board = req.body;
-    console.error(JSON.stringify(board));
+    console.error(board  + "---");
     var state = brain.initTransform(board);
     res.json(state);
 });
 
-router.get('/state', function (req, res, next) {
-    //var info = JSON.parse(req.body);
-
-    // old state
-    var state = {
-        state: {
-            score: 10,
-            seed: 29060,
-            seedint: 1,
-            state: "ok", // finish
-            message: ""
-        },
-        board: {}
-    };
-
-    res.json({
-        state: {
-            score: 10,
-            seed: 29060,
-            seedint: 1,
-            state: "ok", // finish
-            message: ""
-        },
-        board: {}
-
-    })
+router.post('/state', function (req, res, next) {
+    var state = req.body;
+    state.board.filled.push({x:2,y:2});
+    res.json(state);
 });
 
 module.exports = router;
