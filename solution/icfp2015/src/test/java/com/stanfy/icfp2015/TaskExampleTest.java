@@ -1,5 +1,6 @@
 package com.stanfy.icfp2015;
 
+import com.stanfy.icfp2015.example.ScalaTaskExample;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
