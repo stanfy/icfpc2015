@@ -14,6 +14,8 @@
 7. pentagram
 8. lambda
 9. oga
+10. la!
+11. turing
 
 
 # Alphabet
