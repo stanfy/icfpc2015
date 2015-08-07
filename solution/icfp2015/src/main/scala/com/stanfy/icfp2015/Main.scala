@@ -1,6 +1,8 @@
 package com.stanfy.icfp2015
 
-import com.stanfy.icfp2015.Board.Board
+import com.stanfy.icfp2015.Board.{Board, JsonParser}
+import org.json4s.DefaultFormats
+import org.json4s.jackson.JsonMethods._
 
 
 /**
@@ -10,8 +12,10 @@ import com.stanfy.icfp2015.Board.Board
 object Main {
   def main(args: Array[String]): Unit = {
 
-    val testData = TestData
-    val board = new Board(testData.testJson)
+    implicit val formats = DefaultFormats
+    val testData:String = TestData.testJson
+    val jsonParser = new JsonParser(testData)
+    val board = parse(testData).extract[Board]
 
     println("Board id = " + board.id)
     println("Board width = " +  board.width)
@@ -19,8 +23,7 @@ object Main {
     println("Board sourceLength = " + board.sourceLength)
     println("Board sourceSeeds = " + board.sourceSeeds)
 
-
-    println("Board cells = " + board.filledCells)
+    println("Board cells = " + board.filled)
     println("Board units = " + board.units)
   }
 }
