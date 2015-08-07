@@ -167,6 +167,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+<<<<<<< Updated upstream
+		1737CA318F6887BBDE2916FD /* Problems */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Problems;
+=======
 		192EA3C20E23E3C645A62C6F /* Board */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +189,7 @@
 				192EA5DA704F7B143A324101 /* BoardsConfigCollection.h */,
 			);
 			path = Board;
+>>>>>>> Stashed changes
 			sourceTree = "<group>";
 		};
 		7327FD221B6CAF1E00D693ED = {

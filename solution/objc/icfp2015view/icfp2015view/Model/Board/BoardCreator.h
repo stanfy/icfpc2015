@@ -6,5 +6,11 @@
 #import <Foundation/Foundation.h>
 
 
-@interface Board : NSObject
+@class Board;
+
+
+@interface BoardCreator : NSObject
+
++ (Board *)createBoardFromJson:(NSString * )json;
+
 @end

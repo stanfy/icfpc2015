@@ -3,10 +3,9 @@
 // Copyright (c) 2015 Stanfy LLC. All rights reserved.
 //
 
-#import "Problem.h"
+#import <Foundation/Foundation.h>
 
 
-@implementation Problem {
-
-}
+@interface BoardsConfigCollection : NSObject
++ (NSString *)problem0;
 @end
