@@ -34,3 +34,8 @@ https://davar.icfpcontest.org/#/teams
 Submit solutions to: https://davar.icfpcontest.org/teams/6/solutions
 
 Your API token is: zSbouMJS0cYhLXgghheLt9alzo8aAHtpku9hiWAVR6U=
+
+# Power
+
+[Power](POWER.md)
+
