@@ -6,23 +6,10 @@ import org.json4s.native.JsonMethods._
 /**
  * Created by hdf on 07.08.15.
  */
-object SFJSONParser {
-  def main(args: Array[String]): Unit = {
 
-    val json = parse( """
-     { "name": "joe",
-       "children": [
-         {
-           "name": "Mary",
-           "age": 5
-         },
-         {
-           "name": "Mazy",
-           "age": 3
-         }
-       ]
-     }
-                      """)
-    print((json \ "children")(0))
+object SFJSONParser {
+  def parseJSON(input:String):JValue = {
+    val json = parse(input)
+    return json
   }
 }
