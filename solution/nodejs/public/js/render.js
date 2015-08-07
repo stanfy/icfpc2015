@@ -72,12 +72,12 @@ function drawMap(map) {
         fill(item.x, item.y, filledColor)
     });
 
-    map.units.forEach(function (unit) {
-        drawUnit(unit)
-    });
-    map.units.forEach(function (unit) {
-        drawPivot(unit)
-    });
+    //map.units.forEach(function (unit) {
+    //    drawUnit(unit)
+    //});
+    //map.units.forEach(function (unit) {
+    //    drawPivot(unit)
+    //});
 }
 function resize() {
 
