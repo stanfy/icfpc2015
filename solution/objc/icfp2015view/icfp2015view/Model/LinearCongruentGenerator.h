@@ -7,4 +7,13 @@
 
 
 @interface LinearCongruentGenerator : NSObject
+
+@property(nonatomic, assign) SInt32 seed;
+
+- (instancetype)initWithSeed:(SInt32)seed;
++ (instancetype)generatorWithSeed:(SInt32)seed;
++ (instancetype)defaultGenerator;
+
+- (SInt32)nextValue;
+
 @end
