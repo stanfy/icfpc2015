@@ -24,3 +24,6 @@ Java/Scala/Kotlin/Groovy )
 Quick for press and talks + always see who is available for quick talk.
 Channel: https://www.sqwiggle.com/signup/fe4552c9dffc7f3a8e525b07165c0439
 
+# Process
+Read [here](PROCESS.md)
+
