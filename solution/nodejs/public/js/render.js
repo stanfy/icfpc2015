@@ -116,7 +116,7 @@ function init() {
  loadJSON(function(response) {
   // Parse JSON string into object
     var actual_JSON = JSON.parse(response);
-    drawMap(actual_JSON);
+    drawMap(actual_JSON.board);
  });
 };
 init();
