@@ -8,16 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import "LinearCongruentGenerator.h"
+#import "CommandLineTask.h"
+#import "ArgumentsParser.h"
 
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
         // insert code here...
+
+        NSArray *arguments = [[NSProcessInfo processInfo] arguments];
+
+        CommandLineTask *task = [[[ArgumentsParser alloc] initWithArguments:arguments] taskFromArguments];
 
         LinearCongruentGenerator *gen = [LinearCongruentGenerator generatorWithSeed:17];
         for (int i = 0; i < 20; ++i) {
             NSLog(@" %d", [gen nextValue]);
         }
         NSLog(@"Hello, World!");
+
+        NSLog(@"task = %@", task);
     }
     return 0;
 }

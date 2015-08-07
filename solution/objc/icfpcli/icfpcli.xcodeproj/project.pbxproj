@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1737C906DA1F0CF480C8BDC5 /* ArgumentsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CDCF692138C09D5C89F8 /* ArgumentsParser.m */; };
 		7327FD7A1B6CAF6F00D693ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD791B6CAF6F00D693ED /* main.m */; };
 		73481A851B750DD4006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A841B750DD4006C7E9D /* libclilibrary.dylib */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1737C87B39A769C381D03E2A /* ArgumentsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArgumentsParser.h; sourceTree = "<group>"; };
+		1737CDCF692138C09D5C89F8 /* ArgumentsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArgumentsParser.m; sourceTree = "<group>"; };
 		7327FD761B6CAF6F00D693ED /* icfpcli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = icfpcli; sourceTree = BUILT_PRODUCTS_DIR; };
 		7327FD791B6CAF6F00D693ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		73481A841B750DD4006C7E9D /* libclilibrary.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclilibrary.dylib; path = ../../icfp2015view/build/Debug/libclilibrary.dylib; sourceTree = "<group>"; };
@@ -62,6 +65,8 @@
 			children = (
 				73481A841B750DD4006C7E9D /* libclilibrary.dylib */,
 				7327FD791B6CAF6F00D693ED /* main.m */,
+				1737CDCF692138C09D5C89F8 /* ArgumentsParser.m */,
+				1737C87B39A769C381D03E2A /* ArgumentsParser.h */,
 			);
 			path = icfpcli;
 			sourceTree = "<group>";
@@ -123,6 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7327FD7A1B6CAF6F00D693ED /* main.m in Sources */,
+				1737C906DA1F0CF480C8BDC5 /* ArgumentsParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

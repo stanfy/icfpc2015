@@ -25,4 +25,15 @@
     return [[self alloc] initWithFilePath:filePath powerWords:powerWords limit:limit maxMemoryUsage:maxMemoryUsage];
 }
 
+- (NSString *)description {
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"  filePath=%@", self.filePath];
+    [description appendFormat:@", powerWords=%@", self.powerWords];
+    [description appendFormat:@", limit=%f", self.limit];
+    [description appendFormat:@", maxMemoryUsage=%f", self.maxMemoryUsage];
+    [description appendString:@">"];
+    return description;
+}
+
+
 @end
