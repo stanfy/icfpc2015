@@ -34,6 +34,9 @@
 		7327FD4B1B6CAF1F00D693ED /* icfp2015viewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD4A1B6CAF1F00D693ED /* icfp2015viewTests.m */; };
 		73481A771B750D24006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A6C1B750D24006C7E9D /* libclilibrary.dylib */; };
 		73481A831B750DA8006C7E9D /* LinearCongruentGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 1737CB752B798028B79127CC /* LinearCongruentGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		73481A861B751536006C7E9D /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAE425F7FA63CD86B3E72 /* BoardCell.m */; };
+		73481A871B75153D006C7E9D /* BoardUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAF9120DFE1ADA6985EB5 /* BoardUnit.m */; };
+		73481A881B7515B2006C7E9D /* BoardCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 192EA97BD2FCC1AEC7B3AD63 /* BoardCreator.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -217,7 +220,6 @@
 				7327FD2E1B6CAF1E00D693ED /* Supporting Files */,
 				1737C9705461F892CA41EA07 /* Model */,
 				1737C0ACB7A2E23335C9D495 /* Parse */,
-				1737CA318F6887BBDE2916FD /* Problems */,
 			);
 			path = icfp2015view;
 			sourceTree = "<group>";
@@ -255,6 +257,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73481A881B7515B2006C7E9D /* BoardCreator.h in Headers */,
 				73481A831B750DA8006C7E9D /* LinearCongruentGenerator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,6 +445,8 @@
 				1737CA00868540C795D0600C /* CommandLineTask.m in Sources */,
 				1737C86F2773625070C3ECCE /* LinearCongruentGenerator.m in Sources */,
 				1737CEB141F9CAAFC8C4B850 /* Command.m in Sources */,
+				73481A861B751536006C7E9D /* BoardCell.m in Sources */,
+				73481A871B75153D006C7E9D /* BoardUnit.m in Sources */,
 				192EA00A2DA94AE96FE12F68 /* Board.m in Sources */,
 				192EA4545742813D38308033 /* BoardCreator.m in Sources */,
 				192EA920E5639B7C366E7953 /* BoardsConfigCollection.m in Sources */,

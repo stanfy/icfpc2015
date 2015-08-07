@@ -11,6 +11,7 @@
 
 @interface BoardCreator : NSObject
 
-+ (Board *)createBoardFromJson:(NSString * )json;
++ (Board *)createBoardFromJson:(NSString *)json;
++ (Board *)createBoardFromFile:(NSString *)filePath;
 
 @end
