@@ -112,7 +112,9 @@ router.get('/state', function (req, res, next) {
             state:"ok", // finish
             message:""
         },
-        board: board
+        board: {
+
+        }
     };
 
     res.json({
@@ -123,7 +125,9 @@ router.get('/state', function (req, res, next) {
             state:"ok", // finish
             message:""
         },
-        board: board
+        board: {
+            
+        }
 
     })
 });
