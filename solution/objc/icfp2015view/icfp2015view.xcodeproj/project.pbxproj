@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1737C560163469DDD2BF7106 /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C543D70716D2B5939710 /* Board.m */; };
+		1737C6B225F973FD2D8767DB /* CommandLineTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C2E01852765595320223 /* CommandLineTask.m */; };
+		1737C6B569287FFD9964DB55 /* BoardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C468A0648A5B6FC98E16 /* BoardParser.m */; };
+		1737C6F23C868BFED40F7D7E /* Solution.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C49C15521729C2F03204 /* Solution.m */; };
+		1737C95E1A199A94EBDBAD1C /* Problem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C8CC245D3BEB620908F1 /* Problem.m */; };
+		1737C9D7AC949FEC6D79629C /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CA7C6823CA3FB24FEC32 /* Command.m */; };
+		1737CBB54942EF9354E3B716 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C7F58549F1753DDBBBD1 /* Solver.m */; };
+		1737CBF353F26C2636B279EE /* LinearCongruentGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C73AB0D48C1738B01FB1 /* LinearCongruentGenerator.m */; };
 		7327FD311B6CAF1E00D693ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD301B6CAF1E00D693ED /* main.m */; };
 		7327FD341B6CAF1E00D693ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD331B6CAF1E00D693ED /* AppDelegate.m */; };
 		7327FD371B6CAF1E00D693ED /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD361B6CAF1E00D693ED /* ViewController.m */; };
@@ -27,6 +35,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1737C0AF8CA5BA608C185302 /* Solution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solution.h; sourceTree = "<group>"; };
+		1737C0DE73EB627810B7E865 /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
+		1737C2E01852765595320223 /* CommandLineTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandLineTask.m; sourceTree = "<group>"; };
+		1737C3C5C96B8605F0A1FA6D /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
+		1737C468A0648A5B6FC98E16 /* BoardParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardParser.m; sourceTree = "<group>"; };
+		1737C49C15521729C2F03204 /* Solution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solution.m; sourceTree = "<group>"; };
+		1737C543D70716D2B5939710 /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
+		1737C73AB0D48C1738B01FB1 /* LinearCongruentGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearCongruentGenerator.m; sourceTree = "<group>"; };
+		1737C7F58549F1753DDBBBD1 /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
+		1737C8CC245D3BEB620908F1 /* Problem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Problem.m; sourceTree = "<group>"; };
+		1737CA7C6823CA3FB24FEC32 /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Command.m; sourceTree = "<group>"; };
+		1737CAE2AB8BD133B5AB06DE /* CommandLineTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandLineTask.h; sourceTree = "<group>"; };
+		1737CB0420F2F285AC28664A /* Problem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Problem.h; sourceTree = "<group>"; };
+		1737CB6AEEFC9C00942B10CC /* BoardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardParser.h; sourceTree = "<group>"; };
+		1737CB752B798028B79127CC /* LinearCongruentGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearCongruentGenerator.h; sourceTree = "<group>"; };
+		1737CF35EEB29B3B84389B03 /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		7327FD2B1B6CAF1E00D693ED /* icfp2015view.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = icfp2015view.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7327FD2F1B6CAF1E00D693ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7327FD301B6CAF1E00D693ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -60,6 +84,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1737C0ACB7A2E23335C9D495 /* Parse */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Parse;
+			sourceTree = "<group>";
+		};
+		1737C9705461F892CA41EA07 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1737C543D70716D2B5939710 /* Board.m */,
+				1737C0DE73EB627810B7E865 /* Board.h */,
+				1737C73AB0D48C1738B01FB1 /* LinearCongruentGenerator.m */,
+				1737CB752B798028B79127CC /* LinearCongruentGenerator.h */,
+				1737C7F58549F1753DDBBBD1 /* Solver.m */,
+				1737CF35EEB29B3B84389B03 /* Solver.h */,
+				1737C49C15521729C2F03204 /* Solution.m */,
+				1737C0AF8CA5BA608C185302 /* Solution.h */,
+				1737CA7C6823CA3FB24FEC32 /* Command.m */,
+				1737C3C5C96B8605F0A1FA6D /* Command.h */,
+				1737C468A0648A5B6FC98E16 /* BoardParser.m */,
+				1737CB6AEEFC9C00942B10CC /* BoardParser.h */,
+				1737C2E01852765595320223 /* CommandLineTask.m */,
+				1737CAE2AB8BD133B5AB06DE /* CommandLineTask.h */,
+				1737C8CC245D3BEB620908F1 /* Problem.m */,
+				1737CB0420F2F285AC28664A /* Problem.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		7327FD221B6CAF1E00D693ED = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +143,8 @@
 				7327FD3B1B6CAF1E00D693ED /* Images.xcassets */,
 				7327FD3D1B6CAF1E00D693ED /* LaunchScreen.xib */,
 				7327FD2E1B6CAF1E00D693ED /* Supporting Files */,
+				1737C9705461F892CA41EA07 /* Model */,
+				1737C0ACB7A2E23335C9D495 /* Parse */,
 			);
 			path = icfp2015view;
 			sourceTree = "<group>";
@@ -222,6 +278,14 @@
 				7327FD371B6CAF1E00D693ED /* ViewController.m in Sources */,
 				7327FD341B6CAF1E00D693ED /* AppDelegate.m in Sources */,
 				7327FD311B6CAF1E00D693ED /* main.m in Sources */,
+				1737C560163469DDD2BF7106 /* Board.m in Sources */,
+				1737CBF353F26C2636B279EE /* LinearCongruentGenerator.m in Sources */,
+				1737CBB54942EF9354E3B716 /* Solver.m in Sources */,
+				1737C6F23C868BFED40F7D7E /* Solution.m in Sources */,
+				1737C9D7AC949FEC6D79629C /* Command.m in Sources */,
+				1737C6B569287FFD9964DB55 /* BoardParser.m in Sources */,
+				1737C6B225F973FD2D8767DB /* CommandLineTask.m in Sources */,
+				1737C95E1A199A94EBDBAD1C /* Problem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
