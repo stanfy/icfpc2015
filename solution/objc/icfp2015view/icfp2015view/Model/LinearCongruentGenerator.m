@@ -26,9 +26,22 @@
 }
 
 - (SInt32)nextValue {
-    SInt32 nextSeed = _seed >> 16;
-    _seed = (_seed * 1103515245 + 12345) & INT32_MAX;
-    return nextSeed;
+    NSLog(@"===================");
+    NSLog(@"Seed is %u", (int) _seed);
+
+    SInt32 value = _seed >> 16;
+    NSLog(@"Next value is %u", (int) value);
+
+    SInt32 mul = _seed * 1103515245;
+    NSLog(@"After mul is %u", (int) mul);
+
+    SInt32 afterAdd = mul + 12345;
+    NSLog(@"After add is %u", (int) afterAdd);
+
+    _seed = afterAdd & INT32_MAX;
+    NSLog(@"Next seed is %u", (int) _seed);
+
+    return value;
 }
 
 
