@@ -25,6 +25,9 @@
 9. oga
 10. la!
 11. turing
+12. R'lyeh!
+13. yuggot
+14. .....
 
 
 # Alphabet
