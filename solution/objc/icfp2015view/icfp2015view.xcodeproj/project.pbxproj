@@ -56,13 +56,10 @@
 		7327FD3C1B6CAF1E00D693ED /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7327FD3B1B6CAF1E00D693ED /* Images.xcassets */; };
 		7327FD3F1B6CAF1E00D693ED /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7327FD3D1B6CAF1E00D693ED /* LaunchScreen.xib */; };
 		7327FD4B1B6CAF1F00D693ED /* icfp2015viewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD4A1B6CAF1F00D693ED /* icfp2015viewTests.m */; };
-		7344E20E1B75153800AA8A6F /* BoardCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 192EA97BD2FCC1AEC7B3AD63 /* BoardCreator.h */; };
 		7344E20F1B75153E00AA8A6F /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAE425F7FA63CD86B3E72 /* BoardCell.m */; };
 		7344E2101B75154100AA8A6F /* BoardUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAF9120DFE1ADA6985EB5 /* BoardUnit.m */; };
 		73481A771B750D24006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A6C1B750D24006C7E9D /* libclilibrary.dylib */; };
 		73481A831B750DA8006C7E9D /* LinearCongruentGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 1737CB752B798028B79127CC /* LinearCongruentGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		73481A861B751536006C7E9D /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAE425F7FA63CD86B3E72 /* BoardCell.m */; };
-		73481A871B75153D006C7E9D /* BoardUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAF9120DFE1ADA6985EB5 /* BoardUnit.m */; };
 		73481A881B7515B2006C7E9D /* BoardCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 192EA97BD2FCC1AEC7B3AD63 /* BoardCreator.h */; };
 /* End PBXBuildFile section */
 

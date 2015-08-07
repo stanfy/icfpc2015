@@ -8,5 +8,18 @@
 
 @interface Solution : NSObject
 
+@property (nonatomic, readonly) NSNumber * problemId;
+@property (nonatomic, readonly) NSNumber * seed;
+@property (nonatomic, readonly) NSString * tag;
+@property (nonatomic, readonly) NSString * commands;
+
+- (instancetype)initWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag commands:(NSString *)commands;
+
++ (instancetype)solutionWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag commands:(NSString *)commands;
+
+- (NSString *)jsonString;
+
+- (NSDictionary *)jsonDictionary;
+
 
 @end

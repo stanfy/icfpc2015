@@ -13,6 +13,8 @@
 #import "DummySolver.h"
 #import "Board.h"
 #import "BoardCreator.h"
+#import "Solution.h"
+
 
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
@@ -22,15 +24,17 @@ int main(int argc, const char *argv[]) {
 
         CommandLineTask *task = [[[ArgumentsParser alloc] initWithArguments:arguments] taskFromArguments];
 
-        // Board?
-        //
-        Board *board = [BoardCreator createBoardFromFile:task.filePath];
-        DummySolver *solver = [DummySolver solverWithBoard:board];
-        Solution *solution = [solver solve];
+        NSString * filePath = task.filePath;
+        if (!filePath || ![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            filePath = @"/Users/hdf/projects/icfp2015/problems/problem_6.json";
+        }
         
-        NSLog(@"board = %@", board);
-        NSLog(@"task = %@", task);
-        NSLog(@"solution = %@", solution);
+        Board *board = [BoardCreator createBoardFromFile:filePath];
+        DummySolver *solver = [DummySolver solverWithBoard:board];
+
+        NSArray * solutions = [solver solve];
+        NSString * json = [solver jsonFromSolutions:solutions];
+        NSLog(@"%@", json);
     }
     return 0;
 }

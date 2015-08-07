@@ -15,6 +15,8 @@
 
 - (instancetype)initWithBoard:(Board *)board;
 
+- (NSString *)jsonFromSolutions:(NSArray *)solutions;
+
 + (instancetype)solverWithBoard:(Board *)board;
 
 

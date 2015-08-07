@@ -10,6 +10,7 @@
 #import "Board.h"
 #import "BoardCreator.h"
 #import "BoardsConfigCollection.h"
+#import "DummySolver.h"
 
 
 @interface AppDelegate ()
@@ -28,6 +29,13 @@
     Board * board = [BoardCreator createBoardFromJson:problemJson];
 
     NSLog(@"board %@", board);
+
+    DummySolver *solver = [DummySolver solverWithBoard:board];
+
+    NSArray * solutions = [solver solve];
+    NSString * json = [solver jsonFromSolutions:solutions];
+    NSLog(@"%@", json);
+    
     return YES;
 }
 
