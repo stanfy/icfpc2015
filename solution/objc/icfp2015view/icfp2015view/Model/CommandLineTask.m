@@ -9,4 +9,20 @@
 @implementation CommandLineTask {
 
 }
+- (instancetype)initWithFilePath:(NSString *)filePath powerWords:(NSArray *)powerWords limit:(double)limit maxMemoryUsage:(double)maxMemoryUsage {
+    self = [super init];
+    if (self) {
+        _filePath = filePath;
+        _powerWords = powerWords;
+        _limit = limit;
+        _maxMemoryUsage = maxMemoryUsage;
+    }
+
+    return self;
+}
+
++ (instancetype)taskWithFilePath:(NSString *)filePath powerWords:(NSArray *)powerWords limit:(double)limit maxMemoryUsage:(double)maxMemoryUsage {
+    return [[self alloc] initWithFilePath:filePath powerWords:powerWords limit:limit maxMemoryUsage:maxMemoryUsage];
+}
+
 @end

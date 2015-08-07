@@ -7,15 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1737C1FAECE74A01BB2D90AC /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C7AEB9979438C1B709EF /* Command.m */; };
-		1737C21C7BEE6DE0A1116DA6 /* CommandLineTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CD47BE9C5E9150CC0735 /* CommandLineTask.m */; };
-		1737C57A973A3FBAD7AD13B3 /* LinearCongruentGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CDB0149FB3C9459AE1F3 /* LinearCongruentGenerator.m */; };
-		1737C7F789A301670A3F1454 /* Problem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CF64C1218E39960A8749 /* Problem.m */; };
-		1737C82417FD1539B6690630 /* BoardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CAF6FC8F612E43CA7397 /* BoardParser.m */; };
-		1737CA28255C71D9021CE0E3 /* Solution.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C4986399C751EE41736F /* Solution.m */; };
-		1737CCC8702C82255B7DD697 /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C1E6DA912C295AE5D9FF /* Board.m */; };
-		1737CE86A0F11CD8E4D5FAD2 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737C700D94CE358D1DF7ABD /* Solver.m */; };
 		7327FD7A1B6CAF6F00D693ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD791B6CAF6F00D693ED /* main.m */; };
+		73481A851B750DD4006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A841B750DD4006C7E9D /* libclilibrary.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,24 +24,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1737C04CE09918EB4D119605 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
-		1737C1E6DA912C295AE5D9FF /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
-		1737C375A2EFD5B4CBADE1AF /* BoardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardParser.h; sourceTree = "<group>"; };
-		1737C4986399C751EE41736F /* Solution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solution.m; sourceTree = "<group>"; };
-		1737C58009DBD051101A7AE4 /* Solution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solution.h; sourceTree = "<group>"; };
-		1737C700D94CE358D1DF7ABD /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
-		1737C75C073F2091E2B21B16 /* CommandLineTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandLineTask.h; sourceTree = "<group>"; };
-		1737C7AEB9979438C1B709EF /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Command.m; sourceTree = "<group>"; };
-		1737CA7E080478FAA038BB5C /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
-		1737CAF6FC8F612E43CA7397 /* BoardParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardParser.m; sourceTree = "<group>"; };
-		1737CCD712B17832EEE1F929 /* LinearCongruentGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearCongruentGenerator.h; sourceTree = "<group>"; };
-		1737CD47BE9C5E9150CC0735 /* CommandLineTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandLineTask.m; sourceTree = "<group>"; };
-		1737CD9027B7E09178C85008 /* Problem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Problem.h; sourceTree = "<group>"; };
-		1737CDB0149FB3C9459AE1F3 /* LinearCongruentGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearCongruentGenerator.m; sourceTree = "<group>"; };
-		1737CF274D5ED2E6FE7223CF /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
-		1737CF64C1218E39960A8749 /* Problem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Problem.m; sourceTree = "<group>"; };
 		7327FD761B6CAF6F00D693ED /* icfpcli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = icfpcli; sourceTree = BUILT_PRODUCTS_DIR; };
 		7327FD791B6CAF6F00D693ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		73481A841B750DD4006C7E9D /* libclilibrary.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclilibrary.dylib; path = ../../icfp2015view/build/Debug/libclilibrary.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,36 +34,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73481A851B750DD4006C7E9D /* libclilibrary.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1737C78332E4A0CE92ED41DD /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				1737CA7E080478FAA038BB5C /* Board.h */,
-				1737C1E6DA912C295AE5D9FF /* Board.m */,
-				1737CF274D5ED2E6FE7223CF /* Solver.h */,
-				1737C700D94CE358D1DF7ABD /* Solver.m */,
-				1737C04CE09918EB4D119605 /* Command.h */,
-				1737C7AEB9979438C1B709EF /* Command.m */,
-				1737CD9027B7E09178C85008 /* Problem.h */,
-				1737CF64C1218E39960A8749 /* Problem.m */,
-				1737C58009DBD051101A7AE4 /* Solution.h */,
-				1737C4986399C751EE41736F /* Solution.m */,
-				1737C375A2EFD5B4CBADE1AF /* BoardParser.h */,
-				1737CAF6FC8F612E43CA7397 /* BoardParser.m */,
-				1737C75C073F2091E2B21B16 /* CommandLineTask.h */,
-				1737CD47BE9C5E9150CC0735 /* CommandLineTask.m */,
-				1737CCD712B17832EEE1F929 /* LinearCongruentGenerator.h */,
-				1737CDB0149FB3C9459AE1F3 /* LinearCongruentGenerator.m */,
-			);
-			name = Model;
-			path = ../../icfp2015view/icfp2015view/Model;
-			sourceTree = "<group>";
-		};
 		7327FD6D1B6CAF6F00D693ED = {
 			isa = PBXGroup;
 			children = (
@@ -105,8 +60,8 @@
 		7327FD781B6CAF6F00D693ED /* icfpcli */ = {
 			isa = PBXGroup;
 			children = (
+				73481A841B750DD4006C7E9D /* libclilibrary.dylib */,
 				7327FD791B6CAF6F00D693ED /* main.m */,
-				1737C78332E4A0CE92ED41DD /* Model */,
 			);
 			path = icfpcli;
 			sourceTree = "<group>";
@@ -168,14 +123,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7327FD7A1B6CAF6F00D693ED /* main.m in Sources */,
-				1737CCC8702C82255B7DD697 /* Board.m in Sources */,
-				1737CE86A0F11CD8E4D5FAD2 /* Solver.m in Sources */,
-				1737C1FAECE74A01BB2D90AC /* Command.m in Sources */,
-				1737C7F789A301670A3F1454 /* Problem.m in Sources */,
-				1737CA28255C71D9021CE0E3 /* Solution.m in Sources */,
-				1737C82417FD1539B6690630 /* BoardParser.m in Sources */,
-				1737C21C7BEE6DE0A1116DA6 /* CommandLineTask.m in Sources */,
-				1737C57A973A3FBAD7AD13B3 /* LinearCongruentGenerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +209,10 @@
 		7327FD7E1B6CAF6F00D693ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Volumes/data/Projects/icfp-2015/solution/objc/icfp2015view/build/Debug",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../icfp2015view\"/**";
 			};
@@ -270,6 +221,10 @@
 		7327FD7F1B6CAF6F00D693ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Volumes/data/Projects/icfp-2015/solution/objc/icfp2015view/build/Debug",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../icfp2015view\"/**";
 			};
@@ -294,6 +249,7 @@
 				7327FD7F1B6CAF6F00D693ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

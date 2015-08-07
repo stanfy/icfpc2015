@@ -5,6 +5,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class Solution;
 
-@interface Solver : NSObject
+@protocol SolverProtocol <NSObject>
+/*
+Generates Solution
+ */
+
+- (Solution *)solve;
+
 @end
