@@ -12,7 +12,7 @@ import org.json4s.Formats
 class Board(val input:String) {
 
   implicit val formats = {
-    Serialization.formats(ShortTypeHints(List(classOf[Cell], classOf[BoardUnit], classOf[JInt])))
+    Serialization.formats(ShortTypeHints(List(classOf[BoardCell], classOf[BoardUnit])))
   }
 
   val parsedJson = parse(input)
@@ -25,7 +25,7 @@ class Board(val input:String) {
   val sourceLength = parsedJson \ "sourceLength"
   val sourceSeeds = (parsedJson \ "sourceSeeds") //.extract[List[JInt]]
 
-  val filledCells = (parsedJson \ "filled").extract[List[Cell]]
+  val filledCells = (parsedJson \ "filled").extract[List[BoardCell]]
 
   val units = (parsedJson \ "units").extract[List[BoardUnit]]
 }
