@@ -5,6 +5,18 @@
 var transform = require("../logic/transformations");
 var brain = require("../logic/brain");
 
+(function(definition) {
+    /* global module, define */
+    if(typeof module === 'object' && typeof module.exports === 'object') {
+        module.exports = definition();
+    } else if(typeof define === 'function' && define.amd) {
+        define([], definition);
+    } else {
+        var exports = definition();
+        window.astar = exports.astar;
+        window.Graph = exports.Graph;
+    }
+})(function() {
 function pathTo(node){
     var curr = node,
         path = [];
@@ -21,7 +33,7 @@ function getHeap() {
     });
 }
 
-exports.astar = {
+var astar = {
     /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
@@ -118,8 +130,8 @@ exports.astar = {
     // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
     heuristics: {
         manhattan: function(pos0, pos1) {
-            var d1 = Math.abs(pos1.unit.pivot.x - pos0.unit.pivot.x);
-            var d2 = Math.abs(pos1.unit.pivot.y - pos0.unit.pivot.y);
+            var d1 = Math.abs(pos1.state.unit.pivot.x - pos0.state.unit.pivot.x);
+            var d2 = Math.abs(pos1.state.unit.pivot.y - pos0.state.unit.pivot.y);
             return d1 + d2;
         },
         diagonal: function(pos0, pos1) {
@@ -142,13 +154,14 @@ exports.astar = {
     }
 };
 
+
 /**
  * A graph memory structure
  * @param {Array} gridIn 2D array of input weights
  * @param {Object} [options]
  * @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
  */
-exports.Graph = function(state, options){
+function Graph(state, options){
     var maxX = state.board.width;
     var maxY = state.board.height;
     var maxL = 5;
@@ -161,7 +174,7 @@ exports.Graph = function(state, options){
     for (var x = 0; x < maxX; x++) {
         this.grid[x] = [];
 
-        for (var y = 0; y < row.length; y++) {
+        for (var y = 0; y < maxY; y++) {
             this.grid[x][y] = [];
             for ( var l =0; l< maxL; l++){
                 this.grid[x][y][l] = [];
@@ -176,28 +189,28 @@ exports.Graph = function(state, options){
 
         }
     }
+    this.init = function() {
+        this.dirtyNodes = [];
+        for (var i = 0; i < this.nodes.length; i++) {
+            astar.cleanNode(this.nodes[i]);
+        }
+    };
     this.init();
 }
 
-exports.Graph.prototype.init = function() {
-    this.dirtyNodes = [];
-    for (var i = 0; i < this.nodes.length; i++) {
-        astar.cleanNode(this.nodes[i]);
-    }
-};
 
-exports.Graph.prototype.cleanDirty = function() {
+Graph.prototype.cleanDirty = function() {
     for (var i = 0; i < this.dirtyNodes.length; i++) {
         astar.cleanNode(this.dirtyNodes[i]);
     }
     this.dirtyNodes = [];
 };
 
-exports.Graph.prototype.markDirty = function(node) {
+Graph.prototype.markDirty = function(node) {
     this.dirtyNodes.push(node);
 };
 
-exports.Graph.prototype.neighbors = function(node) {
+Graph.prototype.neighbors = function(node) {
     var ret = [],
         x = node.x,
         y = node.y,
@@ -207,9 +220,9 @@ exports.Graph.prototype.neighbors = function(node) {
         grid = this.grid;
 
 
-    var leftState = brain.moveLeft(node.state, function(){return "leftFailure"});
+        var leftState = brain.moveLeft(node, function(){return "leftFailure"});
 
-    if(leftState =! "leftFailure" && leftState && leftState.state.state === "ok") {
+    if(leftState =! "leftFailure" && leftState.state.state === "ok") {
         if (grid[left.x] && grid[left.x][left.y] && grid[left.x][left.y][left.l] && grid[left.x][left.y][l][r]) {
             var nodeLeft = grid[left.x][left.y][l][r];
             nodeLeft.step = "L";
@@ -221,7 +234,7 @@ exports.Graph.prototype.neighbors = function(node) {
 
     // right
 
-    var rightState = brain.moveRight(node.state, function(){return "rightFailure"});
+    var rightState = brain.moveRight(node, function(){return "rightFailure"});
 
     if(rightState != "rightFailure" && rightState && rightState.state.state === "ok") {
         var right = transform.moveRight({x: x, y: y});
@@ -234,7 +247,7 @@ exports.Graph.prototype.neighbors = function(node) {
     }
 
     // se
-    var seState = brain.moveDownRight(node.state, function(){return "seFailure";});
+    var seState = brain.moveDownRight(node, function(){return "seFailure";});
     if(seState != "seFailure" && seState && seState.state.state === "ok") {
         var se = transform.moveSE({x: x, y: y});
         if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
@@ -247,7 +260,7 @@ exports.Graph.prototype.neighbors = function(node) {
 
     // sw
 
-    var swState = brain.moveDownLeft(node.state, function(){return "swFailure";});
+    var swState = brain.moveDownLeft(node, function(){return "swFailure";});
     if(swState != "swFailure" && swState && swState.state.state == "ok") {
 
         var sw = transform.moveSW({x: x, y: y});
@@ -260,8 +273,8 @@ exports.Graph.prototype.neighbors = function(node) {
     }
 
     // rotate left
-    var ccState = brain.rotateCC(node.state, function(){return "ccFailure";});
-    if(ccState != "swFailure" && ccState && ccState.state.state === "ok") {
+    var ccState = brain.rotateCC(node, function(){return "ccFailure";});
+    if(ccState != "ccFailure" && ccState && ccState.state.state === "ok") {
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
             var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
             nodeCC.step = "CC";
@@ -272,7 +285,7 @@ exports.Graph.prototype.neighbors = function(node) {
 
     // rotate right
 
-    var cState = brain.rotateC(node.state, function(){return "cFailure";});
+    var cState = brain.rotateC(node, function(){return "cFailure";});
     if( cState != "cFailure" && cState && cState.state.state === "ok") {
 
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
@@ -285,7 +298,7 @@ exports.Graph.prototype.neighbors = function(node) {
     return ret;
 };
 
-exports.Graph.prototype.toString = function() {
+Graph.prototype.toString = function() {
     var graphString = [],
         nodes = this.grid, // when using grid
         rowDebug, row, y, l;
@@ -300,6 +313,7 @@ exports.Graph.prototype.toString = function() {
     return graphString.join("\n");
 };
 
+exports.Graph = Graph;
 function GridNode(x, y, l, r, weight) {
     this.x = x;
     this.y = y;
@@ -312,7 +326,7 @@ function GridNode(x, y, l, r, weight) {
 }
 
 GridNode.prototype.toString = function() {
-    return "[" + this.x + " " + this.y +  " " + this.l + " " + this.r "]";
+    return "[" + this.x + " " + this.y +  " " + this.l + " " + this.r +"]";
 };
 
 GridNode.prototype.getCost = function(fromNeighbor) {
@@ -448,3 +462,9 @@ BinaryHeap.prototype = {
         }
     }
 };
+
+    return {
+        astar: astar,
+        Graph: Graph
+    };
+});
