@@ -51,15 +51,17 @@ function pivot(i, j, color) {
         cellSize / 3, color);
 }
 
-function drawUnit(unit, origin) {
+function drawUnit(unit) {
     unit.members.forEach(function (member) {
-        fill(member.x + origin.x + (origin.y % 2 == 0 ? 0 : (member.y % 2 == 1 ? 1 : 0)), member.y + origin.y, unitColor)
+        fill(member.x, member.y,
+            unitColor
+        )
     });
 
 }
 
-function drawPivot(unit, origin) {
-    pivot(unit.pivot.x + origin.x + (origin.y % 2 == 0 ? 0 : (unit.pivot.y % 2 == 1 ? 1 : 0)), unit.pivot.y + origin.y, pivotColor);
+function drawPivot(unit) {
+    pivot(unit.pivot.x, unit.pivot.y, pivotColor);
 }
 
 function drawMap(map, state) {
@@ -70,11 +72,11 @@ function drawMap(map, state) {
     console.log("Map " + map.width + "x" + map.height);
 
     document.getElementById("currentState").innerHTML =
-      "State: " + state.state + "\n"
-      + "Score: " + state.score + "\n"
-      + "Seed: " + state.seed + "\n"
-      + "\nFull state: \n"
-      + JSON.stringify(state, null, 4);
+        "State: " + state.state + "\n"
+        + "Score: " + state.score + "\n"
+        + "Seed: " + state.seed + "\n"
+        + "\nFull state: \n"
+        + JSON.stringify(state, null, 4);
 
     drawBoard(map.width, map.height, cellSize, gapSize);
     map.filled.forEach(function (item) {
@@ -84,10 +86,9 @@ function drawMap(map, state) {
     // Draw state
     if (state) {
         var unit = state.unit;
-        var origin = state.unitOrigin;
-        if (unit && origin) {
-            drawUnit(unit, origin)
-            drawPivot(unit, origin)
+        if (unit) {
+            drawUnit(unit)
+            drawPivot(unit)
         }
     }
 }
@@ -249,8 +250,8 @@ function rotateCC() {
 }
 
 function logCommand(command) {
-  commandLog += command + " ";
-  document.getElementById("commandSequence").value = commandLog;
+    commandLog += command + " ";
+    document.getElementById("commandSequence").value = commandLog;
 }
 
 window.addEventListener('resize', resize, false);

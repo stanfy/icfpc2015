@@ -54,7 +54,6 @@ describe('Locking', function () {
         });
     });
     context('when locking with unit', function () {
-
         it('should not fail', function () {
             assert.equal(brain.lockUnit(state).state.state, "locked");
         });

@@ -54,10 +54,11 @@ exports.placeUnitOnTop = function (state, unit) {
     }).x;
 
     var emptySpace = (state.board.width - (maxX + 1));
-    var unitOrigin = {
-        x: (emptySpace / 2 | 0), // Integer division :)
-        y: 0
-    };
+    var updatedUnit = extend({}, unit);
+    updatedUnit.members = unit.members.map(function (mem) {
+        return {x: mem.x + (emptySpace / 2 | 0), y: mem.y};
+    });
+    updatedUnit.pivot = {x: unit.pivot.x + (emptySpace / 2 | 0), y: unit.pivot.y}
 
 
     // check ig unit can be placed
@@ -65,16 +66,15 @@ exports.placeUnitOnTop = function (state, unit) {
         board: state.board,
         state: {
             state: "ok",
-            unit: unit,
-            unitOrigin: unitOrigin,
+            unit: updatedUnit,
             score: state.state.score,
             seed: state.state.seed
         }
     };
 
     // Try to place
-    return moveWithMovementFunction(result, "Place", function (cell, origin) {
-        return {x: origin.x + cell.x, y: origin.y + cell.y}
+    return moveWithMovementFunction(result, "Place", function (cell) {
+        return {x: cell.x, y: cell.y}
     }, null, function () {
         return {
             board: state.board,
@@ -164,16 +164,15 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
 
     // get active unit
     var unit = state.state.unit;
-    var origin = state.state.unitOrigin;
     var pivot = unit.pivot;
     // simple -1 for all X
 
-    console.log("Unit.memers" + unit.members)
+    console.log("Unit.memers" + unit.members);
     var canMoveInDirection = unit.members.reduce(function (prev, cell) {
         if (!prev) {
             return false;
         }
-        var nextCell = movePoint(cell, origin, pivot);
+        var nextCell = movePoint(cell, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
             console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
@@ -184,14 +183,20 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
 
     console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
-        var nextOrigin = moveUnit ? origin : movePoint({x: 0, y: 0}, origin, pivot);
-        var nextUnit = moveUnit ? moveUnit(unit) : unit;
+
+        // update all points with move point
+        // update pivot with move point
+        var updatedUnit = extend({}, unit);
+        updatedUnit.members = unit.members.map(function (mem) {
+            return movePoint(mem, unit.pivot)
+        });
+        updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
+        var nextUnit = moveUnit ? moveUnit(unit) : updatedUnit;
         return {
             board: state.board,
             state: {
                 state: "ok",
                 unit: nextUnit,
-                unitOrigin: nextOrigin,
                 score: state.state.score,
                 seed: state.state.seed
             }
@@ -213,8 +218,8 @@ exports.moveLeft = function (state) {
         return state;
     }
 
-    return moveWithMovementFunction(state, "Left", function (cell, origin) {
-        return {x: origin.x + cell.x - 1, y: origin.y + cell.y}
+    return moveWithMovementFunction(state, "Left", function (cell, pivot) {
+        return {x: cell.x - 1, y: cell.y}
     });
 };
 
@@ -224,8 +229,8 @@ exports.moveRight = function (state) {
         return state;
     }
 
-    return moveWithMovementFunction(state, "Right", function (cell, origin) {
-        return {x: origin.x + cell.x + 1, y: origin.y + cell.y}
+    return moveWithMovementFunction(state, "Right", function (cell) {
+        return {x: cell.x + 1, y: cell.y}
     });
 };
 
@@ -234,8 +239,8 @@ exports.moveDownLeft = function (state) {
         return state;
     }
 
-    return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
-        return {x: origin.x + cell.x - ((origin.y + cell.y) % 2 == 0 ? 1 : 0), y: origin.y + cell.y + 1}
+    return moveWithMovementFunction(state, "DownLeft", function (cell) {
+        return {x: cell.x, y: cell.y + 1}
     });
 };
 
@@ -244,8 +249,8 @@ exports.moveDownRight = function (state) {
         return state;
     }
 
-    return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
-        return {x: origin.x + cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
+    return moveWithMovementFunction(state, "DownLeft", function (cell) {
+        return {x: cell.x, y: cell.y + 1}
     });
 };
 
@@ -255,7 +260,7 @@ exports.rotateC = function (state) {
     }
 
 
-    var movePointFunction = function (cell, origin, pivot) {
+    var movePointFunction = function (cell, pivot) {
 
         return transform.rotateRight(cell, pivot);
     };
@@ -275,7 +280,7 @@ exports.rotateCC = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
-    var movePointFunction = function (cell, origin, pivot) {
+    var movePointFunction = function (cell, pivot) {
 
         return transform.rotateLeft(cell, pivot);
     };
@@ -312,11 +317,10 @@ exports.lockUnit = function (state) {
     updatedBoard.filled = state.board.filled.slice();
 
     var unit = state.state.unit;
-    var origin = state.state.unitOrigin;
 
     unit.members.forEach(function (cell) {
-        var x = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0));
-        var y = cell.y + origin.y;
+        var x = cell.x;
+        var y = cell.y;
         if (!updatedBoard.filled.some(function (filledCell) {
                 return filledCell.x == x && filledCell.y == y;
             })) {
@@ -329,7 +333,7 @@ exports.lockUnit = function (state) {
         state: {
             state: "locked",
             unit: unit,
-            score: state.state.score +  unit.members.length,
+            score: state.state.score + unit.members.length,
             seed: state.state.seed
         }
     }
