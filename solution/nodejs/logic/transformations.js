@@ -136,3 +136,24 @@ exports.rotateRight = function(point, pivot){
     return {x : hexed.q, y: hexed.r};
 
 }
+
+exports.rotateUnitLeft = function(unit){
+    var pivot = unit.pivot;
+    var rotatedMembers = [];
+    unit.members.forEach(function(member) {
+        var rotated = exports.rotateLeft(member, pivot);
+        rotatedMembers.push(rotated);
+    });
+    return {pivot : pivot, members: rotatedMembers};
+
+}
+
+exports.rotateUnitRight = function (unit) {
+    var pivot = unit.pivot;
+    var rotatedMembers = [];
+    unit.members.forEach(function(member) {
+        var rotated = exports.rotateRight(member, pivot);
+        rotatedMembers.push(rotated);
+    });
+    return {pivot : pivot, members: rotatedMembers};
+}

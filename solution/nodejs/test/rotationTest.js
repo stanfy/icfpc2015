@@ -79,5 +79,31 @@ describe("rotation", function () {
             expect(rotated6).to.deep.equal(point);
         });
 
+        it("compex figure right rotation", function(){
+            unit = {
+                pivot: {x: 0, y: 0},
+                members: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}]
+            };
+            var expectedRotated = {
+                pivot: {x: 0, y: 0},
+                members: [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 2}]
+            };
+            var rotated = transform.rotateUnitRight(unit);
+            expect(rotated).to.deep.equal(expectedRotated);
+        });
+
+        it("compex figure left rotation", function(){
+            expectedRotated = {
+                pivot: {x: 0, y: 0},
+                members: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}]
+            };
+            var unit = {
+                pivot: {x: 0, y: 0},
+                members: [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 2}]
+            };
+            var rotated = transform.rotateUnitLeft(unit);
+            expect(rotated).to.deep.equal(expectedRotated);
+        });
+
     });
 });
