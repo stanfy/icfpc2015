@@ -28,6 +28,30 @@ var solveBoard = function (board, seed) {
 };
 
 
+// ---------------------------------------
+
+exports.solveBoardForAllSeedsForLetters = function(json, letters) {
+    var seeds = json.sourceSeeds;
+    var board = json;
+
+    var solutions = [];
+    seeds.forEach(function (seed) {
+        solutions.push(solveBoardForLetters(board, seed, letters));
+    });
+    return solutions;
+};
+
+
+var solveBoardForLetters = function (board, seed, letters) {
+    var state = player.initializeOneBoard(board, seed);
+    state.sequence = letters;
+    state = player.nextState(state, {"command" : "SEQUENCE"});
+    return solution.init(board.id, seed, letters);
+};
+
+
+// --------------------------------------------
+
 // -> SW W E W E
 // <- aaaalllaalla
 var lettersFromCommands = function(commands) {

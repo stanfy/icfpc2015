@@ -2,9 +2,7 @@ var brain = require('./brain');
 
 
 exports.initializeOneBoard = function (board, seed) {
-    console.error(board + "---");
     var state = brain.initTransform(board, seed);
-    console.error(board + "---");
     return state;
 };
 
