@@ -171,13 +171,9 @@ var pointIsBlockedAtBoard = function (board, x, y) {
     }
 
 
-    var boardFilled = board.filled.reduce(function (prev, cell) {
-        if (prev) {
-            return prev;
-        }
+    var boardFilled = board.filled.some(function (cell) {
         return cell.x == x && cell.y == y;
-
-    }, false);
+    });
     return boardFilled;
 };
 
@@ -307,7 +303,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
             }
         }
 
-       var nextUnit = updatedUnit;
+        var nextUnit = updatedUnit;
         var nextHashes = state.state.hashes.splice(0);
         if (nextUnit.pivot.y != unit.pivot.y) {
             nextHashes = []
@@ -349,37 +345,37 @@ exports.moveLeft = function (state, failure) {
 };
 
 
-exports.moveRight = function (state,failure) {
+exports.moveRight = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "Right", function (cell) {
         return {x: cell.x + 1, y: cell.y}
-    },failure);
+    }, failure);
 };
 
-exports.moveDownLeft = function (state,failure) {
+exports.moveDownLeft = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
         return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1}
-    },failure);
+    }, failure);
 };
 
-exports.moveDownRight = function (state,failure) {
+exports.moveDownRight = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "DownRight", function (cell) {
         return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
-    },failure);
+    }, failure);
 };
 
-exports.rotateC = function (state,failure) {
+exports.rotateC = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -389,7 +385,7 @@ exports.rotateC = function (state,failure) {
         return transform.rotateRight(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateC", movePointFunction,failure);
+    return moveWithMovementFunction(state, "rotateC", movePointFunction, failure);
 
 };
 
@@ -402,7 +398,7 @@ exports.rotateCC = function (state, failure) {
         return transform.rotateLeft(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateCC", movePointFunction,failure);
+    return moveWithMovementFunction(state, "rotateCC", movePointFunction, failure);
 
 };
 
