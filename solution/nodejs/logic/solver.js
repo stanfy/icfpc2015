@@ -1,7 +1,7 @@
 var player = require('./player');
 var solution = require('./oneSolution');
 
-exports.solveBoardForAllSeeds = function (json, minScore, partial_result) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
     var seeds = json.sourceSeeds;
     var board = json;
 

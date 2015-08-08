@@ -93,7 +93,7 @@ exports.placeUnitOnTop = function (state, unit) {
             seed: state.state.seed,
             ls_old: state.state.ls_old,
             hashes: hashes,
-            estimation:state.state.estimation,
+            estimation: state.state.estimation,
         }
     };
 
@@ -149,7 +149,7 @@ exports.getNextUnit = function (state) {
             seed: nexSeed,
             ls_old: state.state.ls_old,
             hashes: state.state.hashes,
-            estimation:state.state.estimation,
+            estimation: state.state.estimation,
 
         }
     };
@@ -249,7 +249,7 @@ exports.removeAllLines = function (state) {
             seed: state.state.seed,
             ls_old: linesclearedAt.length,
             hashes: state.state.hashes,
-            estimation:state.state.estimation,
+            estimation: state.state.estimation,
 
         }
     };
@@ -326,7 +326,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
                 seed: state.state.seed,
                 ls_old: state.state.ls_old,
                 hashes: nextHashes,
-                estimation:state.state.estimation
+                estimation: state.state.estimation
             }
         };
         result.state.estimation = JSON.stringify(estimator.estimatePosition(result));
@@ -339,6 +339,14 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         nextState = exports.removeAllLines(nextState);
         nextState = exports.getNextUnit(nextState);
         nextState = exports.placeUnitOnTop(nextState, nextState.state.unit);
+
+        // Estimate this one
+        //TODO : ESTIMATOR IS HERE
+        //var value = estimator.findBestPositionsForCurrentState(nextState);
+        //console.error("Best items are : " + JSON.stringify(value));
+        //if (nextState && nextState.state) {
+        //    nextState.state.estimatedPositions = value;
+        //}
         return nextState;
     }
 };

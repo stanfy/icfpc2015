@@ -51,10 +51,10 @@ function pivot(i, j, color) {
         cellSize / 3, color);
 }
 
-function drawUnit(unit) {
+function drawUnit(unit, customColor) {
     unit.members.forEach(function (member) {
         fill(member.x, member.y,
-            unitColor
+            customColor ? customColor : unitColor
         )
     });
 
@@ -84,12 +84,21 @@ function drawMap(map, state) {
         fill(item.x, item.y, filledColor)
     });
 
+
+
     // Draw state
     if (state) {
         var unit = state.unit;
         if (unit) {
             drawUnit(unit)
             drawPivot(unit)
+        }
+
+        var estimations = state.estimatedPositions;
+        if (estimations && estimations.length) {
+            for (var i = 0 ; i < estimations.length  && i < 10;i ++) {
+                drawUnit(estimations[i].unit, "rgba(0," + (10.0 - i) * 255.0 +",0,0.2)")
+            }
         }
     }
 }
