@@ -179,7 +179,7 @@ function getNextState() {
 }
 function moveLeft() {
     console.log("Current state is " + JSON.stringify(current_state))
-    loadJSON("state?command=W", function (state) {
+    loadJSON("state?command=E", function (state) {
         console.log("W State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
@@ -188,7 +188,7 @@ function moveLeft() {
 
 function moveRight() {
     console.log("Current state is " + JSON.stringify(current_state))
-    loadJSON("state?command=E", function (state) {
+    loadJSON("state?command=W", function (state) {
         console.log("E State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
