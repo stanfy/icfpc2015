@@ -39,7 +39,26 @@ exports.initTransform = function (board, seed) {
     initialState = exports.getNextUnit(initialState);
     initialState = exports.placeUnitOnTop(initialState, initialState.state.unit);
     return initialState
-}
+};
+
+exports.unitHash = function (unit) {
+    return unit.members.reduce(function (cur, char) {
+        cur[char.x << 16 + char.y] = true;
+        return cur;
+    }, {})
+};
+
+exports.unitHashIsInHashes = function (hash, hashes) {
+    return hashes.some(function (hs) {
+        for (var k in hash) {
+            if (!hs[k]) {
+                return false;
+            }
+        }
+        return true;
+    });
+};
+
 /** Simply puts unit on the board, centering
  * Doesn't peform any checks on it
  * */
@@ -60,8 +79,8 @@ exports.placeUnitOnTop = function (state, unit) {
     });
     updatedUnit.pivot = {x: unit.pivot.x + (emptySpace / 2 | 0), y: unit.pivot.y}
 
-
     // check ig unit can be placed
+    var hashes = [];
     var result = {
         board: state.board,
         state: {
@@ -69,7 +88,8 @@ exports.placeUnitOnTop = function (state, unit) {
             unit: updatedUnit,
             score: state.state.score,
             seed: state.state.seed,
-            ls_old: state.state.ls_old
+            ls_old: state.state.ls_old,
+            hashes: hashes,
         }
     };
 
@@ -123,7 +143,8 @@ exports.getNextUnit = function (state) {
             unit: unit,
             score: state.state.score,
             seed: nexSeed,
-            ls_old: state.state.ls_old
+            ls_old: state.state.ls_old,
+            hashes: state.state.hashes
         }
     };
 
@@ -225,7 +246,8 @@ exports.removeAllLines = function (state) {
             unit: state.state.unit,
             score: state.state.score + move_score,
             seed: state.state.seed,
-            ls_old: linesclearedAt.length
+            ls_old: linesclearedAt.length,
+            hashes: state.state.hashes,
         }
     };
 
@@ -267,7 +289,27 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
             return movePoint(mem, unit.pivot)
         });
         updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
+
+        //check next hash
+        var updatedUnitHash = exports.unitHash(updatedUnit);
+        if (exports.unitHashIsInHashes(updatedUnitHash, state.state.hashes)) {
+            return {
+                board: state.board,
+                state: {
+                    state: "<BOOM!>",
+                    message: "Yo have returned to the same state!"
+                }
+            }
+        }
+
+
         var nextUnit = moveUnit ? moveUnit(unit) : updatedUnit;
+        var nextHashes = state.state.hashes.splice(0);
+        if (nextUnit.pivot.y != unit.pivot.y) {
+            nextHashes = []
+        }
+        nextHashes.push(updatedUnitHash);
+
         return {
             board: state.board,
             state: {
@@ -275,7 +317,8 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
                 unit: nextUnit,
                 score: state.state.score,
                 seed: state.state.seed,
-                ls_old: state.state.ls_old
+                ls_old: state.state.ls_old,
+                hashes: nextHashes,
             }
         };
     } else {
@@ -402,38 +445,51 @@ exports.lockUnit = function (state) {
     }
 };
 
-exports.performSequence = function(state) {
-  console.error(state.sequence);
+exports.performSequence = function (state) {
+    console.error(state.sequence);
 
-  if (state.sequence.length == 0) {
-    console.log("Command sequence is empty");
-    return state;
-  }
-
-  var sequence = state.sequence;
-  var history = "";
-
-  for (var i = 0; i < sequence.length; i++) {
-    var c = sequence[i];
-    console.log("Sequence execution. Current command: " + c);
-
-    console.error(state.state.state);
-
-    if (state.state.state != "ok") {
-      state.commandHistory = history;
-      return state;
+    if (state.sequence.length == 0) {
+        console.log("Command sequence is empty");
+        return state;
     }
 
-    if ("p'!.03".indexOf(c) >= 0) {/* move W    */ state = exports.moveLeft(state); history += "W ";
-    }	else if ("bcefy2".indexOf(c) >= 0) {/* move E    */ state = exports.moveRight(state); history += "E ";
-    }	else if ("aghij4".indexOf(c) >= 0) {/* move SW   */ state = exports.moveDownLeft(state); history += "SW ";
-    }	else if ("lmno 5".indexOf(c) >= 0) {/* move SE   */ state = exports.moveDownRight(state); history += "SE ";
-    }	else if ("dqrvz1".indexOf(c) >= 0) {/* rotate C  */ state = exports.rotateC(state); history += "C ";
-    }	else if ("kstuwx".indexOf(c) >= 0) {/* rotate CC */ state = exports.rotateCC(state); history += "CC "; }
-  }
+    var sequence = state.sequence;
+    var history = "";
 
-  state.commandHistory = history;
-  return state;
+    for (var i = 0; i < sequence.length; i++) {
+        var c = sequence[i];
+        console.log("Sequence execution. Current command: " + c);
+
+        console.error(state.state.state);
+
+        if (state.state.state != "ok") {
+            state.commandHistory = history;
+            return state;
+        }
+
+        if ("p'!.03".indexOf(c) >= 0) {/* move W    */
+            state = exports.moveLeft(state);
+            history += "W ";
+        } else if ("bcefy2".indexOf(c) >= 0) {/* move E    */
+            state = exports.moveRight(state);
+            history += "E ";
+        } else if ("aghij4".indexOf(c) >= 0) {/* move SW   */
+            state = exports.moveDownLeft(state);
+            history += "SW ";
+        } else if ("lmno 5".indexOf(c) >= 0) {/* move SE   */
+            state = exports.moveDownRight(state);
+            history += "SE ";
+        } else if ("dqrvz1".indexOf(c) >= 0) {/* rotate C  */
+            state = exports.rotateC(state);
+            history += "C ";
+        } else if ("kstuwx".indexOf(c) >= 0) {/* rotate CC */
+            state = exports.rotateCC(state);
+            history += "CC ";
+        }
+    }
+
+    state.commandHistory = history;
+    return state;
 };
 
 var a = {
