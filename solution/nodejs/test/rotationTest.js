@@ -105,5 +105,53 @@ describe("rotation", function () {
             expect(rotated).to.deep.equal(expectedRotated);
         });
 
+        it("movement to left test", function(){
+
+            var point = {x : 2, y: 4};
+            var lefted = transform.moveLeft(point);
+
+            expect(lefted).to.deep.equal({x: 1, y :4});
+        });
+
+        it("movement to right test", function(){
+
+            var point = {x : 2, y: 4};
+            var lefted = transform.moveRight(point);
+
+            expect(lefted).to.deep.equal({x: 3, y :4});
+        });
+
+        it("movement to SW even test", function(){
+
+            var point = {x : 2, y: 4};
+            var lefted = transform.moveSW(point);
+
+            expect(lefted).to.deep.equal({x: 1, y :5});
+        });
+
+        it("movement to SW odd test", function(){
+
+            var point = {x : 2, y: 3};
+            var lefted = transform.moveSW(point);
+
+            expect(lefted).to.deep.equal({x: 2, y :4});
+        });
+
+        it("movement to SE even test", function(){
+
+            var point = {x : 2, y: 4};
+            var lefted = transform.moveSE(point);
+
+            expect(lefted).to.deep.equal({x: 2, y :5});
+        });
+
+        it("movement to SE odd test", function(){
+
+            var point = {x : 2, y: 3};
+            var lefted = transform.moveSE(point);
+
+            expect(lefted).to.deep.equal({x: 3, y :4});
+        });
+
     });
 });

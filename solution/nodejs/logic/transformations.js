@@ -137,6 +137,51 @@ exports.rotateRight = function(point, pivot){
 
 }
 
+exports.moveLeft = function (point){
+    var hex = new Hex(point.x, point.y);
+
+    var cube = oddRToCube(hex);
+    var tranlatedRotated = new Cube(cube.x - 1, cube.y + 1, cube.z);
+    var hexed = cubeToOddR(tranlatedRotated);
+
+    return {x : hexed.q, y: hexed.r};
+}
+
+exports.moveRight = function (point){
+    var hex = new Hex(point.x, point.y);
+
+    var cube = oddRToCube(hex);
+
+
+    var tranlatedRotated = new Cube(cube.x + 1, cube.y - 1, cube.z);
+    var hexed = cubeToOddR(tranlatedRotated);
+
+    return {x : hexed.q, y: hexed.r};
+}
+
+exports.moveSW = function (point){
+    var hex = new Hex(point.x, point.y);
+
+    var cube = oddRToCube(hex);
+
+    var tranlatedRotated = new Cube(cube.x - 1, cube.y , cube.z+1);
+    var hexed = cubeToOddR(tranlatedRotated);
+
+    return {x : hexed.q, y: hexed.r};
+}
+
+exports.moveSE = function (point){
+    var hex = new Hex(point.x, point.y);
+
+    var cube = oddRToCube(hex);
+
+
+    var tranlatedRotated = new Cube(cube.x, cube.y - 1, cube.z+1);
+    var hexed = cubeToOddR(tranlatedRotated);
+
+    return {x : hexed.q, y: hexed.r};
+}
+
 exports.rotateUnitLeft = function(unit){
     var pivot = unit.pivot;
     var rotatedMembers = [];
