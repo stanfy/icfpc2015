@@ -60,5 +60,16 @@ exports.estimatePosition = function (state) {
     base += linesSum * linesCoef;
     base += itemsLeft * itemsLeftCoef;
 
-    return {value:base, score:score * scoreCoef, holes:holesSum * holesCoef, lines:linesSum * linesCoef, items:itemsLeft * itemsLeftCoef};
+    return {
+        value: base,
+        score: score * scoreCoef,
+        holes: holesSum * holesCoef,
+        lines: linesSum * linesCoef,
+        items: itemsLeft * itemsLeftCoef
+    };
+}
+
+
+exports.findBestPositionsForCurrentState = function (state) {
+    // resolving current unit and trying to place it somewhere
 }

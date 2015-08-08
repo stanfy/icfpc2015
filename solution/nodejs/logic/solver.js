@@ -1,27 +1,34 @@
 var player = require('./player');
 var solution = require('./oneSolution');
 
-exports.solveBoardForAllSeeds = function(json, minScore) {
+exports.solveBoardForAllSeeds = function (json, minScore, partial_result) {
     var seeds = json.sourceSeeds;
     var board = json;
 
-    var solutions = [];
-    seeds.forEach(function (seed) {
-        var solution = solveBoard(board, seed, minScore);
-
-        if (minScore) {
-            // try to find best solution
-            while (solution.score <= minScore) {
-                solution = solveBoard(board, seed, minScore);
-
-                // increase min score
-                if (solution.score > minScore) {
-                    minScore = solution.score;
-                }
-            }
-        }
-        solutions.push(solution);
+    var solutions = seeds.map(function (seed) {
+        return solution.init(board.id, seed, "", 0)
     });
+
+    var max_cycles = 10000;
+    if (!partial_result) {
+        max_cycles = 1;
+    }
+    while (max_cycles > 0) {
+        var atLeastOneWasBetter = false;
+        solutions = solutions.map(function (oldSolution) {
+            var newSolution = solveBoard(board, oldSolution.seed, oldSolution.score);
+            if (newSolution.score > oldSolution.score) {
+                atLeastOneWasBetter = true;
+                return newSolution;
+            }
+            return oldSolution;
+        });
+
+        if (partial_result && atLeastOneWasBetter) {
+            partial_result(solutions);
+        }
+        max_cycles--;
+    }
     return solutions;
 };
 
@@ -32,11 +39,11 @@ var solveBoard = function (board, seed) {
     var lastState = state;
     var score = state.state.score;
 
-    while(state) {
+    while (state) {
         // generate state
         var alreadyUsedCommands = [];
         var possibleCommand = generateNextCommand(board, seed, alreadyUsedCommands);
-        var possibleState = player.nextState(state, {"command" : possibleCommand});
+        var possibleState = player.nextState(state, {"command": possibleCommand});
 
         // if state is error - try another command
         var stateAfterCommand = possibleState ? possibleState.state.state : null;
@@ -54,8 +61,8 @@ var solveBoard = function (board, seed) {
                 possibleState = player.nextState(state, {"command": anotherCommand});
                 stateAfterCommand = possibleState ? possibleState.state.state : null;
             } while ((possibleState == null
-                || stateAfterCommand == "BOOM!")
-                && anotherCommand);
+            || stateAfterCommand == "BOOM!")
+            && anotherCommand);
 
             possibleCommand = anotherCommand;
         }
@@ -74,7 +81,7 @@ var solveBoard = function (board, seed) {
 
 // ---------------------------------------
 
-exports.solveBoardForAllSeedsForLetters = function(json, letters) {
+exports.solveBoardForAllSeedsForLetters = function (json, letters) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -89,7 +96,7 @@ exports.solveBoardForAllSeedsForLetters = function(json, letters) {
 var solveBoardForLetters = function (board, seed, letters) {
     var state = player.initializeOneBoard(board, seed);
     state.sequence = letters;
-    state = player.nextState(state, {"command" : "SEQUENCE"});
+    state = player.nextState(state, {"command": "SEQUENCE"});
     return solution.init(board.id, seed, letters);
 };
 
@@ -98,11 +105,11 @@ var solveBoardForLetters = function (board, seed, letters) {
 
 // -> SW W E W E
 // <- aaaalllaalla
-var lettersFromCommands = function(commands) {
+var lettersFromCommands = function (commands) {
     var commandsArray = commands.split(",");
     var letters = "";
 
-    commandsArray.map(function(command) {
+    commandsArray.map(function (command) {
         letters += selectLetterFromCommand(command);
     });
     return letters;
@@ -111,13 +118,25 @@ var lettersFromCommands = function(commands) {
 
 var selectLetterFromCommand = function (command) {
     var letters = [];
-    switch(command) {
-        case "W": letters = ["p","'","!", ".", "0", "3"]; break;
-        case "E": letters = ["b","c","e", "f", "y", "2"]; break;
-        case "SW": letters = ["a","g","h", "i", "j", "4"]; break;
-        case "SE": letters =["l","m","n", "o", " ", "5"]; break;
-        case "C": letters = ["d","q","r", "v", "z", "1"]; break;
-        case "CC": letters = ["k","s","t", "u", "w", "x"]; break;
+    switch (command) {
+        case "W":
+            letters = ["p", "'", "!", ".", "0", "3"];
+            break;
+        case "E":
+            letters = ["b", "c", "e", "f", "y", "2"];
+            break;
+        case "SW":
+            letters = ["a", "g", "h", "i", "j", "4"];
+            break;
+        case "SE":
+            letters = ["l", "m", "n", "o", " ", "5"];
+            break;
+        case "C":
+            letters = ["d", "q", "r", "v", "z", "1"];
+            break;
+        case "CC":
+            letters = ["k", "s", "t", "u", "w", "x"];
+            break;
     }
 
     return letters[0];
@@ -129,10 +148,10 @@ var generateNextCommand = function (board, seed, alreadyUsedCommands, previousCo
     // TODO: implement real
     //var possibleCommands = ["SW", "SE", "W", "E", "CC", "C"];
     var possibleCommands = [
-        "SW", "SE","SW", "SE",
-        "SW", "SE","SW", "SE",
-        "SW", "SE","SW", "SE",
-        "SW", "SE","SW", "SE",
+        "SW", "SE", "SW", "SE",
+        "SW", "SE", "SW", "SE",
+        "SW", "SE", "SW", "SE",
+        "SW", "SE", "SW", "SE",
         "E", "E", "E", "E",
         "E", "E", "E", "E",
         "W", "W"
@@ -141,10 +160,18 @@ var generateNextCommand = function (board, seed, alreadyUsedCommands, previousCo
 
     var commandToFilter = null;
     switch (previousCommand) {
-        case "W": commandToFilter = "E";break;
-        case "E": commandToFilter = "W";break;
-        case "C": commandToFilter = "CC";break;
-        case "CC": commandToFilter = "C";break;
+        case "W":
+            commandToFilter = "E";
+            break;
+        case "E":
+            commandToFilter = "W";
+            break;
+        case "C":
+            commandToFilter = "CC";
+            break;
+        case "CC":
+            commandToFilter = "C";
+            break;
     }
     if (commandToFilter) {
         possibleCommands = possibleCommands.filter(function (i) {
@@ -155,7 +182,7 @@ var generateNextCommand = function (board, seed, alreadyUsedCommands, previousCo
 
     // filter already used commands
     if (alreadyUsedCommands.length > 0) {
-        possibleCommands = possibleCommands.filter(function(n) {
+        possibleCommands = possibleCommands.filter(function (n) {
             return !(alreadyUsedCommands.indexOf(n) > -1);
         });
     }
