@@ -18,13 +18,7 @@ router.post('/initial', function (req, res, next) {
     var state = brain.initTransform(board, seed);
     console.error(board + "---");
 
-    var stateWithUnit = brain.getNextUnit(state);
-    console.error(board + "---" + stateWithUnit.state.unit);
-
-    var nextState = brain.placeUnitOnTop(stateWithUnit, stateWithUnit.state.unit);
-    console.error(board + "---");
-
-    res.json(nextState);
+    res.json(state);
 });
 
 /*

@@ -312,6 +312,30 @@ function submitCommandSequence(sequence) {
     delete current_state.sequence;
 }
 
+
+function submitCommandAuto(sequence) {
+    console.log("Submit command sequence: " + JSON.stringify(current_state))
+    if (sequence.length > 0) {
+        var char = sequence.charAt(0);
+        var nexSequence = sequence.substring(1);
+
+        current_state.sequence = char;
+        loadJSON("state?command=SEQUENCE", function (state) {
+            console.log("CC State is updated to " + JSON.stringify(state))
+            current_state = state;
+            if (state.commandHistory) {
+                logCommand(state.commandHistory);
+                delete state.commandHistory;
+            }
+            drawMap(state.board, state.state);
+
+            setTimeout(function (s) {
+                submitCommandAuto((nexSequence));
+            }, 100);
+        }, current_state, "POST");
+    }
+}
+
 window.addEventListener('resize', resize, false);
 resize();
 init();

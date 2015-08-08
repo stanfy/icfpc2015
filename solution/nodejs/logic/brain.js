@@ -424,7 +424,7 @@ exports.performSequence = function(state) {
       return state;
     }
 
-    if        ("p'!.03".indexOf(c) >= 0) {/* move W    */ state = exports.moveLeft(state); history += "W ";
+    if ("p'!.03".indexOf(c) >= 0) {/* move W    */ state = exports.moveLeft(state); history += "W ";
     }	else if ("bcefy2".indexOf(c) >= 0) {/* move E    */ state = exports.moveRight(state); history += "E ";
     }	else if ("aghij4".indexOf(c) >= 0) {/* move SW   */ state = exports.moveDownLeft(state); history += "SW ";
     }	else if ("lmno 5".indexOf(c) >= 0) {/* move SE   */ state = exports.moveDownRight(state); history += "SE ";
