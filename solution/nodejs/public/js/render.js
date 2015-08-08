@@ -10,6 +10,8 @@ var pivotColor = '#6600FF';
 var current_board = null;
 var current_state = null;
 
+var commandLog = "";
+
 function draw(canvas, x, y, size, color) {
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -190,6 +192,7 @@ function moveLeft() {
     loadJSON("state?command=W", function (state) {
         console.log("W State is updated to " + JSON.stringify(state))
         current_state = state;
+        logCommand("W");
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
@@ -199,6 +202,7 @@ function moveRight() {
     loadJSON("state?command=E", function (state) {
         console.log("E State is updated to " + JSON.stringify(state))
         current_state = state;
+        logCommand("E");
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
@@ -208,6 +212,7 @@ function moveDownRight() {
     loadJSON("state?command=SE", function (state) {
         console.log("SE State is updated to " + JSON.stringify(state))
         current_state = state;
+        logCommand("SE");
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
@@ -217,7 +222,7 @@ function moveDownLeft() {
     loadJSON("state?command=SW", function (state) {
         console.log("SW State is updated to " + JSON.stringify(state))
         current_state = state;
-
+        logCommand("SW");
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
@@ -228,6 +233,7 @@ function rotateC() {
     loadJSON("state?command=C", function (state) {
         console.log("C State is updated to " + JSON.stringify(state))
         current_state = state;
+        logCommand("C");
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
@@ -237,8 +243,14 @@ function rotateCC() {
     loadJSON("state?command=CC", function (state) {
         console.log("CC State is updated to " + JSON.stringify(state))
         current_state = state;
+        logCommand("CC");
         drawMap(state.board, state.state);
     }, current_state, "POST");
+}
+
+function logCommand(command) {
+  commandLog += command + " ";
+  document.getElementById("commandSequence").value = commandLog;
 }
 
 window.addEventListener('resize', resize, false);
