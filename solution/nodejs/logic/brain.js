@@ -93,19 +93,19 @@ exports.getNextUnit = function (state) {
 var pointIsBlockedAtBoard = function (board, x, y) {
     if (x < 0) {
         console.error("  X < 0 " + x);
-        return false;
+        return true;
     }
     if (x >= board.width) {
         console.error("  X >= " + x + "sattBoard " + board.width);
-        return false;
+        return true;
     }
     if (y < 0) {
         console.error("  Y < 0 " + y);
-        return false;
+        return true;
     }
     if (y >= board.height) {
         console.error("  Y >= " + y + "sattBoard " + board.height);
-        return false;
+        return true;
     }
 
 
