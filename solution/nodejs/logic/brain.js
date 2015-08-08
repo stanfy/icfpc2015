@@ -171,9 +171,11 @@ exports.removeAllLines = function (state) {
     for (var y = 0; y < board.height; y++) {
         // if we have all filled items here
         var should = true;
-        for (var x = 0; x < board.width.x; x++) {
+        for (var x = 0; x < board.width; x++) {
+            var py = y ;
+            var px = x;
             var boardFilled = board.filled.some(function (cell) {
-                return cell.x == x && cell.y == y;
+                return cell.x == px && cell.y == py;
 
             });
             if (!boardFilled) {
@@ -182,6 +184,7 @@ exports.removeAllLines = function (state) {
             }
         }
         if (should) {
+            console.error("Adding line" + y);
             linesclearedAt.push(y);
         }
     }
