@@ -207,6 +207,24 @@ function moveDownLeft() {
 }
 
 
+function rotateC() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=C", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+
+function rotateCC() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=CC", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+
 window.addEventListener('resize', resize, false);
 resize();
 init();

@@ -119,10 +119,11 @@ var pointIsBlockedAtBoard = function (board, x, y) {
     return boardFilled;
 };
 
-var moveWithMovementFunction = function (state, name, move) {
+var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
     // get active unit
     var unit = state.state.unit;
     var origin = state.state.unitOrigin;
+    var pivot = unit.pivot;
     // simple -1 for all X
 
     console.log("Unit.memers" + unit.members)
@@ -130,7 +131,7 @@ var moveWithMovementFunction = function (state, name, move) {
         if (!prev) {
             return false;
         }
-        var nextCell = move({x: cell.x + origin.x, y: cell.y + origin.y});
+        var nextCell = movePoint(cell, origin,pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
             console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
@@ -139,14 +140,15 @@ var moveWithMovementFunction = function (state, name, move) {
         return true
     }, true);
 
-    console.error(" Can move " + name + " ? " + canMoveInDirection);
+    console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
-        var nextOrigin = move(origin);
+        var nextOrigin = moveUnit ? origin : movePoint({x:0,y:0}, origin, pivot);
+        var nextUnit = moveUnit ? moveUnit(unit) : unit;
         return {
             board: state.board,
             state: {
                 state: "ok",
-                unit: unit,
+                unit: nextUnit,
                 unitOrigin: nextOrigin,
                 score: state.score,
                 seed: state.seed
@@ -159,32 +161,64 @@ var moveWithMovementFunction = function (state, name, move) {
 }
 
 exports.moveLeft = function (state) {
-    return moveWithMovementFunction(state, "Left", function (cell) {
-        return {x: cell.x - 1, y: cell.y}
+    return moveWithMovementFunction(state, "Left", function (cell, origin) {
+        return {x: origin.x + cell.x - 1, y: origin.y + cell.y}
     });
 };
 
 
 exports.moveRight = function (state) {
-    return moveWithMovementFunction(state, "Right", function (cell) {
-        return {x: cell.x + 1, y: cell.y}
+    return moveWithMovementFunction(state, "Right", function (cell,origin) {
+        return {x: origin.x + cell.x + 1, y: origin.y + cell.y}
     });
 };
 
 exports.moveDownLeft = function (state) {
-    return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1}
+    return moveWithMovementFunction(state, "DownLeft", function (cell,origin) {
+        return {x: origin.x + cell.x - ((origin.y + cell.y) % 2 == 0 ? 1 : 0), y: origin.y + cell.y + 1}
     });
 };
 
 exports.moveDownRight = function (state) {
-    return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
+    return moveWithMovementFunction(state, "DownLeft", function (cell,origin) {
+        return {x: origin.x +  cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
     });
 };
 
 exports.rotateC = function (state) {
-    return state;
+
+    var movePointFunction = function (cell, origin, pivot) {
+        var X = cell.x - pivot.x;
+        var Y = cell.y - pivot.y;
+
+        var xx = X - (Y - Y & 1) / 2;
+        var zz = Y;
+        var yy = -xx - zz;
+
+        var xx1 = -zz;
+        var yy1 = -xx;
+        var zz1 = -yy;
+
+        var X1 = xx1 + (zz1 - zz1 & 1) / 2 + pivot.x;
+        var Y1 = zz1 + pivot.y;
+
+        
+        return {x: origin.x + X1, y: origin.y + Y1};
+    };
+
+    return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
+        return {
+            pivot: unit.pivot,
+            members: unit.members.map(function (cell) {
+                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
+            })
+        };
+    });
+
+    //x = X - (Y - Y&1) / 2
+    //zz = Y
+    //yy = -xx - zz
+    //return state;
 };
 
 exports.rotateCC = function (state) {
