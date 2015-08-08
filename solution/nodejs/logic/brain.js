@@ -3,6 +3,7 @@
  */
 var Long = require("long");
 var lcg = require('../logic/lcg');
+var extend = require('util')._extend;
 
 
 exports.initTransform = function (board) {
@@ -82,7 +83,7 @@ exports.getNextUnit = function (state) {
         state: {
             state: "waiting for placing figure",
             unit: unit,
-            score: state.score,
+            score: state.state.score,
             seed: nexSeed
         }
     };
@@ -131,7 +132,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
         if (!prev) {
             return false;
         }
-        var nextCell = movePoint(cell, origin,pivot);
+        var nextCell = movePoint(cell, origin, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
             console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
@@ -142,7 +143,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
 
     console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
-        var nextOrigin = moveUnit ? origin : movePoint({x:0,y:0}, origin, pivot);
+        var nextOrigin = moveUnit ? origin : movePoint({x: 0, y: 0}, origin, pivot);
         var nextUnit = moveUnit ? moveUnit(unit) : unit;
         return {
             board: state.board,
@@ -156,9 +157,13 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
         };
     } else {
         // TODO : Handle ncorrrect movements
-        return state;
+        var nextState = exports.lockUnit(state);
+        nextState = exports.getNextUnit(nextState);
+        nextState = exports.placeUnitOnTop(nextState, nextState.state.unit);
+        return nextState;
     }
-}
+};
+
 
 exports.moveLeft = function (state) {
     return moveWithMovementFunction(state, "Left", function (cell, origin) {
@@ -168,20 +173,20 @@ exports.moveLeft = function (state) {
 
 
 exports.moveRight = function (state) {
-    return moveWithMovementFunction(state, "Right", function (cell,origin) {
+    return moveWithMovementFunction(state, "Right", function (cell, origin) {
         return {x: origin.x + cell.x + 1, y: origin.y + cell.y}
     });
 };
 
 exports.moveDownLeft = function (state) {
-    return moveWithMovementFunction(state, "DownLeft", function (cell,origin) {
+    return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
         return {x: origin.x + cell.x - ((origin.y + cell.y) % 2 == 0 ? 1 : 0), y: origin.y + cell.y + 1}
     });
 };
 
 exports.moveDownRight = function (state) {
-    return moveWithMovementFunction(state, "DownLeft", function (cell,origin) {
-        return {x: origin.x +  cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
+    return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
+        return {x: origin.x + cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
     });
 };
 
@@ -223,7 +228,7 @@ exports.rotateC = function (state) {
         var X1 = cxx1 + (czz1 - czz1 & 1) / 2;
         var Y1 = czz1;
 
-        return {x: X1, y:  Y1};
+        return {x: X1, y: Y1};
     };
 
     return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
@@ -235,12 +240,146 @@ exports.rotateC = function (state) {
         };
     });
 
-    //x = X - (Y - Y&1) / 2
-    //zz = Y
-    //yy = -xx - zz
-    //return state;
 };
 
 exports.rotateCC = function (state) {
     return state;
 };
+
+/*
+ Locks unit at current positiong
+ */
+exports.lockUnit = function (state) {
+    if (!state.state.unit) {
+        return {
+            board: state.board,
+            state: {
+                state: "error",
+                message: "State should contain unit to lock"
+            }
+        }
+    }
+    var updatedBoard = extend({},state.board);
+    updatedBoard.filled = state.board.filled.slice();
+
+    var unit = state.state.unit;
+    var origin = state.state.unitOrigin;
+
+    state.state.unit.members.forEach(function (cell) {
+        var x = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0));
+        var y = cell.y + origin.y;
+        if (!updatedBoard.filled.some(function (filledCell) {
+                return filledCell.x == x && filledCell.y == y;
+            })) {
+            updatedBoard.filled.push({x: x, y: y});
+        }
+    });
+
+    return {
+        board: updatedBoard,
+        state: {
+            state: "locked",
+            unit: state.unit,
+            score: state.score,
+            seed: state.seed
+        }
+    }
+};
+
+var a = {
+    "board": {
+        "height": 20,
+        "width": 30,
+        "sourceSeeds": [0, 22837, 22837, 15215, 24851, 11460, 14027, 32620, 32719, 15577],
+        "units": [{"members": [{"x": 0, "y": 0}, {"x": 2, "y": 0}], "pivot": {"x": 1, "y": 0}}, {
+            "members": [{
+                "x": 1,
+                "y": 0
+            }, {"x": 0, "y": 1}, {"x": 0, "y": 2}], "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 1, "y": 0}
+        }, {
+            "members": [{"x": 1, "y": 1}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 0, "y": 0}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 1}, {"x": 1, "y": 2}, {"x": 0, "y": 3}],
+            "pivot": {"x": 1, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 1, "y": 1}
+        }, {
+            "members": [{"x": 1, "y": 1}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 1, "y": 0}, {"x": 1, "y": 1}, {"x": 1, "y": 2}, {"x": 0, "y": 3}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 1}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 1, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 1}, {"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 1, "y": 0}
+        }, {
+            "members": [{"x": 1, "y": 1}, {"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 1, "y": 0}
+        }, {
+            "members": [{"x": 0, "y": 0}, {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 3, "y": 0}, {"x": 2, "y": 0}],
+            "pivot": {"x": 1, "y": 0}
+        }],
+        "id": 5,
+        "filled": [{"x": 2, "y": 6}, {"x": 3, "y": 6}, {"x": 4, "y": 6}, {"x": 5, "y": 6}, {"x": 8, "y": 6}, {
+            "x": 10,
+            "y": 6
+        }, {"x": 22, "y": 6}, {"x": 2, "y": 7}, {"x": 5, "y": 7}, {"x": 7, "y": 7}, {"x": 10, "y": 7}, {
+            "x": 21,
+            "y": 7
+        }, {"x": 2, "y": 8}, {"x": 6, "y": 8}, {"x": 8, "y": 8}, {"x": 10, "y": 8}, {"x": 22, "y": 8}, {
+            "x": 2,
+            "y": 9
+        }, {"x": 3, "y": 9}, {"x": 4, "y": 9}, {"x": 5, "y": 9}, {"x": 10, "y": 9}, {"x": 12, "y": 9}, {
+            "x": 15,
+            "y": 9
+        }, {"x": 17, "y": 9}, {"x": 18, "y": 9}, {"x": 19, "y": 9}, {"x": 21, "y": 9}, {"x": 2, "y": 10}, {
+            "x": 5,
+            "y": 10
+        }, {"x": 10, "y": 10}, {"x": 12, "y": 10}, {"x": 15, "y": 10}, {"x": 17, "y": 10}, {"x": 20, "y": 10}, {
+            "x": 22,
+            "y": 10
+        }, {"x": 23, "y": 10}, {"x": 24, "y": 10}, {"x": 2, "y": 11}, {"x": 5, "y": 11}, {"x": 10, "y": 11}, {
+            "x": 12,
+            "y": 11
+        }, {"x": 14, "y": 11}, {"x": 16, "y": 11}, {"x": 17, "y": 11}, {"x": 18, "y": 11}, {"x": 19, "y": 11}, {
+            "x": 21,
+            "y": 11
+        }, {"x": 24, "y": 11}, {"x": 2, "y": 12}, {"x": 6, "y": 12}, {"x": 10, "y": 12}, {"x": 13, "y": 12}, {
+            "x": 14,
+            "y": 12
+        }, {"x": 17, "y": 12}, {"x": 22, "y": 12}, {"x": 25, "y": 12}, {"x": 2, "y": 13}, {"x": 6, "y": 13}, {
+            "x": 10,
+            "y": 13
+        }, {"x": 13, "y": 13}, {"x": 17, "y": 13}, {"x": 18, "y": 13}, {"x": 19, "y": 13}, {"x": 21, "y": 13}, {
+            "x": 24,
+            "y": 13
+        }, {"x": 13, "y": 14}, {"x": 12, "y": 15}],
+        "sourceLength": 100
+    }
+    ,
+    "state": {
+        "state": "ok", "unit": {
+            "members": [{"x": 0, "y": 0}, {"x": 2, "y": 0}], "pivot": {
+                "x": 1, "y": 0
+            }
+        }
+        ,
+        "unitOrigin": {
+            "x": 19, "y": 6
+        }
+    }
+}
