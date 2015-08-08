@@ -1,19 +1,28 @@
 <html>
 <body>
-<input type="text" id="mapNumber" value="1">
-<input type="button" value="Refresh" onclick="refresh()"/>
-<input type="button" value="Next state" onclick="getNextState()"/>
-<input type="button" value="Left" onclick="moveLeft()"/>
-<input type="button" value="Right" onclick="moveRight()"/>
-<input type="button" value="DownLeft" onclick="moveDownLeft()"/>
-<input type="button" value="DownRight" onclick="moveDownRight()"/>
-<input type="button" value="C" onclick="rotateC()"/>
-<input type="button" value="CC" onclick="rotateCC()"/>
+<div>
+	<input type="text" id="mapNumber" value="1">
+	<input type="button" value="Refresh" onclick="refresh()"/>
+	<input type="button" value="Next state" onclick="getNextState()"/>
+	<input type="button" value="Left" onclick="moveLeft()"/>
+	<input type="button" value="Right" onclick="moveRight()"/>
+	<input type="button" value="DownLeft" onclick="moveDownLeft()"/>
+	<input type="button" value="DownRight" onclick="moveDownRight()"/>
+	<input type="button" value="C" onclick="rotateC()"/>
+	<input type="button" value="CC" onclick="rotateCC()"/>
+</div>
 
-<canvas id="c" width="1500" height="500"/>
-<button>Get Initial state</button>
+<div>
+	<canvas id="c" width="1500" height="500"/>
+	<button>Get Initial state</button>
+</div>
+
+<div>
+	<p>Current state:</p>
+	<pre id="currentState"></pre>
+</div>
+
 <script type="text/javascript" src="js/render.js"></script>
+
 </body>
 </html>
-
-

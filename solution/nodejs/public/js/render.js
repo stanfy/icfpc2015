@@ -66,6 +66,14 @@ function drawMap(map, state) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     console.log("Map " + map.width + "x" + map.height);
+
+    document.getElementById("currentState").innerHTML =
+      "State: " + state.state + "\n"
+      + "Score: " + state.score + "\n"
+      + "Seed: " + state.seed + "\n"
+      + "\nFull state: \n"
+      + JSON.stringify(state, null, 4);
+
     drawBoard(map.width, map.height, cellSize, gapSize);
     map.filled.forEach(function (item) {
         fill(item.x, item.y, filledColor)
@@ -236,5 +244,3 @@ function rotateCC() {
 window.addEventListener('resize', resize, false);
 resize();
 init();
-
-
