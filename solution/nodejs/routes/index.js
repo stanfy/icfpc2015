@@ -26,6 +26,14 @@ router.post('/initial', function (req, res, next) {
 router.post('/state', function (req, res, next) {
     var state = req.body;
     var params = req.query;
+
+    // Skip everyting,if current state is not ok
+    if (state.state.state != "ok") {
+        res.json(state);
+        console.error("Skipping since previous state is not OK " + state.state.state);
+        return;
+    }
+
     console.error("Query is " + JSON.stringify(req.query));
 
     var nextState = player.nextState(state, params);
