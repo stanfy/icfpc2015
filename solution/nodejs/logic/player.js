@@ -1,24 +1,12 @@
 var brain = require('./brain');
 
-exports.initializeAllBoardsFromJson = function (json) {
-
-    var seeds = json.sourceSeeds;
-    var board = json;
-
-    seeds.forEach(function (seed) {
-        console.error(board + "---");
-        var state = brain.initTransform(board, seed);
-        console.error(board + "---");
-    })
-}
-
 
 exports.initializeOneBoard = function (board, seed) {
     console.error(board + "---");
     var state = brain.initTransform(board, seed);
     console.error(board + "---");
     return state;
-}
+};
 
 
 exports.nextState = function (state, params) {
@@ -54,4 +42,4 @@ exports.nextState = function (state, params) {
         nextState = brain.performSequence(state);
     }
     return nextState;
-}
+};

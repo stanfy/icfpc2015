@@ -14,19 +14,18 @@ program
     .option("-c, --cores [value]", "Number of processor cores available", parseInt)
     .parse(process.argv);
 
-console.log('hello, you\'re running our cli with options:');
+//console.log('hello, you\'re running our cli with options:');
 
 const file = program.file;
 const time = program.time;
 const memory = program.memory;
 const cores = program.cores;
-var json = null;
 
 // talking to user
-if (file) console.log('- file %s', file);
-if (time) console.log('- time %j', time);
-if (memory) console.log('- memory %j', memory);
-if (cores) console.log('- cores %j', cores);
+//if (file) console.log('- file %s', file);
+//if (time) console.log('- time %j', time);
+//if (memory) console.log('- memory %j', memory);
+//if (cores) console.log('- cores %j', cores);
 
 // reading file
 fs = require('fs')
@@ -34,7 +33,17 @@ fs.readFile(file, 'utf8', function (err,data) {
     if (err) {
         return console.log(err);
     }
-    json = data;
+
+    var json = JSON.parse(data);
+
+    if (!data || !json) {
+        console.log("[]");
+
+    } else {
+        // initialize all!
+        var solver = require("../logic/solver");
+        var result = solver.solveBoardForAllSeeds(json);
+        console.log(result);
+    }
 });
 
-// initialize all!
