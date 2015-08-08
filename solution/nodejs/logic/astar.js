@@ -21,7 +21,7 @@ function getHeap() {
     });
 }
 
-var astar = {
+exports.astar = {
     /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
@@ -66,8 +66,11 @@ var astar = {
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if (neighbor.closed || neighbor.isWall()) {
+                if (neighbor.closed ) {
                     // Not a valid node to process, skip to next neighbor.
+                    continue;
+                }
+                if(neighbor.isWall()) {
                     continue;
                 }
 
@@ -115,8 +118,8 @@ var astar = {
     // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
     heuristics: {
         manhattan: function(pos0, pos1) {
-            var d1 = Math.abs(pos1.x - pos0.x);
-            var d2 = Math.abs(pos1.y - pos0.y);
+            var d1 = Math.abs(pos1.unit.pivot.x - pos0.unit.pivot.x);
+            var d2 = Math.abs(pos1.unit.pivot.y - pos0.unit.pivot.y);
             return d1 + d2;
         },
         diagonal: function(pos0, pos1) {
@@ -135,6 +138,7 @@ var astar = {
         node.closed = false;
         node.parent = null;
         node.move = "";
+        node.state = {};
     }
 };
 
@@ -144,7 +148,9 @@ var astar = {
  * @param {Object} [options]
  * @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
  */
-function Graph(maxX, maxY, state, options) {
+exports.Graph = function(state, options){
+    var maxX = state.board.width;
+    var maxY = state.board.height;
     var maxL = 5;
     var maxR = 5;
     options = options || {};
@@ -173,25 +179,25 @@ function Graph(maxX, maxY, state, options) {
     this.init();
 }
 
-Graph.prototype.init = function() {
+exports.Graph.prototype.init = function() {
     this.dirtyNodes = [];
     for (var i = 0; i < this.nodes.length; i++) {
         astar.cleanNode(this.nodes[i]);
     }
 };
 
-Graph.prototype.cleanDirty = function() {
+exports.Graph.prototype.cleanDirty = function() {
     for (var i = 0; i < this.dirtyNodes.length; i++) {
         astar.cleanNode(this.dirtyNodes[i]);
     }
     this.dirtyNodes = [];
 };
 
-Graph.prototype.markDirty = function(node) {
+exports.Graph.prototype.markDirty = function(node) {
     this.dirtyNodes.push(node);
 };
 
-Graph.prototype.neighbors = function(node) {
+exports.Graph.prototype.neighbors = function(node) {
     var ret = [],
         x = node.x,
         y = node.y,
@@ -203,7 +209,7 @@ Graph.prototype.neighbors = function(node) {
     var leftFaulire = false;
     var leftState = brain.moveLeft(node.state, function(){leftFaulire = true;});
 
-    if(leftFaulire == false && leftState && leftState.state.state != "BOOM!") {
+    if(leftFaulire === false && leftState && leftState.state.state != "BOOM!") {
         if (grid[left.x] && grid[left.x][left.y] && grid[left.x][left.y][left.l] && grid[left.x][left.y][l][r]) {
             var nodeLeft = grid[left.x][left.y][l][r];
             nodeLeft.step = "L";
@@ -214,9 +220,10 @@ Graph.prototype.neighbors = function(node) {
 
 
     // right
-    var rightState = brain.moveRight(node.state);
+    var rightFailure = false;
+    var rightState = brain.moveRight(node.state, function(){rightFaulire = true;});
 
-    if(rightState && rightState.state.state != "BOOM!") {
+    if(rightFailure === false && rightState && rightState.state.state != "BOOM!") {
         var right = transform.moveRight({x: x, y: y});
         if (grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]) {
             var nodeRight = grid[right.x][right.y][l][r];
@@ -227,8 +234,9 @@ Graph.prototype.neighbors = function(node) {
     }
 
     // se
-    var seState = brain.moveDownRight(node.state);
-    if(seState && seState.state.state != "BOOM!") {
+    var seFailure = false;
+    var seState = brain.moveDownRight(node.state, function(){seFaulire = true;});
+    if(seFailure === false && seState && seState.state.state != "BOOM!") {
         var se = transform.moveSE({x: x, y: y});
         if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
             var nodeSe = grid[se.x][se.y][l][r];
@@ -239,8 +247,9 @@ Graph.prototype.neighbors = function(node) {
     }
 
     // sw
-    var swState = brain.moveDownLeft(node.state);
-    if(swState && swState.state.state != "BOOM!") {
+    var swFailure = false;
+    var swState = brain.moveDownLeft(node.state, function(){swFaulire = true;});
+    if(swFailure === false && swState && swState.state.state != "BOOM!") {
 
         var sw = transform.moveSW({x: x, y: y});
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]) {
@@ -252,8 +261,9 @@ Graph.prototype.neighbors = function(node) {
     }
 
     // rotate left
-    var ccState = brain.rotateCC(node.state);
-    if(ccState && ccState.state.state != "BOOM!") {
+    var ccFailure = false;
+    var ccState = brain.rotateCC(node.state, function(){ccFaulire = true;});
+    if(ccFailure === false && ccState && ccState.state.state != "BOOM!") {
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
             var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
             nodeCC.step = "CC";
@@ -263,8 +273,9 @@ Graph.prototype.neighbors = function(node) {
     }
 
     // rotate right
-    var cState = brain.rotateC(node.state);
-    if(cState && cState.state.state != "BOOM!") {
+    var cFailure = false;
+    var cState = brain.rotateC(node.state, function(){cFaulire = true;});
+    if(cFailure === false && cState && cState.state.state != "BOOM!") {
 
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
             var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
@@ -276,7 +287,7 @@ Graph.prototype.neighbors = function(node) {
     return ret;
 };
 
-Graph.prototype.toString = function() {
+exports.Graph.prototype.toString = function() {
     var graphString = [],
         nodes = this.grid, // when using grid
         rowDebug, row, y, l;
@@ -308,14 +319,15 @@ GridNode.prototype.toString = function() {
 
 GridNode.prototype.getCost = function(fromNeighbor) {
     // Take diagonal weight into consideration.
-    if (fromNeighbor && fromNeighbor.x != this.x && fromNeighbor.y != this.y) {
-        return this.weight * 1.41421;
-    }
+//    if (fromNeighbor && fromNeighbor.x != this.x && fromNeighbor.y != this.y) {
+//        return this.weight * 1.41421;
+//    }
     return this.weight;
 };
 
 GridNode.prototype.isWall = function() {
-    return this.weight === 0;
+    return false;
+    //return this.weight === 1;
 };
 
 function BinaryHeap(scoreFunction){
