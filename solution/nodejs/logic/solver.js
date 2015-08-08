@@ -1,13 +1,19 @@
 var player = require('./player');
 var solution = require('./oneSolution');
 
-exports.solveBoardForAllSeeds = function(json) {
+exports.solveBoardForAllSeeds = function(json, minScore) {
     var seeds = json.sourceSeeds;
     var board = json;
 
     var solutions = [];
     seeds.forEach(function (seed) {
-        solutions.push(solveBoard(board, seed));
+        var solution = solveBoard(board, seed, minScore);
+        if (minScore) {
+            while (solution.score < minScore) {
+                solution = solveBoard(board, seed, minScore);
+            }
+        }
+        solutions.push(solution);
     });
     return solutions;
 };
@@ -17,6 +23,7 @@ var solveBoard = function (board, seed) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
     var lastState = state;
+    var score = state.state.score;
 
     while(state) {
         // generate state
@@ -46,13 +53,15 @@ var solveBoard = function (board, seed) {
             possibleCommand = anotherCommand;
         }
 
+        if (possibleCommand) commands.push(possibleCommand);
+
         state = possibleState;
         lastState = possibleState ? possibleState : lastState;
-        if (possibleCommand) commands.push(possibleCommand);
+        score = lastState.state.score;
     }
 
     var letters = lettersFromCommands(commands.join(","));
-    return solution.init(board.id, seed, letters, lastState.state.score);
+    return solution.init(board.id, seed, letters, score);
 };
 
 
