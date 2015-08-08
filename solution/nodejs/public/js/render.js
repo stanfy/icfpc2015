@@ -164,6 +164,8 @@ function init() {
 };
 
 function refresh() {
+    commandLog = "";
+    logCommand("");
     loadMap(function (actual_JSON) {
         // Parse JSON string into object
         drawMap(actual_JSON);
