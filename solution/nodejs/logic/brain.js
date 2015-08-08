@@ -188,22 +188,42 @@ exports.moveDownRight = function (state) {
 exports.rotateC = function (state) {
 
     var movePointFunction = function (cell, origin, pivot) {
-        var X = cell.x - pivot.x;
-        var Y = cell.y - pivot.y;
 
-        var xx = X - (Y - Y & 1) / 2;
-        var zz = Y;
-        var yy = -xx - zz;
+        var CX = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0))
+        var CY = cell.y + origin.y;
 
-        var xx1 = -zz;
-        var yy1 = -xx;
-        var zz1 = -yy;
+        var cxx = CX - (CY - CY & 1) / 2;
+        var czz = CY;
+        var cyy = -cxx - czz;
 
-        var X1 = xx1 + (zz1 - zz1 & 1) / 2 + pivot.x;
-        var Y1 = zz1 + pivot.y;
+        var PX = pivot.x + origin.x + (origin.y % 2 == 0 ? 0 : (pivot.y % 2 == 1 ? 1 : 0))
+        var PY = pivot.y + origin.y;
 
-        
-        return {x: origin.x + X1, y: origin.y + Y1};
+        var pxx = PX - (PY - PY & 1) / 2;
+        var pzz = PY;
+        var pyy = -pxx - pzz;
+
+        // Moving cell to pivot
+
+        cxx = cxx - pxx;
+        cyy = cyy - pyy;
+        czz = czz - pzz;
+
+        // Rotating Cxx
+        var cxx1 = -czz;
+        var cyy1 = -cxx;
+        var czz1 = -cyy;
+
+        // moving cxx back from pivot
+
+        cxx1 = cxx1 + pxx;
+        cyy1 = cyy1 + pyy;
+        czz1 = czz1 + pzz;
+
+        var X1 = cxx1 + (czz1 - czz1 & 1) / 2;
+        var Y1 = czz1;
+
+        return {x: X1, y:  Y1};
     };
 
     return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
