@@ -3,6 +3,7 @@
  */
 var Long = require("long");
 var lcg = require('../logic/lcg');
+var extend = require('util')._extend;
 
 
 exports.initTransform = function (board) {
@@ -82,7 +83,7 @@ exports.getNextUnit = function (state) {
         state: {
             state: "waiting for placing figure",
             unit: unit,
-            score: state.score,
+            score: state.state.score,
             seed: nexSeed
         }
     };
@@ -156,7 +157,10 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
         };
     } else {
         // TODO : Handle ncorrrect movements
-        return state;
+        var nextState = exports.lockUnit(state);
+        nextState = exports.getNextUnit(nextState);
+        nextState = exports.placeUnitOnTop(nextState, nextState.state.unit);
+        return nextState;
     }
 };
 
@@ -255,7 +259,7 @@ exports.lockUnit = function (state) {
             }
         }
     }
-    var updatedBoard = Object.create(state.board);
+    var updatedBoard = extend({},state.board);
     updatedBoard.filled = state.board.filled.slice();
 
     var unit = state.state.unit;
@@ -264,7 +268,7 @@ exports.lockUnit = function (state) {
     state.state.unit.members.forEach(function (cell) {
         var x = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0));
         var y = cell.y + origin.y;
-        if (!state.board.filled.some(function (filledCell) {
+        if (!updatedBoard.filled.some(function (filledCell) {
                 return filledCell.x == x && filledCell.y == y;
             })) {
             updatedBoard.filled.push({x: x, y: y});
@@ -275,8 +279,107 @@ exports.lockUnit = function (state) {
         board: updatedBoard,
         state: {
             state: "locked",
+            unit: state.unit,
             score: state.score,
             seed: state.seed
         }
     }
 };
+
+var a = {
+    "board": {
+        "height": 20,
+        "width": 30,
+        "sourceSeeds": [0, 22837, 22837, 15215, 24851, 11460, 14027, 32620, 32719, 15577],
+        "units": [{"members": [{"x": 0, "y": 0}, {"x": 2, "y": 0}], "pivot": {"x": 1, "y": 0}}, {
+            "members": [{
+                "x": 1,
+                "y": 0
+            }, {"x": 0, "y": 1}, {"x": 0, "y": 2}], "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 1, "y": 0}
+        }, {
+            "members": [{"x": 1, "y": 1}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 0, "y": 0}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 1}, {"x": 1, "y": 2}, {"x": 0, "y": 3}],
+            "pivot": {"x": 1, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 1, "y": 1}
+        }, {
+            "members": [{"x": 1, "y": 1}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 1, "y": 0}, {"x": 1, "y": 1}, {"x": 1, "y": 2}, {"x": 0, "y": 3}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 0}, {"x": 1, "y": 1}, {"x": 0, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 1, "y": 1}
+        }, {
+            "members": [{"x": 2, "y": 1}, {"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 1, "y": 0}
+        }, {
+            "members": [{"x": 1, "y": 1}, {"x": 2, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}],
+            "pivot": {"x": 1, "y": 0}
+        }, {
+            "members": [{"x": 0, "y": 0}, {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 0, "y": 2}],
+            "pivot": {"x": 0, "y": 1}
+        }, {
+            "members": [{"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 3, "y": 0}, {"x": 2, "y": 0}],
+            "pivot": {"x": 1, "y": 0}
+        }],
+        "id": 5,
+        "filled": [{"x": 2, "y": 6}, {"x": 3, "y": 6}, {"x": 4, "y": 6}, {"x": 5, "y": 6}, {"x": 8, "y": 6}, {
+            "x": 10,
+            "y": 6
+        }, {"x": 22, "y": 6}, {"x": 2, "y": 7}, {"x": 5, "y": 7}, {"x": 7, "y": 7}, {"x": 10, "y": 7}, {
+            "x": 21,
+            "y": 7
+        }, {"x": 2, "y": 8}, {"x": 6, "y": 8}, {"x": 8, "y": 8}, {"x": 10, "y": 8}, {"x": 22, "y": 8}, {
+            "x": 2,
+            "y": 9
+        }, {"x": 3, "y": 9}, {"x": 4, "y": 9}, {"x": 5, "y": 9}, {"x": 10, "y": 9}, {"x": 12, "y": 9}, {
+            "x": 15,
+            "y": 9
+        }, {"x": 17, "y": 9}, {"x": 18, "y": 9}, {"x": 19, "y": 9}, {"x": 21, "y": 9}, {"x": 2, "y": 10}, {
+            "x": 5,
+            "y": 10
+        }, {"x": 10, "y": 10}, {"x": 12, "y": 10}, {"x": 15, "y": 10}, {"x": 17, "y": 10}, {"x": 20, "y": 10}, {
+            "x": 22,
+            "y": 10
+        }, {"x": 23, "y": 10}, {"x": 24, "y": 10}, {"x": 2, "y": 11}, {"x": 5, "y": 11}, {"x": 10, "y": 11}, {
+            "x": 12,
+            "y": 11
+        }, {"x": 14, "y": 11}, {"x": 16, "y": 11}, {"x": 17, "y": 11}, {"x": 18, "y": 11}, {"x": 19, "y": 11}, {
+            "x": 21,
+            "y": 11
+        }, {"x": 24, "y": 11}, {"x": 2, "y": 12}, {"x": 6, "y": 12}, {"x": 10, "y": 12}, {"x": 13, "y": 12}, {
+            "x": 14,
+            "y": 12
+        }, {"x": 17, "y": 12}, {"x": 22, "y": 12}, {"x": 25, "y": 12}, {"x": 2, "y": 13}, {"x": 6, "y": 13}, {
+            "x": 10,
+            "y": 13
+        }, {"x": 13, "y": 13}, {"x": 17, "y": 13}, {"x": 18, "y": 13}, {"x": 19, "y": 13}, {"x": 21, "y": 13}, {
+            "x": 24,
+            "y": 13
+        }, {"x": 13, "y": 14}, {"x": 12, "y": 15}],
+        "sourceLength": 100
+    }
+    ,
+    "state": {
+        "state": "ok", "unit": {
+            "members": [{"x": 0, "y": 0}, {"x": 2, "y": 0}], "pivot": {
+                "x": 1, "y": 0
+            }
+        }
+        ,
+        "unitOrigin": {
+            "x": 19, "y": 6
+        }
+    }
+}

@@ -129,6 +129,12 @@ describe("brain", function () {
                 assert.equal(result.state.unitOrigin, undefined, "After next unit put, we should set off unit Origin");
                 assert.notEqual(result.state.seed, state.state.seed, "We should upate seed to the new value");
                 assert.equal(result.state.state, "waiting for placing figure", "We shoudl update state for specific case");
+                assert.notEqual(result, undefined, "Should return sate");
+                assert.notEqual(state.state, undefined, "State is required");
+                assert.equal(result.state.score, state.state.score, "We shouldn't alter score on placing");
+                assert.notEqual(result.state.unit, undefined, "We should provide unit");
+                assert.notEqual(result.board, undefined, "We should provide board in result");
+
             });
         });
 

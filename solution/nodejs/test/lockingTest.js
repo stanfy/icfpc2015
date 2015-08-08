@@ -69,7 +69,15 @@ describe('Locking', function () {
                     return filledCell.x == x && filledCell.y == y;
                 })
             }), true, "All items should be put as locked to the board")
-
         });
+
+        it('Return state in result', function () {
+            state = brain.lockUnit(state);
+
+            assert.notEqual(state, undefined, "Should return sate");
+            assert.notEqual(state.state, undefined, "State is required");
+            assert.notEqual(state.board, undefined, "We should provide board in result");
+        });
+
     });
 });
