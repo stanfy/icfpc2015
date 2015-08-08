@@ -112,9 +112,9 @@ function resize() {
 
 
 document.addEventListener('keydown', function (event) {
-    if (event.keyCode == 37) {
+    if (event.keyCode == 64) { // a
         moveLeft();
-    } else if (event.keyCode == 39) {
+    } else if (event.keyCode == 66) { // d
         moveRight();
     } else if (event.keyCode == 90) { // z
         moveDownLeft();
