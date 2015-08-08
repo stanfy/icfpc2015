@@ -4,7 +4,7 @@
 var Long = require("long");
 var lcg = require('../logic/lcg');
 var extend = require('util')._extend;
-
+var transform = require("../logic/transformations");
 exports.stateIsFinished = function (state) {
     return state && state.state && state.state.state == "finished" || state.state.state == "error";
 };
@@ -240,41 +240,7 @@ exports.rotateC = function (state) {
 
     var movePointFunction = function (cell, origin, pivot) {
 
-        var CX = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0))
-        var CY = cell.y + origin.y;
-
-        var cxx = CX - (CY - CY & 1) / 2;
-        var czz = CY;
-        var cyy = -cxx - czz;
-
-        var PX = pivot.x + origin.x + (origin.y % 2 == 0 ? 0 : (pivot.y % 2 == 1 ? 1 : 0))
-        var PY = pivot.y + origin.y;
-
-        var pxx = PX - (PY - PY & 1) / 2;
-        var pzz = PY;
-        var pyy = -pxx - pzz;
-
-        // Moving cell to pivot
-
-        cxx = cxx - pxx;
-        cyy = cyy - pyy;
-        czz = czz - pzz;
-
-        // Rotating Cxx
-        var cxx1 = -czz;
-        var cyy1 = -cxx;
-        var czz1 = -cyy;
-
-        // moving cxx back from pivot
-
-        cxx1 = cxx1 + pxx;
-        cyy1 = cyy1 + pyy;
-        czz1 = czz1 + pzz;
-
-        var X1 = cxx1 + (czz1 - czz1 & 1) / 2;
-        var Y1 = czz1;
-
-        return {x: X1, y: Y1};
+        return transform.rotateRight(cell, pivot);
     };
 
     return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
@@ -292,8 +258,20 @@ exports.rotateCC = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
+    var movePointFunction = function (cell, origin, pivot) {
 
-    return state;
+        return transform.rotateLeft(cell, pivot);
+    };
+
+    return moveWithMovementFunction(state, "rotateCC", movePointFunction, function (unit) {
+        return {
+            pivot: unit.pivot,
+            members: unit.members.map(function (cell) {
+                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
+            })
+        };
+    });
+
 };
 
 /*
