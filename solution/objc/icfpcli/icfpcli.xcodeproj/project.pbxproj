@@ -9,17 +9,29 @@
 /* Begin PBXBuildFile section */
 		1737C906DA1F0CF480C8BDC5 /* ArgumentsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1737CDCF692138C09D5C89F8 /* ArgumentsParser.m */; };
 		7327FD7A1B6CAF6F00D693ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD791B6CAF6F00D693ED /* main.m */; };
-		73481A851B750DD4006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A841B750DD4006C7E9D /* libclilibrary.dylib */; };
+		7344E25F1B7612B000AA8A6F /* LinearCongruentGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2431B7612B000AA8A6F /* LinearCongruentGenerator.m */; };
+		7344E2601B7612B000AA8A6F /* Solution.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2441B7612B000AA8A6F /* Solution.m */; };
+		7344E2611B7612B000AA8A6F /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2461B7612B000AA8A6F /* Command.m */; };
+		7344E2621B7612B000AA8A6F /* CommandLineTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2481B7612B000AA8A6F /* CommandLineTask.m */; };
+		7344E2631B7612B000AA8A6F /* DummySolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E24C1B7612B000AA8A6F /* DummySolver.m */; };
+		7344E2641B7612B000AA8A6F /* CommandToLettersConvertor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E24E1B7612B000AA8A6F /* CommandToLettersConvertor.m */; };
+		7344E2651B7612B000AA8A6F /* LightningSolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2501B7612B000AA8A6F /* LightningSolver.m */; };
+		7344E2661B7612B000AA8A6F /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2531B7612B000AA8A6F /* Board.m */; };
+		7344E2671B7612B000AA8A6F /* BoardCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2561B7612B000AA8A6F /* BoardCreator.m */; };
+		7344E2681B7612B000AA8A6F /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2571B7612B000AA8A6F /* BoardCell.m */; };
+		7344E2691B7612B000AA8A6F /* BoardUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2591B7612B000AA8A6F /* BoardUnit.m */; };
+		7344E26A1B7612B000AA8A6F /* BoardsConfigCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7344E25B1B7612B000AA8A6F /* BoardsConfigCollection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7327FD741B6CAF6F00D693ED /* CopyFiles */ = {
+		7327FD741B6CAF6F00D693ED /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -29,7 +41,32 @@
 		1737CDCF692138C09D5C89F8 /* ArgumentsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArgumentsParser.m; sourceTree = "<group>"; };
 		7327FD761B6CAF6F00D693ED /* icfpcli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = icfpcli; sourceTree = BUILT_PRODUCTS_DIR; };
 		7327FD791B6CAF6F00D693ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		73481A841B750DD4006C7E9D /* libclilibrary.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclilibrary.dylib; path = ../../icfp2015view/build/Debug/libclilibrary.dylib; sourceTree = "<group>"; };
+		7344E2171B76123100AA8A6F /* libclilibrary.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclilibrary.dylib; path = ../icfp2015view/build/Debug/libclilibrary.dylib; sourceTree = "<group>"; };
+		7344E2421B7612B000AA8A6F /* LinearCongruentGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearCongruentGenerator.h; sourceTree = "<group>"; };
+		7344E2431B7612B000AA8A6F /* LinearCongruentGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearCongruentGenerator.m; sourceTree = "<group>"; };
+		7344E2441B7612B000AA8A6F /* Solution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solution.m; sourceTree = "<group>"; };
+		7344E2451B7612B000AA8A6F /* Solution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solution.h; sourceTree = "<group>"; };
+		7344E2461B7612B000AA8A6F /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Command.m; sourceTree = "<group>"; };
+		7344E2471B7612B000AA8A6F /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
+		7344E2481B7612B000AA8A6F /* CommandLineTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandLineTask.m; sourceTree = "<group>"; };
+		7344E2491B7612B000AA8A6F /* CommandLineTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandLineTask.h; sourceTree = "<group>"; };
+		7344E24A1B7612B000AA8A6F /* SolverProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverProtocol.h; sourceTree = "<group>"; };
+		7344E24C1B7612B000AA8A6F /* DummySolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DummySolver.m; sourceTree = "<group>"; };
+		7344E24D1B7612B000AA8A6F /* DummySolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummySolver.h; sourceTree = "<group>"; };
+		7344E24E1B7612B000AA8A6F /* CommandToLettersConvertor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandToLettersConvertor.m; sourceTree = "<group>"; };
+		7344E24F1B7612B000AA8A6F /* CommandToLettersConvertor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandToLettersConvertor.h; sourceTree = "<group>"; };
+		7344E2501B7612B000AA8A6F /* LightningSolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightningSolver.m; sourceTree = "<group>"; };
+		7344E2511B7612B000AA8A6F /* LightningSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightningSolver.h; sourceTree = "<group>"; };
+		7344E2531B7612B000AA8A6F /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
+		7344E2541B7612B000AA8A6F /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
+		7344E2551B7612B000AA8A6F /* BoardCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardCreator.h; sourceTree = "<group>"; };
+		7344E2561B7612B000AA8A6F /* BoardCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardCreator.m; sourceTree = "<group>"; };
+		7344E2571B7612B000AA8A6F /* BoardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardCell.m; sourceTree = "<group>"; };
+		7344E2581B7612B000AA8A6F /* BoardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardCell.h; sourceTree = "<group>"; };
+		7344E2591B7612B000AA8A6F /* BoardUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardUnit.m; sourceTree = "<group>"; };
+		7344E25A1B7612B000AA8A6F /* BoardUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardUnit.h; sourceTree = "<group>"; };
+		7344E25B1B7612B000AA8A6F /* BoardsConfigCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardsConfigCollection.m; sourceTree = "<group>"; };
+		7344E25C1B7612B000AA8A6F /* BoardsConfigCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardsConfigCollection.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +74,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73481A851B750DD4006C7E9D /* libclilibrary.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +83,7 @@
 		7327FD6D1B6CAF6F00D693ED = {
 			isa = PBXGroup;
 			children = (
+				7344E2171B76123100AA8A6F /* libclilibrary.dylib */,
 				7327FD781B6CAF6F00D693ED /* icfpcli */,
 				7327FD771B6CAF6F00D693ED /* Products */,
 			);
@@ -63,12 +100,69 @@
 		7327FD781B6CAF6F00D693ED /* icfpcli */ = {
 			isa = PBXGroup;
 			children = (
-				73481A841B750DD4006C7E9D /* libclilibrary.dylib */,
+				7344E25E1B7612B000AA8A6F /* Model */,
 				7327FD791B6CAF6F00D693ED /* main.m */,
 				1737CDCF692138C09D5C89F8 /* ArgumentsParser.m */,
 				1737C87B39A769C381D03E2A /* ArgumentsParser.h */,
 			);
 			path = icfpcli;
+			sourceTree = "<group>";
+		};
+		7344E24B1B7612B000AA8A6F /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7344E24A1B7612B000AA8A6F /* SolverProtocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		7344E2521B7612B000AA8A6F /* Solvers */ = {
+			isa = PBXGroup;
+			children = (
+				7344E24C1B7612B000AA8A6F /* DummySolver.m */,
+				7344E24D1B7612B000AA8A6F /* DummySolver.h */,
+				7344E24E1B7612B000AA8A6F /* CommandToLettersConvertor.m */,
+				7344E24F1B7612B000AA8A6F /* CommandToLettersConvertor.h */,
+				7344E2501B7612B000AA8A6F /* LightningSolver.m */,
+				7344E2511B7612B000AA8A6F /* LightningSolver.h */,
+			);
+			path = Solvers;
+			sourceTree = "<group>";
+		};
+		7344E25D1B7612B000AA8A6F /* Board */ = {
+			isa = PBXGroup;
+			children = (
+				7344E2531B7612B000AA8A6F /* Board.m */,
+				7344E2541B7612B000AA8A6F /* Board.h */,
+				7344E2551B7612B000AA8A6F /* BoardCreator.h */,
+				7344E2561B7612B000AA8A6F /* BoardCreator.m */,
+				7344E2571B7612B000AA8A6F /* BoardCell.m */,
+				7344E2581B7612B000AA8A6F /* BoardCell.h */,
+				7344E2591B7612B000AA8A6F /* BoardUnit.m */,
+				7344E25A1B7612B000AA8A6F /* BoardUnit.h */,
+				7344E25B1B7612B000AA8A6F /* BoardsConfigCollection.m */,
+				7344E25C1B7612B000AA8A6F /* BoardsConfigCollection.h */,
+			);
+			path = Board;
+			sourceTree = "<group>";
+		};
+		7344E25E1B7612B000AA8A6F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7344E2421B7612B000AA8A6F /* LinearCongruentGenerator.h */,
+				7344E2431B7612B000AA8A6F /* LinearCongruentGenerator.m */,
+				7344E2441B7612B000AA8A6F /* Solution.m */,
+				7344E2451B7612B000AA8A6F /* Solution.h */,
+				7344E2461B7612B000AA8A6F /* Command.m */,
+				7344E2471B7612B000AA8A6F /* Command.h */,
+				7344E2481B7612B000AA8A6F /* CommandLineTask.m */,
+				7344E2491B7612B000AA8A6F /* CommandLineTask.h */,
+				7344E24B1B7612B000AA8A6F /* Protocols */,
+				7344E2521B7612B000AA8A6F /* Solvers */,
+				7344E25D1B7612B000AA8A6F /* Board */,
+			);
+			name = Model;
+			path = ../../icfp2015view/icfp2015view/Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,7 +174,7 @@
 			buildPhases = (
 				7327FD721B6CAF6F00D693ED /* Sources */,
 				7327FD731B6CAF6F00D693ED /* Frameworks */,
-				7327FD741B6CAF6F00D693ED /* CopyFiles */,
+				7327FD741B6CAF6F00D693ED /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -127,8 +221,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7344E2621B7612B000AA8A6F /* CommandLineTask.m in Sources */,
 				7327FD7A1B6CAF6F00D693ED /* main.m in Sources */,
+				7344E2681B7612B000AA8A6F /* BoardCell.m in Sources */,
+				7344E25F1B7612B000AA8A6F /* LinearCongruentGenerator.m in Sources */,
+				7344E2631B7612B000AA8A6F /* DummySolver.m in Sources */,
+				7344E2661B7612B000AA8A6F /* Board.m in Sources */,
+				7344E2601B7612B000AA8A6F /* Solution.m in Sources */,
+				7344E2641B7612B000AA8A6F /* CommandToLettersConvertor.m in Sources */,
+				7344E2671B7612B000AA8A6F /* BoardCreator.m in Sources */,
 				1737C906DA1F0CF480C8BDC5 /* ArgumentsParser.m in Sources */,
+				7344E2611B7612B000AA8A6F /* Command.m in Sources */,
+				7344E2691B7612B000AA8A6F /* BoardUnit.m in Sources */,
+				7344E26A1B7612B000AA8A6F /* BoardsConfigCollection.m in Sources */,
+				7344E2651B7612B000AA8A6F /* LightningSolver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +323,7 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Volumes/data/Projects/icfp-2015/solution/objc/icfp2015view/build/Debug",
+					/Users/hdf/projects/icfp2015/solution/objc/icfp2015view/build/Debug,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../icfp2015view\"/**";
@@ -229,7 +335,7 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Volumes/data/Projects/icfp-2015/solution/objc/icfp2015view/build/Debug",
+					/Users/hdf/projects/icfp2015/solution/objc/icfp2015view/build/Debug,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../icfp2015view\"/**";

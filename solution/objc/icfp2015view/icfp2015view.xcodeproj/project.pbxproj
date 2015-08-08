@@ -63,8 +63,6 @@
 		7344E2131B760C0500AA8A6F /* LightningSolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA4D018F9ADA5F60C49E9 /* LightningSolver.m */; };
 		7344E2141B760C0F00AA8A6F /* CommandToLettersConvertor.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA6DA3AE33C41A35AE934 /* CommandToLettersConvertor.m */; };
 		73481A771B750D24006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A6C1B750D24006C7E9D /* libclilibrary.dylib */; };
-		73481A831B750DA8006C7E9D /* LinearCongruentGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 1737CB752B798028B79127CC /* LinearCongruentGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		73481A881B7515B2006C7E9D /* BoardCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 192EA97BD2FCC1AEC7B3AD63 /* BoardCreator.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -349,8 +347,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73481A881B7515B2006C7E9D /* BoardCreator.h in Headers */,
-				73481A831B750DA8006C7E9D /* LinearCongruentGenerator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

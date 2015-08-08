@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Stanfy LLC. All rights reserved.
 //
 
+#define NSLog(...) /* */
+
+
 #import <Foundation/Foundation.h>
 #import "LinearCongruentGenerator.h"
 #import "CommandLineTask.h"
@@ -37,7 +40,13 @@ int main(int argc, const char *argv[]) {
 
         NSArray * solutions = [solver solve];
         NSString * json = [solver jsonFromSolutions:solutions];
-        NSLog(@"%@", json);
+        
+        //NSLog(@"%@", json);
+        
+        NSFileHandle *stdout = [NSFileHandle fileHandleWithStandardOutput];
+        NSData *strData = [json dataUsingEncoding:NSUTF8StringEncoding];
+        [stdout writeData: strData];
+        
     }
     return 0;
 }
