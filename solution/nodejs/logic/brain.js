@@ -97,9 +97,11 @@ exports.getNextUnit = function (state) {
     var nexSeed = lcgValue.seed;
     var value = lcgValue.value;
     var unit = state.board.units[value % state.board.units.length];
+    var updatedBoard = extend({}, state.board);
+    updatedBoard.sourceLength = updatedBoard.sourceLength - 1;
 
     var result = {
-        board: state.board,
+        board: updatedBoard,
         state: {
             state: "waiting for placing figure",
             unit: unit,
@@ -234,7 +236,6 @@ exports.rotateC = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
-
 
 
     var movePointFunction = function (cell, origin, pivot) {
