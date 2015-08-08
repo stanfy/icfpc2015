@@ -4,7 +4,7 @@
 var Long = require("long");
 var lcg = require('../logic/lcg');
 var extend = require('util')._extend;
-var transform = require("../logic/transformations");
+
 exports.stateIsFinished = function (state) {
     return state && state.state && state.state.state == "finished" || state.state.state == "error";
 };
@@ -96,27 +96,15 @@ exports.getNextUnit = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
-    if (state.board.sourceLength == 0) {
-        return {
-            board: state.board,
-            state: {
-                state: "finished",
-                message: "No more figures in source",
-                score: state.state.score
-            }
-        };
-    }
 
     var seedL = new Long(state.state.seed);
     var lcgValue = lcg.lcgValue(seedL);
     var nexSeed = lcgValue.seed;
     var value = lcgValue.value;
     var unit = state.board.units[value % state.board.units.length];
-    var updatedBoard = extend({}, state.board);
-    updatedBoard.sourceLength = updatedBoard.sourceLength - 1;
 
     var result = {
-        board: updatedBoard,
+        board: state.board,
         state: {
             state: "waiting for placing figure",
             unit: unit,
@@ -255,9 +243,44 @@ exports.rotateC = function (state) {
     }
 
 
+
     var movePointFunction = function (cell, origin, pivot) {
 
-        return transform.rotateRight(cell, pivot);
+        var CX = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0))
+        var CY = cell.y + origin.y;
+
+        var cxx = CX - (CY - CY & 1) / 2;
+        var czz = CY;
+        var cyy = -cxx - czz;
+
+        var PX = pivot.x + origin.x + (origin.y % 2 == 0 ? 0 : (pivot.y % 2 == 1 ? 1 : 0))
+        var PY = pivot.y + origin.y;
+
+        var pxx = PX - (PY - PY & 1) / 2;
+        var pzz = PY;
+        var pyy = -pxx - pzz;
+
+        // Moving cell to pivot
+
+        cxx = cxx - pxx;
+        cyy = cyy - pyy;
+        czz = czz - pzz;
+
+        // Rotating Cxx
+        var cxx1 = -czz;
+        var cyy1 = -cxx;
+        var czz1 = -cyy;
+
+        // moving cxx back from pivot
+
+        cxx1 = cxx1 + pxx;
+        cyy1 = cyy1 + pyy;
+        czz1 = czz1 + pzz;
+
+        var X1 = cxx1 + (czz1 - czz1 & 1) / 2;
+        var Y1 = czz1;
+
+        return {x: X1, y: Y1};
     };
 
     return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
@@ -275,20 +298,8 @@ exports.rotateCC = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
-    var movePointFunction = function (cell, origin, pivot) {
 
-        return transform.rotateLeft(cell, pivot);
-    };
-
-    return moveWithMovementFunction(state, "rotateCC", movePointFunction, function (unit) {
-        return {
-            pivot: unit.pivot,
-            members: unit.members.map(function (cell) {
-                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
-            })
-        };
-    });
-
+    return state;
 };
 
 /*
@@ -333,6 +344,74 @@ exports.lockUnit = function (state) {
             seed: state.state.seed
         }
     }
+};
+
+exports.performSequence = function(state) {
+  console.error(state.sequence);
+
+  if (state.sequence.length == 0) {
+    console.log("Command sequence is empty");
+    return state;
+  }
+
+  var sequence = state.sequence;
+  var history = "";
+
+  for (var i = 0; i < sequence.length; i++) {
+    var c = sequence[i];
+    console.log("Sequence execution. Current command: " + c);
+
+    console.error(state.state.state);
+
+    if (state.state.state != "ok") {
+      state.commandHistory = history;
+      return state;
+    }
+
+    if        ("p'!.03".indexOf(c) >= 0) {/* move W    */ state = exports.moveLeft(state); history += "W ";
+    }	else if ("bcefy2".indexOf(c) >= 0) {/* move E    */ state = exports.moveRight(state); history += "E ";
+    }	else if ("aghij4".indexOf(c) >= 0) {/* move SW   */ state = exports.moveDownLeft(state); history += "SW ";
+    }	else if ("lmno 5".indexOf(c) >= 0) {/* move SE   */ state = exports.moveDownRight(state); history += "SE ";
+    }	else if ("dqrvz1".indexOf(c) >= 0) {/* rotate C  */ state = exports.rotateC(state); history += "C ";
+    }	else if ("kstuwx".indexOf(c) >= 0) {/* rotate CC */ state = exports.rotateCC(state); history += "CC "; }
+  }
+
+  state.commandHistory = history;
+  return state;
+};
+
+exports.performSequence = function(state) {
+  console.error(state.sequence);
+
+  if (state.sequence.length == 0) {
+    console.log("Command sequence is empty");
+    return state;
+  }
+
+  var sequence = state.sequence;
+  var history = "";
+
+  for (var i = 0; i < sequence.length; i++) {
+    var c = sequence[i];
+    console.log("Sequence execution. Current command: " + c);
+
+    console.error(state.state.state);
+
+    if (state.state.state != "ok") {
+      state.commandHistory = history;
+      return state;
+    }
+
+    if        ("p'!.03".indexOf(c) >= 0) {/* move W    */ state = exports.moveLeft(state); history += "W ";
+    }	else if ("bcefy2".indexOf(c) >= 0) {/* move E    */ state = exports.moveRight(state); history += "E ";
+    }	else if ("aghij4".indexOf(c) >= 0) {/* move SW   */ state = exports.moveDownLeft(state); history += "SW ";
+    }	else if ("lmno 5".indexOf(c) >= 0) {/* move SE   */ state = exports.moveDownRight(state); history += "SE ";
+    }	else if ("dqrvz1".indexOf(c) >= 0) {/* rotate C  */ state = exports.rotateC(state); history += "C ";
+    }	else if ("kstuwx".indexOf(c) >= 0) {/* rotate CC */ state = exports.rotateCC(state); history += "CC "; }
+  }
+
+  state.commandHistory = history;
+  return state;
 };
 
 var a = {

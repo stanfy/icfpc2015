@@ -62,7 +62,8 @@ router.post('/state', function (req, res, next) {
 
     } else if (params.command == "CC") {
         nextState = brain.rotateCC(state);
-
+    } else if (params.command == "SEQUENCE") {
+        nextState = brain.performSequence(state);
     }
     //
     //
