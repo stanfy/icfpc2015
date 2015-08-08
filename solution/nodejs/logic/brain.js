@@ -240,7 +240,7 @@ exports.moveDownLeft = function (state) {
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        return {x: cell.x, y: cell.y + 1}
+        return {x: cell.x - (cell.y % 2 == 0 ? 1: 0), y: cell.y + 1}
     });
 };
 
@@ -249,8 +249,8 @@ exports.moveDownRight = function (state) {
         return state;
     }
 
-    return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        return {x: cell.x, y: cell.y + 1}
+    return moveWithMovementFunction(state, "DownRight", function (cell) {
+        return {x: cell.x + (cell.y % 2 == 0 ? 0: 1), y: cell.y + 1}
     });
 };
 
