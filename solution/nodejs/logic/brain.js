@@ -172,7 +172,7 @@ exports.removeAllLines = function (state) {
         // if we have all filled items here
         var should = true;
         for (var x = 0; x < board.width; x++) {
-            var py = y ;
+            var py = y;
             var px = x;
             var boardFilled = board.filled.some(function (cell) {
                 return cell.x == px && cell.y == py;

@@ -194,6 +194,9 @@ function getInitialState(seed) {
 
 function getNextState() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
     loadJSON("state", function (state) {
         console.log("State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -202,6 +205,10 @@ function getNextState() {
 }
 function moveLeft() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
     loadJSON("state?command=W", function (state) {
         console.log("W State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -212,6 +219,10 @@ function moveLeft() {
 
 function moveRight() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
     loadJSON("state?command=E", function (state) {
         console.log("E State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -222,6 +233,10 @@ function moveRight() {
 
 function moveDownRight() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
     loadJSON("state?command=SE", function (state) {
         console.log("SE State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -232,6 +247,10 @@ function moveDownRight() {
 
 function moveDownLeft() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
     loadJSON("state?command=SW", function (state) {
         console.log("SW State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -243,6 +262,10 @@ function moveDownLeft() {
 
 function rotateC() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
     loadJSON("state?command=C", function (state) {
         console.log("C State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -253,6 +276,10 @@ function rotateC() {
 
 function rotateCC() {
     console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
     loadJSON("state?command=CC", function (state) {
         console.log("CC State is updated to " + JSON.stringify(state))
         current_state = state;
@@ -262,8 +289,10 @@ function rotateCC() {
 }
 
 function logCommand(command) {
-    commandLog += command + " ";
-    document.getElementById("commandSequence").value = commandLog;
+    if (current_state.state.state == "ok") {
+        commandLog += command + " ";
+        document.getElementById("commandSequence").value = commandLog;
+    }
 }
 
 window.addEventListener('resize', resize, false);
