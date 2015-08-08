@@ -68,7 +68,8 @@ exports.placeUnitOnTop = function (state, unit) {
             state: "ok",
             unit: updatedUnit,
             score: state.state.score,
-            seed: state.state.seed
+            seed: state.state.seed,
+            ls_old: state.state.ls_old
         }
     };
 
@@ -121,7 +122,8 @@ exports.getNextUnit = function (state) {
             state: "waiting for placing figure",
             unit: unit,
             score: state.state.score,
-            seed: nexSeed
+            seed: nexSeed,
+            ls_old: state.state.ls_old
         }
     };
 
@@ -156,6 +158,80 @@ var pointIsBlockedAtBoard = function (board, x, y) {
     }, false);
     return boardFilled;
 };
+
+
+exports.removeAllLines = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
+    // find the line
+    var linesclearedAt = [];
+    var board = state.board;
+    for (var y = 0; y < board.height; y++) {
+        // if we have all filled items here
+        var should = true;
+        for (var x = 0; x < board.width; x++) {
+            var py = y ;
+            var px = x;
+            var boardFilled = board.filled.some(function (cell) {
+                return cell.x == px && cell.y == py;
+
+            });
+            if (!boardFilled) {
+                should = false;
+                break;
+            }
+        }
+        if (should) {
+            console.error("Adding line" + y);
+            linesclearedAt.push(y);
+        }
+    }
+    var size = state.state.unit.members.length;
+
+    var ls = linesclearedAt.length;
+    var points = size + 100 * (1 + ls) * ls / 2;
+    var line_bonus = 0;
+    var lsOld = state.state.ls_old;
+    if (lsOld > 1) {
+        line_bonus = Math.floor((lsOld - 1) * points / 10);
+    }
+    var move_score = points + line_bonus;
+
+    // Starting from the top
+    var updatedBoard = extend({}, state.board);
+
+    linesclearedAt.forEach(function (line) {
+        // remove all items in the board
+        updatedBoard.filled = updatedBoard.filled
+            .filter(function (cell) {
+                return cell.y != line;
+            })
+            .map(function (cell) {
+                if (cell.y > line) {
+                    return cell;
+                }
+                else
+                    return {x: cell.x, y: cell.y + 1};
+            });
+    });
+
+
+    var result = {
+        board: updatedBoard,
+        state: {
+            state: "ok",
+            unit: state.state.unit,
+            score: state.state.score + move_score,
+            seed: state.state.seed,
+            ls_old: linesclearedAt.length
+        }
+    };
+
+    return result;
+};
+
 
 var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failure) {
     if (exports.stateIsFinished(state)) {
@@ -198,7 +274,8 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
                 state: "ok",
                 unit: nextUnit,
                 score: state.state.score,
-                seed: state.state.seed
+                seed: state.state.seed,
+                ls_old: state.state.ls_old
             }
         };
     } else {
@@ -206,6 +283,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
             return failure();
         }
         var nextState = exports.lockUnit(state);
+        nextState = exports.removeAllLines(nextState);
         nextState = exports.getNextUnit(nextState);
         nextState = exports.placeUnitOnTop(nextState, nextState.state.unit);
         return nextState;
@@ -240,7 +318,7 @@ exports.moveDownLeft = function (state) {
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        return {x: cell.x - (cell.y % 2 == 0 ? 1: 0), y: cell.y + 1}
+        return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1}
     });
 };
 
@@ -250,7 +328,7 @@ exports.moveDownRight = function (state) {
     }
 
     return moveWithMovementFunction(state, "DownRight", function (cell) {
-        return {x: cell.x + (cell.y % 2 == 0 ? 0: 1), y: cell.y + 1}
+        return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
     });
 };
 
@@ -318,7 +396,7 @@ exports.lockUnit = function (state) {
         state: {
             state: "locked",
             unit: unit,
-            score: state.state.score + unit.members.length,
+            score: state.state.score,
             seed: state.state.seed
         }
     }
