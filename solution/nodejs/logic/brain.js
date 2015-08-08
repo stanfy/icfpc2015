@@ -97,7 +97,7 @@ exports.placeUnitOnTop = function (state, unit) {
     // Try to place
     return moveWithMovementFunction(result, "Place", function (cell) {
         return {x: cell.x, y: cell.y}
-    }, null, function () {
+    }, function () {
         return {
             board: state.board,
             state: {
@@ -220,7 +220,6 @@ exports.removeAllLines = function (state) {
         line_bonus = Math.floor((lsOld - 1) * points / 10);
     }
     var move_score = points + line_bonus;
-
     // Starting from the top
     var updatedBoard = extend({}, state.board);
 
