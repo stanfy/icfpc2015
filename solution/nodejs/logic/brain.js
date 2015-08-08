@@ -256,7 +256,7 @@ exports.removeAllLines = function (state) {
 };
 
 
-var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failure) {
+var moveWithMovementFunction = function (state, name, movePoint, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -308,8 +308,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
             }
         }
 
-
-        var nextUnit = moveUnit ? moveUnit(unit) : updatedUnit;
+       var nextUnit = updatedUnit;
         var nextHashes = state.state.hashes.splice(0);
         if (nextUnit.pivot.y != unit.pivot.y) {
             nextHashes = []
@@ -340,48 +339,48 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
 };
 
 
-exports.moveLeft = function (state) {
+exports.moveLeft = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "Left", function (cell, pivot) {
         return {x: cell.x - 1, y: cell.y}
-    });
+    }, failure);
 };
 
 
-exports.moveRight = function (state) {
+exports.moveRight = function (state,failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "Right", function (cell) {
         return {x: cell.x + 1, y: cell.y}
-    });
+    },failure);
 };
 
-exports.moveDownLeft = function (state) {
+exports.moveDownLeft = function (state,failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
         return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1}
-    });
+    },failure);
 };
 
-exports.moveDownRight = function (state) {
+exports.moveDownRight = function (state,failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "DownRight", function (cell) {
         return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
-    });
+    },failure);
 };
 
-exports.rotateC = function (state) {
+exports.rotateC = function (state,failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -391,11 +390,11 @@ exports.rotateC = function (state) {
         return transform.rotateRight(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateC", movePointFunction);
+    return moveWithMovementFunction(state, "rotateC", movePointFunction,failure);
 
 };
 
-exports.rotateCC = function (state) {
+exports.rotateCC = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -404,7 +403,7 @@ exports.rotateCC = function (state) {
         return transform.rotateLeft(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateCC", movePointFunction);
+    return moveWithMovementFunction(state, "rotateCC", movePointFunction,failure);
 
 };
 
