@@ -3,6 +3,10 @@
  */
 
 var fastboard = require('./fastboard');
+var brain = require('./brain');
+var transformations = require('./transformations');
+var extend = require('util')._extend;
+
 
 /*
  Estimates postition on the board by some coefficitend :
@@ -69,7 +73,54 @@ exports.estimatePosition = function (state) {
     };
 }
 
-
+// Check best place
 exports.findBestPositionsForCurrentState = function (state) {
+    if (brain.stateIsFinished(state)) {
+        return [];
+    }
     // resolving current unit and trying to place it somewhere
+
+    function placeItemAtPositionInState(state, x, y) {
+        var updatedUnit = transformations.moveUnitAt(state.state.unit, x, y);
+        // check if we can put it here in theory, everything is okay
+        if (updatedUnit.members.some(function (cell) {
+                return fastboard.isCellFilledAtBoard(state.board, cell.x, cell.y)
+            })) {
+            return null;
+        }
+
+        // updateing state
+        var st = extend({}, state.state);
+        st.unit = updatedUnit;
+        return {
+            board: state.board,
+            state: st
+        }
+    }
+
+    var estimations = [];
+
+    for (var y = 0; y < state.board.height; y++) {
+        for (var x = 0; x < state.board.width; x++) {
+            // place and lock item at specified position
+            var stateAfterPlacing = placeItemAtPositionInState(state, x, y);
+            if (stateAfterPlacing) {
+                stateAfterPlacing = brain.lockUnit(stateAfterPlacing);
+                stateAfterPlacing = brain.removeAllLines(stateAfterPlacing);
+                var estimation = exports.estimatePosition(stateAfterPlacing);
+                estimations.push({x: x, y: y, est: estimation, unit:stateAfterPlacing.state.unit});
+
+                if (estimations.length > 50) {
+                    estimations = estimations.sort(function (est1, est2) {
+                        return est2.est.value - est1.est.value;
+                    });
+                    estimations = estimations.slice(0, 10);
+                }
+            }
+
+        }
+    }
+
+    return estimations;
+
 }
