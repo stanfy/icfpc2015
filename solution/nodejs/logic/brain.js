@@ -261,18 +261,10 @@ exports.rotateC = function (state) {
 
 
     var movePointFunction = function (cell, pivot) {
-
         return transform.rotateRight(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
-        return {
-            pivot: unit.pivot,
-            members: unit.members.map(function (cell) {
-                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
-            })
-        };
-    });
+    return moveWithMovementFunction(state, "rotateC", movePointFunction);
 
 };
 
@@ -285,14 +277,7 @@ exports.rotateCC = function (state) {
         return transform.rotateLeft(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateCC", movePointFunction, function (unit) {
-        return {
-            pivot: unit.pivot,
-            members: unit.members.map(function (cell) {
-                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
-            })
-        };
-    });
+    return moveWithMovementFunction(state, "rotateCC", movePointFunction);
 
 };
 
