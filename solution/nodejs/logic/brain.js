@@ -43,7 +43,8 @@ exports.initTransform = function (board, seed) {
 
 exports.unitHash = function (unit) {
     return unit.members.reduce(function (cur, char) {
-        cur[char.x << 16 + char.y] = true;
+        var key = (((char.x >>> 0) << 16) + char.y);
+        cur[key] = true;
         return cur;
     }, {})
 };
@@ -291,7 +292,12 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
         updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
 
         //check next hash
+        //console.error("Original unit : " + JSON.stringify(unit))
+        //console.error("Original unit hash: " + JSON.stringify(exports.unitHash(unit)))
+        //console.error("Next unit : " + JSON.stringify(updatedUnit))
         var updatedUnitHash = exports.unitHash(updatedUnit);
+
+        //console.error("Next unit hash: " + JSON.stringify(updatedUnitHash))
         if (exports.unitHashIsInHashes(updatedUnitHash, state.state.hashes)) {
             return {
                 board: state.board,
