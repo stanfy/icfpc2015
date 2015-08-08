@@ -269,7 +269,7 @@ exports.rotateC = function (state) {
         return {
             pivot: unit.pivot,
             members: unit.members.map(function (cell) {
-                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
+                return movePointFunction(cell, unit.pivot);
             })
         };
     });
@@ -289,7 +289,7 @@ exports.rotateCC = function (state) {
         return {
             pivot: unit.pivot,
             members: unit.members.map(function (cell) {
-                return movePointFunction(cell, {x: 0, y: 0}, unit.pivot);
+                return movePointFunction(cell,  unit.pivot);
             })
         };
     });
