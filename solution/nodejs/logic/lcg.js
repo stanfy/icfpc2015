@@ -30,5 +30,5 @@ exports.lcgValue = function (seed) {
     var mod = Long.fromBits((add.getLowBits() >>> 0) & 0x7FFFFFFF, 0, false);
 
     //console.error("Nex seed is " + mod);
-    return {seed: mod, value: value}
+    return {seed: mod.getLowBits() >>> 0, value: value}
 }

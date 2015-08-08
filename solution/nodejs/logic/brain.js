@@ -28,16 +28,17 @@ exports.initTransform = function (board) {
         }
     }
 
-    return {
+    var initialState = {
         board: board,
         state: {
             state: "ok",
-            unit: board.units[0],
             score: 0,
-            unitIndex: 0,
-            seed: 0
+            seed: board.sourceSeeds[0]
         }
-    }
+    };
+    initialState = exports.getNextUnit(initialState);
+    initialState = exports.placeUnitOnTop(initialState, initialState.state.unit);
+    return initialState
 }
 /** Simply puts unit on the board, centering
  * Doesn't peform any checks on it
@@ -63,9 +64,8 @@ exports.placeUnitOnTop = function (state, unit) {
             state: "ok",
             unit: unit,
             unitOrigin: unitOrigin,
-            score: 0,
-            unitIndex: 0,
-            seed: 0
+            score: state.state.score,
+            seed: state.state.seed
         }
     };
 
@@ -165,8 +165,8 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
                 state: "ok",
                 unit: nextUnit,
                 unitOrigin: nextOrigin,
-                score: state.score,
-                seed: state.seed
+                score: state.state.score,
+                seed: state.state.seed
             }
         };
     } else {
@@ -321,9 +321,9 @@ exports.lockUnit = function (state) {
         board: updatedBoard,
         state: {
             state: "locked",
-            unit: state.unit,
-            score: state.score,
-            seed: state.seed
+            unit: state.state.unit,
+            score: state.state.score,
+            seed: state.state.seed
         }
     }
 };
