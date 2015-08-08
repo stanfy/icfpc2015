@@ -296,7 +296,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
             return {
                 board: state.board,
                 state: {
-                    state: "<BOOM!>",
+                    state: "BOOM!",
                     message: "Yo have returned to the same state!"
                 }
             }
