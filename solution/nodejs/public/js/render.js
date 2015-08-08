@@ -57,7 +57,7 @@ function drawUnit(unit, origin) {
 }
 
 function drawPivot(unit, origin) {
-    pivot(unit.pivot.x + origin.x, unit.pivot.y + origin.y, pivotColor);
+    pivot(unit.pivot.x + origin.x + (origin.y %2 ==0 ?  0: (unit.pivot.y %2 == 1 ? 1 : 0)), unit.pivot.y + origin.y, pivotColor);
 }
 
 function drawMap(map, state) {
