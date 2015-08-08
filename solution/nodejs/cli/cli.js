@@ -43,7 +43,7 @@ fs.readFile(file, 'utf8', function (err,data) {
         // initialize all!
         var solver = require("../logic/solver");
         var result = solver.solveBoardForAllSeeds(json);
-        console.log(result);
+        console.log(JSON.stringify(result));
     }
 });
 

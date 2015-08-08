@@ -159,19 +159,19 @@ exports.getNextUnit = function (state) {
 
 var pointIsBlockedAtBoard = function (board, x, y) {
     if (x < 0) {
-        console.error("  X < 0 " + x);
+        //console.error("  X < 0 " + x);
         return true;
     }
     if (x >= board.width) {
-        console.error("  X >= " + x + "sattBoard " + board.width);
+        //console.error("  X >= " + x + "sattBoard " + board.width);
         return true;
     }
     if (y < 0) {
-        console.error("  Y < 0 " + y);
+        //console.error("  Y < 0 " + y);
         return true;
     }
     if (y >= board.height) {
-        console.error("  Y >= " + y + "sattBoard " + board.height);
+        //console.error("  Y >= " + y + "sattBoard " + board.height);
         return true;
     }
 
@@ -207,7 +207,7 @@ exports.removeAllLines = function (state) {
             }
         }
         if (should) {
-            console.error("Adding line" + y);
+            //console.error("Adding line" + y);
             linesclearedAt.push(y);
         }
     }
@@ -268,7 +268,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
     var pivot = unit.pivot;
     // simple -1 for all X
 
-    console.log("Unit.memers" + unit.members);
+    //console.log("Unit.memers" + unit.members);
     var canMoveInDirection = unit.members.reduce(function (prev, cell) {
         if (!prev) {
             return false;
@@ -276,13 +276,13 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         var nextCell = movePoint(cell, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
-            console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
+            ////console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
             return false;
         }
         return true
     }, true);
 
-    console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
+    ////console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
 
         // update all points with move point
@@ -294,12 +294,12 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
 
         //check next hash
-        //console.error("Original unit : " + JSON.stringify(unit))
-        //console.error("Original unit hash: " + JSON.stringify(exports.unitHash(unit)))
-        //console.error("Next unit : " + JSON.stringify(updatedUnit))
+        ////console.error("Original unit : " + JSON.stringify(unit))
+        ////console.error("Original unit hash: " + JSON.stringify(exports.unitHash(unit)))
+        ////console.error("Next unit : " + JSON.stringify(updatedUnit))
         var updatedUnitHash = exports.unitHash(updatedUnit);
 
-        //console.error("Next unit hash: " + JSON.stringify(updatedUnitHash))
+        ////console.error("Next unit hash: " + JSON.stringify(updatedUnitHash))
         if (exports.unitHashIsInHashes(updatedUnitHash, state.state.hashes)) {
             return {
                 board: state.board,
@@ -456,7 +456,7 @@ exports.lockUnit = function (state) {
 };
 
 exports.performSequence = function (state) {
-    console.error(state.sequence);
+    //console.error(state.sequence);
 
     if (state.sequence.length == 0) {
         console.log("Command sequence is empty");
@@ -470,7 +470,7 @@ exports.performSequence = function (state) {
         var c = sequence[i];
         console.log("Sequence execution. Current command: " + c);
 
-        console.error(state.state.state);
+        //console.error(state.state.state);
 
         if (state.state.state != "ok") {
             state.commandHistory = history;
