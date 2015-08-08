@@ -8,14 +8,33 @@ var program = require('commander');
 
 program
     .version('0.0.1')
-    .option('-p, --peppers', 'Add peppers')
-    .option('-P, --pineapple', 'Add pineapple')
-    .option('-b, --bbq-sauce', 'Add bbq sauce')
-    .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
+    .option("-f, --file [value]", "File containing JSON encoded input")
+    .option("-t, --time [value]", "Time limit, in seconds, to produce output", parseInt)
+    .option("-m, --memory [value]", "Memory limit, in megabytes, to produce output", parseInt)
+    .option("-c, --cores [value]", "Number of processor cores available", parseInt)
     .parse(process.argv);
 
-console.log('you ordered a pizza with:');
-if (program.peppers) console.log('  - peppers');
-if (program.pineapple) console.log('  - pineapple');
-if (program.bbqSauce) console.log('  - bbq');
-console.log('  - %s cheese', program.cheese);
+console.log('hello, you\'re running our cli with options:');
+
+const file = program.file;
+const time = program.time;
+const memory = program.memory;
+const cores = program.cores;
+var json = null;
+
+// talking to user
+if (file) console.log('- file %s', file);
+if (time) console.log('- time %j', time);
+if (memory) console.log('- memory %j', memory);
+if (cores) console.log('- cores %j', cores);
+
+// reading file
+fs = require('fs')
+fs.readFile(file, 'utf8', function (err,data) {
+    if (err) {
+        return console.log(err);
+    }
+    json = data;
+});
+
+// initialize all!
