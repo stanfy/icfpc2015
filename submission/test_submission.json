@@ -1,1 +1,72 @@
-[{"problemId":1,"seed":0,"tag":"123","solution":"llllblblblllalalaalabbabbablabllballllalbblbbllplabaabbbabblabblabbapabbabblbabaallllblpabllbalbaaalllalbabaaplbbal","score":20}]
+[
+	{
+		"problemId": 5,
+		"seed": 0,
+		"tag": "st-5-0-Sat Aug 08 2015 22:35:45 GMT+0300 (EEST)",
+		"solution": "balaaalblplbbblaapalaallbbbblabbblbllabllalbbabbbablalbaallaalalblalaaallabpalllapaplbbllblbapppabppall",
+		"score": 50
+	},
+	{
+		"problemId": 5,
+		"seed": 22837,
+		"tag": "st-5-22837-Sat Aug 08 2015 22:33:19 GMT+0300 (EEST)",
+		"solution": "laablababaabbbbbalabbaabbabblbllblallalabalalaalblaabbblbabbablbblbaabblplbaaballaaaalalapalpaabbbllbbbal",
+		"score": 48
+	},
+	{
+		"problemId": 5,
+		"seed": 22837,
+		"tag": "st-5-22837-Sat Aug 08 2015 22:33:44 GMT+0300 (EEST)",
+		"solution": "bbbaablbbabbbblllbballlbblalllblbababllabbbbabbbpaallalblbappaaapllllblpabbbbabaaalaalblabapllalalbbbllaalapabbaablbaababaal",
+		"score": 48
+	},
+	{
+		"problemId": 5,
+		"seed": 15215,
+		"tag": "st-5-15215-Sat Aug 08 2015 22:37:04 GMT+0300 (EEST)",
+		"solution": "lbbbabbaalbaalblplalblaalabbblbbalalblalbbbaalaaaababllbblbbbaaaaabbabalbbblplabllpaplabbblbaalapalallbaabbbapababblaabablalballabbal",
+		"score": 44
+	},
+	{
+		"problemId": 5,
+		"seed": 24851,
+		"tag": "st-5-24851-Sat Aug 08 2015 22:33:13 GMT+0300 (EEST)",
+		"solution": "lpaalbabbalblabbllpaabbbbbllbbaabblbaabaalblbaalaaablaaaaabbalbbaalapllablblallbbalbblaaalaapalbaa",
+		"score": 44
+	},
+	{
+		"problemId": 5,
+		"seed": 11460,
+		"tag": "st-5-11460-Sat Aug 08 2015 22:33:33 GMT+0300 (EEST)",
+		"solution": "bllabbllpaaabbblpalaalblplbllblapaalabbllabbblbaabaaalbbbbbaabaallbapalbabbllapllblabballblblbabapapplblablllblla",
+		"score": 46
+	},
+	{
+		"problemId": 5,
+		"seed": 14027,
+		"tag": "st-5-14027-Sat Aug 08 2015 22:31:38 GMT+0300 (EEST)",
+		"solution": "palallapllllllllbaalbbabbllabllalblbbababblaaablbabbbababbbbpaaalpllablbaallaplb",
+		"score": 43
+	},
+	{
+		"problemId": 5,
+		"seed": 32620,
+		"tag": "st-5-32620-Sat Aug 08 2015 22:32:54 GMT+0300 (EEST)",
+		"solution": "llbbbabbbbbaabllblllllbbbaaaplblaablbbbalaablbbaaabbbbbllabbaplbababalabllbaalabpabaallbbbbbbbbbaalbbababbbablaaba",
+		"score": 50
+	},
+	{
+		"problemId": 5,
+		"seed": 32719,
+		"tag": "st-5-32719-Sat Aug 08 2015 22:35:11 GMT+0300 (EEST)",
+		"solution": "lallablblblablbabbaababblpalbalaaalplbblabbalbabbabbblalabbaalalaabbbapallbbabbaapablbbblbapaaaalbbbll",
+		"score": 43
+	},
+	{
+		"problemId": 5,
+		"seed": 15577,
+		"tag": "st-5-15577-Sat Aug 08 2015 22:32:39 GMT+0300 (EEST)",
+		"solution": "lpalblballabababapapabbbblbbabbbbbalppabalalbaalbbabaaaabbllllalalaabblabapllbbblppaallaaa",
+		"score": 46
+	}
+]
