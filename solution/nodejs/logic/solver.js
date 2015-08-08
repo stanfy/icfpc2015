@@ -8,9 +8,16 @@ exports.solveBoardForAllSeeds = function(json, minScore) {
     var solutions = [];
     seeds.forEach(function (seed) {
         var solution = solveBoard(board, seed, minScore);
+
         if (minScore) {
-            while (solution.score < minScore) {
+            // try to find best solution
+            while (solution.score <= minScore) {
                 solution = solveBoard(board, seed, minScore);
+
+                // increase min score
+                if (solution.score > minScore) {
+                    minScore = solution.score;
+                }
             }
         }
         solutions.push(solution);
