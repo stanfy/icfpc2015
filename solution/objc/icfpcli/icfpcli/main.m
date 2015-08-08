@@ -22,10 +22,10 @@
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
         // insert code here...
-        LinearCongruentGenerator *generator = [LinearCongruentGenerator defaultGenerator];
-        for (int i = 0; i < 20; ++i) {
-            NSLog(@"%d", generator.nextValue);
-        }
+//        LinearCongruentGenerator *generator = [LinearCongruentGenerator defaultGenerator];
+//        for (int i = 0; i < 20; ++i) {
+//            NSLog(@"%d", generator.nextValue);
+//        }
         NSArray *arguments = [[NSProcessInfo processInfo] arguments];
 
         CommandLineTask *task = [[[ArgumentsParser alloc] initWithArguments:arguments] taskFromArguments];

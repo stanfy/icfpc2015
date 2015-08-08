@@ -11,6 +11,10 @@
 }
 
 + (NSString * )generateLettersFrom:(NSString * )commands {
+    if (!commands) {
+        return nil;
+    }
+    
     NSArray * array = [commands componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
     NSMutableString * megaString = [NSMutableString new];

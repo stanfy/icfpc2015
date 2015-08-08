@@ -35,6 +35,7 @@
 - (NSArray *)solve {
 
     NSNumber * boardID = self.board.ID;
+    NSNumber * boardHeight = self.board.height;
     NSMutableArray * array = [NSMutableArray array];
 
     for (NSNumber * seed in self.board.sourceSeeds) {
@@ -42,7 +43,7 @@
         NSString * letters = [LightningSolver lettersForBoardID:boardID seed:seed];
 
         if (!letters) {
-            letters = [self randomLetters];
+            letters = [self randomLetters:[boardHeight intValue]];
         }
 
         Solution * s = [Solution solutionWithProblemId:boardID
@@ -57,8 +58,8 @@
 
 
 
-- (NSString * )randomLetters {
-    NSInteger length = arc4random_uniform(100);
+- (NSString * )randomLetters:(NSInteger)boardHeight {
+    NSInteger length = arc4random_uniform(100) + boardHeight;
     NSMutableString * str = [NSMutableString string];
     for (int i = 0; i < length; i++) {
         NSInteger odd = arc4random_uniform(10);
