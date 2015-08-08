@@ -197,11 +197,29 @@ exports.removeAllLines = function (state) {
     if (lsOld > 1) {
         line_bonus = Math.floor((lsOld - 1) * points / 10);
     }
-
     var move_score = points + line_bonus;
 
+    // Starting from the top
+    var updatedBoard = extend({}, state.board);
+
+    linesclearedAt.forEach(function (line) {
+        // remove all items in the board
+        updatedBoard.filled = updatedBoard.filled
+            .filter(function (cell) {
+                return cell.y != line;
+            })
+            .map(function (cell) {
+                if (cell.y > line) {
+                    return cell;
+                }
+                else
+                    return {x: cell.x, y: cell.y + 1};
+            });
+    });
+
+
     var result = {
-        board: state.board,
+        board: updatedBoard,
         state: {
             state: "ok",
             unit: state.state.unit,
