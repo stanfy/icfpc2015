@@ -3,6 +3,8 @@
  * Created by otaykalo on 8-8-2015.
  */
 var transform = require("../logic/transformations");
+var brain = require("../logic/brain");
+
 function pathTo(node){
     var curr = node,
         path = [];
@@ -23,8 +25,8 @@ var astar = {
     /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
-     * @param {GridNode} start
-     * @param {GridNode} end
+     * @param {state} start
+     * @param {state} end
      * @param {Object} [options]
      * @param {bool} [options.closest] Specifies whether to return the
      path to the closest node if the target is unreachable.
@@ -58,7 +60,7 @@ var astar = {
             currentNode.closed = true;
 
             // Find all neighbors for the current node.
-            //TODO: !! apply engine move
+
             var neighbors = graph.neighbors(currentNode);
 
             for (var i = 0, il = neighbors.length; i < il; ++i) {
@@ -132,6 +134,7 @@ var astar = {
         node.visited = false;
         node.closed = false;
         node.parent = null;
+        node.move = "";
     }
 };
 
@@ -141,13 +144,14 @@ var astar = {
  * @param {Object} [options]
  * @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
  */
-function Graph(maxX, maxY, unit, options) {
+function Graph(maxX, maxY, state, options) {
     var maxL = 5;
     var maxR = 5;
     options = options || {};
     this.nodes = [];
     this.diagonal = !!options.diagonal;
     this.grid = [];
+    this.state = state;
     for (var x = 0; x < maxX; x++) {
         this.grid[x] = [];
 
@@ -156,9 +160,8 @@ function Graph(maxX, maxY, unit, options) {
             for ( var l =0; l< maxL; l++){
                 this.grid[x][y][l] = [];
                 for(var r =0; r<maxR; r++) {
-                    //TODO:! maybe initialize with precalculated units
-
-                    var node = new GridNode(x, y, l, r, 1, unit);
+                    // initialization of potential states
+                    var node = new GridNode(x, y, l, r, 1);
 
                     this.grid[x][y][l][r] = node;
                     this.nodes.push(node);
@@ -197,50 +200,78 @@ Graph.prototype.neighbors = function(node) {
         unit = node.unit,
         grid = this.grid;
 
-    // left
-    var left = transform.moveLeft({x:x, y:y});
-    if(grid[left.x] && grid[left.x][left.y] && grid[left.x][left.y][left.l] && grid[left.x][left.y][l][r]){
-        var nodeLeft =grid[left.x][left.y][l][r];
-        nodeLeft.step = "L";
-        ret.push(nodeLeft);
+    var leftFaulire = false;
+    var leftState = brain.moveLeft(node.state, function(){leftFaulire = true;});
+
+    if(leftFaulire == false && leftState && leftState.state.state != "BOOM!") {
+        if (grid[left.x] && grid[left.x][left.y] && grid[left.x][left.y][left.l] && grid[left.x][left.y][l][r]) {
+            var nodeLeft = grid[left.x][left.y][l][r];
+            nodeLeft.step = "L";
+            nodeLeft.state = leftState;
+            ret.push(nodeLeft);
+        }
     }
 
 
     // right
-    var right = transform.moveRight({x:x, y:y});
-    if(grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]){
-        var nodeRight = grid[right.x][right.y][l][r];
-        nodeRight.step = "R";
-        ret.push(nodeRight);
+    var rightState = brain.moveRight(node.state);
+
+    if(rightState && rightState.state.state != "BOOM!") {
+        var right = transform.moveRight({x: x, y: y});
+        if (grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]) {
+            var nodeRight = grid[right.x][right.y][l][r];
+            nodeRight.step = "R";
+            nodeRight.state = rightState;
+            ret.push(nodeRight);
+        }
     }
 
     // se
-    var se = transform.moveSE({x:x, y:y});
-    if(grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]){
-        var nodeSe = grid[se.x][se.y][l][r];
-        nodeSe.step = "SE";
-        ret.push(nodeSe);
+    var seState = brain.moveDownRight(node.state);
+    if(seState && seState.state.state != "BOOM!") {
+        var se = transform.moveSE({x: x, y: y});
+        if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
+            var nodeSe = grid[se.x][se.y][l][r];
+            nodeSe.step = "SE";
+            nodeSe.state = seState;
+            ret.push(nodeSe);
+        }
     }
 
     // sw
-    var sw = transform.moveSW({x:x, y:y});
-    if(grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]){
-        var nodeSw = grid[sw.x][sw.y][l][r];
-        nodeSw.step = "SW";
-        ret.push(nodeSw);
+    var swState = brain.moveDownLeft(node.state);
+    if(swState && swState.state.state != "BOOM!") {
+
+        var sw = transform.moveSW({x: x, y: y});
+        if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]) {
+            var nodeSw = grid[sw.x][sw.y][l][r];
+            nodeSw.step = "SW";
+            nodeSe.state = swState;
+            ret.push(nodeSw);
+        }
     }
 
     // rotate left
-    if(grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]){
-        var nodeCC = grid[sw.x][sw.y][(l+1)%5][r];
-        nodeCC.step = "CC";
-        ret.push(nodeCC);
+    var ccState = brain.rotateCC(node.state);
+    if(ccState && ccState.state.state != "BOOM!") {
+        if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
+            var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
+            nodeCC.step = "CC";
+            nodeCC.state = ccState;
+            ret.push(nodeCC);
+        }
     }
+
     // rotate right
-    if(grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]){
-        var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
-        nodeC.step = "C";
-        ret.push(nodeC);
+    var cState = brain.rotateC(node.state);
+    if(cState && cState.state.state != "BOOM!") {
+
+        if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
+            var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
+            nodeC.step = "C";
+            nodeC.state = cState;
+            ret.push(nodeC);
+        }
     }
     return ret;
 };
@@ -260,15 +291,15 @@ Graph.prototype.toString = function() {
     return graphString.join("\n");
 };
 
-function GridNode(x, y, l, r, weight, unit) {
+function GridNode(x, y, l, r, weight) {
     this.x = x;
     this.y = y;
     this.l = l;
     this.r = r;
 
     this.weight = weight;
-    this.unit = unit;
     this.move = "";
+    this.state = {};
 }
 
 GridNode.prototype.toString = function() {
