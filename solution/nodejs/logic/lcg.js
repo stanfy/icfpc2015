@@ -12,7 +12,7 @@ var Long = require("long");
 //}
 
 exports.lcgValue = function (seed) {
-    var s = seed;
+    var s = new Long(seed);
     //console.error("============");
     //console.error("Seed is " + s);
 
