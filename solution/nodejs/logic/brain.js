@@ -131,7 +131,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
         if (!prev) {
             return false;
         }
-        var nextCell = movePoint(cell, origin,pivot);
+        var nextCell = movePoint(cell, origin, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
             console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
@@ -142,7 +142,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
 
     console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
-        var nextOrigin = moveUnit ? origin : movePoint({x:0,y:0}, origin, pivot);
+        var nextOrigin = moveUnit ? origin : movePoint({x: 0, y: 0}, origin, pivot);
         var nextUnit = moveUnit ? moveUnit(unit) : unit;
         return {
             board: state.board,
@@ -158,7 +158,8 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
         // TODO : Handle ncorrrect movements
         return state;
     }
-}
+};
+
 
 exports.moveLeft = function (state) {
     return moveWithMovementFunction(state, "Left", function (cell, origin) {
@@ -168,20 +169,20 @@ exports.moveLeft = function (state) {
 
 
 exports.moveRight = function (state) {
-    return moveWithMovementFunction(state, "Right", function (cell,origin) {
+    return moveWithMovementFunction(state, "Right", function (cell, origin) {
         return {x: origin.x + cell.x + 1, y: origin.y + cell.y}
     });
 };
 
 exports.moveDownLeft = function (state) {
-    return moveWithMovementFunction(state, "DownLeft", function (cell,origin) {
+    return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
         return {x: origin.x + cell.x - ((origin.y + cell.y) % 2 == 0 ? 1 : 0), y: origin.y + cell.y + 1}
     });
 };
 
 exports.moveDownRight = function (state) {
-    return moveWithMovementFunction(state, "DownLeft", function (cell,origin) {
-        return {x: origin.x +  cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
+    return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
+        return {x: origin.x + cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
     });
 };
 
@@ -223,7 +224,7 @@ exports.rotateC = function (state) {
         var X1 = cxx1 + (czz1 - czz1 & 1) / 2;
         var Y1 = czz1;
 
-        return {x: X1, y:  Y1};
+        return {x: X1, y: Y1};
     };
 
     return moveWithMovementFunction(state, "rotateC", movePointFunction, function (unit) {
@@ -235,12 +236,47 @@ exports.rotateC = function (state) {
         };
     });
 
-    //x = X - (Y - Y&1) / 2
-    //zz = Y
-    //yy = -xx - zz
-    //return state;
 };
 
 exports.rotateCC = function (state) {
     return state;
+};
+
+/*
+ Locks unit at current positiong
+ */
+exports.lockUnit = function (state) {
+    if (!state.state.unit) {
+        return {
+            board: state.board,
+            state: {
+                state: "error",
+                message: "State should contain unit to lock"
+            }
+        }
+    }
+    var updatedBoard = Object.create(state.board);
+    updatedBoard.filled = state.board.filled.slice();
+
+    var unit = state.state.unit;
+    var origin = state.state.unitOrigin;
+
+    state.state.unit.members.forEach(function (cell) {
+        var x = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0));
+        var y = cell.y + origin.y;
+        if (!state.board.filled.some(function (filledCell) {
+                return filledCell.x == x && filledCell.y == y;
+            })) {
+            updatedBoard.filled.push({x: x, y: y});
+        }
+    });
+
+    return {
+        board: updatedBoard,
+        state: {
+            state: "locked",
+            score: state.score,
+            seed: state.seed
+        }
+    }
 };
