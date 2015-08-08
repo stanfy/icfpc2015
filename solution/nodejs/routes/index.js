@@ -45,16 +45,16 @@ router.post('/state', function (req, res, next) {
     //Move all members of the unit one cell in the given direction.
     //    turn [ clockwise | counter-clockwise ]
     var nextState = state;
-    if (params.command == "E") {
+    if (params.command == "W") {
         // Move left
         nextState = brain.moveLeft(state);
-    } else if (params.command == "W") {
+    } else if (params.command == "E") {
         nextState = brain.moveRight(state);
 
-    } else if (params.command == "SE") {
+    } else if (params.command == "SW") {
         nextState = brain.moveDownLeft(state);
 
-    } else if (params.command == "SW") {
+    } else if (params.command == "SE") {
         nextState = brain.moveDownRight(state);
 
     } else if (params.command == "C") {
