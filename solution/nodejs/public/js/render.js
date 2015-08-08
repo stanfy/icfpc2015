@@ -123,7 +123,11 @@ document.addEventListener('keydown', function (event) {
         moveDownLeft();
     } else if (event.keyCode == 88) { // x
         moveDownRight();
-    } else if (event.keyCode == 188) { // ,
+    }
+     else if (event.keyCode == 67) { // c
+        moveDownRight();
+    }
+    else if (event.keyCode == 188) { // ,
         rotateC();
     } else if (event.keyCode == 190) { // .
         rotateCC();
