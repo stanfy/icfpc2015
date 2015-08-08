@@ -1,32 +1,17 @@
 var brain = require('./brain');
 
-exports.initializeAllBoardsFromJson = function (json) {
-
-    var seeds = json.sourceSeeds;
-    var board = json;
-
-    seeds.forEach(function (seed) {
-        console.error(board + "---");
-        var state = brain.initTransform(board, seed);
-        console.error(board + "---");
-    })
-}
-
 
 exports.initializeOneBoard = function (board, seed) {
-    console.error(board + "---");
     var state = brain.initTransform(board, seed);
-    console.error(board + "---");
     return state;
-}
+};
 
 
 exports.nextState = function (state, params) {
     // Skip everyting,if current state is not ok
     if (state.state.state != "ok") {
-        res.json(state);
         console.error("Skipping since previous state is not OK " + state.state.state);
-        return;
+        return null;
     }
 
     //move [ E | W | SE | SW | C | CC]
@@ -54,4 +39,4 @@ exports.nextState = function (state, params) {
         nextState = brain.performSequence(state);
     }
     return nextState;
-}
+};
