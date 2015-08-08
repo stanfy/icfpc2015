@@ -206,10 +206,10 @@ exports.Graph.prototype.neighbors = function(node) {
         unit = node.unit,
         grid = this.grid;
 
-    var leftFaulire = false;
-    var leftState = brain.moveLeft(node.state, function(){leftFaulire = true;});
 
-    if(leftFaulire === false && leftState && leftState.state.state != "BOOM!") {
+    var leftState = brain.moveLeft(node.state, function(){return "leftFailure"});
+
+    if(leftState =! "leftFailure" && leftState && leftState.state.state === "ok") {
         if (grid[left.x] && grid[left.x][left.y] && grid[left.x][left.y][left.l] && grid[left.x][left.y][l][r]) {
             var nodeLeft = grid[left.x][left.y][l][r];
             nodeLeft.step = "L";
@@ -220,10 +220,10 @@ exports.Graph.prototype.neighbors = function(node) {
 
 
     // right
-    var rightFailure = false;
-    var rightState = brain.moveRight(node.state, function(){rightFaulire = true;});
 
-    if(rightFailure === false && rightState && rightState.state.state != "BOOM!") {
+    var rightState = brain.moveRight(node.state, function(){return "rightFailure"});
+
+    if(rightState != "rightFailure" && rightState && rightState.state.state === "ok") {
         var right = transform.moveRight({x: x, y: y});
         if (grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]) {
             var nodeRight = grid[right.x][right.y][l][r];
@@ -234,9 +234,8 @@ exports.Graph.prototype.neighbors = function(node) {
     }
 
     // se
-    var seFailure = false;
-    var seState = brain.moveDownRight(node.state, function(){seFaulire = true;});
-    if(seFailure === false && seState && seState.state.state != "BOOM!") {
+    var seState = brain.moveDownRight(node.state, function(){return "seFailure";});
+    if(seState != "seFailure" && seState && seState.state.state === "ok") {
         var se = transform.moveSE({x: x, y: y});
         if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
             var nodeSe = grid[se.x][se.y][l][r];
@@ -247,9 +246,9 @@ exports.Graph.prototype.neighbors = function(node) {
     }
 
     // sw
-    var swFailure = false;
-    var swState = brain.moveDownLeft(node.state, function(){swFaulire = true;});
-    if(swFailure === false && swState && swState.state.state != "BOOM!") {
+
+    var swState = brain.moveDownLeft(node.state, function(){return "swFailure";});
+    if(swState != "swFailure" && swState && swState.state.state == "ok") {
 
         var sw = transform.moveSW({x: x, y: y});
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]) {
@@ -261,9 +260,8 @@ exports.Graph.prototype.neighbors = function(node) {
     }
 
     // rotate left
-    var ccFailure = false;
-    var ccState = brain.rotateCC(node.state, function(){ccFaulire = true;});
-    if(ccFailure === false && ccState && ccState.state.state != "BOOM!") {
+    var ccState = brain.rotateCC(node.state, function(){return "ccFailure";});
+    if(ccState != "swFailure" && ccState && ccState.state.state === "ok") {
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
             var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
             nodeCC.step = "CC";
@@ -273,9 +271,9 @@ exports.Graph.prototype.neighbors = function(node) {
     }
 
     // rotate right
-    var cFailure = false;
-    var cState = brain.rotateC(node.state, function(){cFaulire = true;});
-    if(cFailure === false && cState && cState.state.state != "BOOM!") {
+
+    var cState = brain.rotateC(node.state, function(){return "cFailure";});
+    if( cState != "cFailure" && cState && cState.state.state === "ok") {
 
         if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
             var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];

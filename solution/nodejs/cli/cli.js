@@ -4,46 +4,50 @@
  * Module dependencies.
  */
 
+function collect(val, memo) {
+    memo.push(val);
+    return memo;
+}
+
+
 var program = require('commander');
 
 program
     .version('0.0.1')
-    .option("-f, --file [value]", "File containing JSON encoded input")
+    .option("-f, --files [value]", "File containing JSON encoded input", collect, [])
     .option("-t, --time [value]", "Time limit, in seconds, to produce output", parseInt)
     .option("-m, --memory [value]", "Memory limit, in megabytes, to produce output", parseInt)
     .option("-c, --cores [value]", "Number of processor cores available", parseInt)
+    .option("-p, --phrases [value]", "Phrase of power", collect, [])
     .parse(process.argv);
 
-//console.log('hello, you\'re running our cli with options:');
-
-const file = program.file;
+const files = program.files;
 const time = program.time;
 const memory = program.memory;
 const cores = program.cores;
+const phrases = program.phrases;
 
-// talking to user
-//if (file) console.log('- file %s', file);
-//if (time) console.log('- time %j', time);
-//if (memory) console.log('- memory %j', memory);
-//if (cores) console.log('- cores %j', cores);
 
-// reading file
-fs = require('fs')
-fs.readFile(file, 'utf8', function (err,data) {
-    if (err) {
-        return console.log(err);
-    }
+// reading files
 
-    var json = JSON.parse(data);
+files.forEach(function(file) {
+    fs = require('fs');
+    fs.readFile(file, 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }
 
-    if (!data || !json) {
-        console.log("[]");
+        var json = JSON.parse(data);
 
-    } else {
-        // initialize all!
-        var solver = require("../logic/solver");
-        var result = solver.solveBoardForAllSeeds(json);
-        console.log(JSON.stringify(result));
-    }
+        if (!data || !json) {
+            console.log("[]");
+
+        } else {
+            // initialize all!
+            var solver = require("../logic/solver");
+            var result = solver.solveBoardForAllSeeds(json, phrases);
+            console.log(JSON.stringify(result));
+        }
+    });
 });
 
