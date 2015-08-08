@@ -51,7 +51,7 @@ function pivot(i, j, color) {
 
 function drawUnit(unit, origin) {
     unit.members.forEach(function (member) {
-        fill(member.x + origin.x, member.y + origin.y, unitColor)
+        fill(member.x + origin.x + (origin.y %2 ==0 ?  0: (member.y %2 == 1 ? 1 : 0)), member.y + origin.y, unitColor)
     });
 
 }
