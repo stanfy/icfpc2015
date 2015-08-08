@@ -124,7 +124,7 @@ document.addEventListener('keydown', function (event) {
     } else if (event.keyCode == 88) { // x
         moveDownRight();
     }
-     else if (event.keyCode == 67) { // c
+    else if (event.keyCode == 67) { // c
         moveDownRight();
     }
     else if (event.keyCode == 188) { // ,
@@ -159,7 +159,7 @@ function loadMap(callback, id, seedIndex) {
     loadJSON('problems/problem_' + id + '.json', function (result) {
         current_board = result;
         var seed = current_board.sourceSeeds[seedIndex];
-        getInitialState(seed )
+        getInitialState(seed)
     })
 }
 
@@ -168,7 +168,7 @@ function init() {
     var mapSeedIndex = document.getElementById('mapSeedIndex').value;
     loadMap(function (actual_JSON) {
         drawMap(actual_JSON);
-    }, mapNumber, mapSeedIndex );
+    }, mapNumber, mapSeedIndex);
 };
 
 function refresh() {
@@ -192,109 +192,56 @@ function getInitialState(seed) {
     }, seededBoard, "POST");
 }
 
-function getNextState() {
-    console.log("Current state is " + JSON.stringify(current_state))
-    if (current_state.state.state != "ok") {
-        return;
-    }
-    loadJSON("state", function (state) {
-        console.log("State is updated to " + JSON.stringify(state))
-        current_state = state;
-        drawMap(state.board, state.state);
-    }, current_state, "POST");
-}
 function moveLeft() {
-    console.log("Current state is " + JSON.stringify(current_state))
-    if (current_state.state.state != "ok") {
-        return;
-    }
+    runMove("W");
 
-    loadJSON("state?command=W", function (state) {
-        console.log("W State is updated to " + JSON.stringify(state))
-        current_state = state;
-        logCommand("W");
-        drawMap(state.board, state.state);
-    }, current_state, "POST");
 }
 
 function moveRight() {
-    console.log("Current state is " + JSON.stringify(current_state))
-    if (current_state.state.state != "ok") {
-        return;
-    }
-
-    loadJSON("state?command=E", function (state) {
-        console.log("E State is updated to " + JSON.stringify(state))
-        current_state = state;
-        logCommand("E");
-        drawMap(state.board, state.state);
-    }, current_state, "POST");
+    runMove("E");
 }
 
 function moveDownRight() {
-    console.log("Current state is " + JSON.stringify(current_state))
-    if (current_state.state.state != "ok") {
-        return;
-    }
-
-    loadJSON("state?command=SE", function (state) {
-        console.log("SE State is updated to " + JSON.stringify(state))
-        current_state = state;
-        logCommand("SE");
-        drawMap(state.board, state.state);
-    }, current_state, "POST");
+    runMove("SE");
 }
 
 function moveDownLeft() {
-    console.log("Current state is " + JSON.stringify(current_state))
-    if (current_state.state.state != "ok") {
-        return;
-    }
-
-    loadJSON("state?command=SW", function (state) {
-        console.log("SW State is updated to " + JSON.stringify(state))
-        current_state = state;
-        logCommand("SW");
-        drawMap(state.board, state.state);
-    }, current_state, "POST");
+    runMove("SW");
 }
 
-
 function rotateC() {
-    console.log("Current state is " + JSON.stringify(current_state))
-    if (current_state.state.state != "ok") {
-        return;
-    }
-
-    loadJSON("state?command=C", function (state) {
-        console.log("C State is updated to " + JSON.stringify(state))
-        current_state = state;
-        logCommand("C");
-        drawMap(state.board, state.state);
-    }, current_state, "POST");
+    runMove("C");
 }
 
 function rotateCC() {
+    runMove("CC");
+}
+
+function runMove(command) {
     console.log("Current state is " + JSON.stringify(current_state))
     if (current_state.state.state != "ok") {
         return;
     }
 
-    loadJSON("state?command=CC", function (state) {
-        console.log("CC State is updated to " + JSON.stringify(state))
+    loadJSON("state?command=" + command, function (state) {
+        if (state.state.state == "BOOM!") {
+            alert("Your last move was incorrect! Returning to previous state");
+            return;
+        }
+        console.log("C State is updated to " + JSON.stringify(state))
         current_state = state;
-        logCommand("CC");
+        logCommand(command);
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
 
 function logCommand(command) {
-  if (current_state.state.state != "ok") {
-     return;
-  }
+    if (current_state.state.state != "ok") {
+        return;
+    }
 
-  commandLog += command + " ";
-  document.getElementById("commandLog").value = commandLog;
+    commandLog += command + " ";
+    document.getElementById("commandLog").value = commandLog;
 }
 
 function submitCommandSequence(sequence) {
@@ -304,8 +251,8 @@ function submitCommandSequence(sequence) {
         console.log("CC State is updated to " + JSON.stringify(state))
         current_state = state;
         if (state.commandHistory) {
-          logCommand(state.commandHistory);
-          delete state.commandHistory;
+            logCommand(state.commandHistory);
+            delete state.commandHistory;
         }
         drawMap(state.board, state.state);
     }, current_state, "POST");
