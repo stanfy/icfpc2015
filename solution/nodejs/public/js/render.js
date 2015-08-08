@@ -49,19 +49,18 @@ function pivot(i, j, color) {
         cellSize / 3, color);
 }
 
-function drawUnit(unit) {
-
+function drawUnit(unit, origin) {
     unit.members.forEach(function (member) {
-        fill(member.x, member.y, unitColor)
+        fill(member.x + origin.x, member.y + origin.y, unitColor)
     });
 
 }
 
-function drawPivot(unit) {
-    pivot(unit.pivot.x, unit.pivot.y, pivotColor);
+function drawPivot(unit, origin) {
+    pivot(unit.pivot.x + origin.x, unit.pivot.y + origin.y, pivotColor);
 }
 
-function drawMap(map) {
+function drawMap(map, state) {
 
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -72,13 +71,17 @@ function drawMap(map) {
         fill(item.x, item.y, filledColor)
     });
 
-    //map.units.forEach(function (unit) {
-    //    drawUnit(unit)
-    //});
-    //map.units.forEach(function (unit) {
-    //    drawPivot(unit)
-    //});
+    // Draw state
+    if (state) {
+        var unit = state.unit;
+        var origin = state.unitOrigin;
+        if (unit && origin) {
+            drawUnit(unit, origin)
+            drawPivot(unit, origin)
+        }
+    }
 }
+
 function resize() {
 
     var canvas = document.getElementById('c');
@@ -113,7 +116,7 @@ document.addEventListener('keydown', function (event) {
 function loadJSON(path, callback, jsonObject, method) {
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
-    xobj.open(method ? method : 'GET', 'http://localhost:3000/'+ path , true); // Replace 'my_data' with the path to your file
+    xobj.open(method ? method : 'GET', 'http://localhost:3000/' + path, true); // Replace 'my_data' with the path to your file
     xobj.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == "200") {
@@ -131,7 +134,7 @@ function loadJSON(path, callback, jsonObject, method) {
 }
 
 function loadMap(callback, id) {
-    loadJSON('problems/problem_' + id + '.json', function(result) {
+    loadJSON('problems/problem_' + id + '.json', function (result) {
         current_board = result;
         getInitialState()
     })
@@ -152,23 +155,75 @@ function refresh() {
 
 function getInitialState() {
     console.log("Current board is " + JSON.stringify(current_board))
-    loadJSON("initial", function(state) {
+    loadJSON("initial", function (state) {
         console.log("State is updated to " + JSON.stringify(state))
         current_state = state;
-        drawMap(state.board);
+        drawMap(state.board, state.state);
     }, current_board, "POST");
 }
 
 function getNextState() {
     console.log("Current state is " + JSON.stringify(current_state))
-    loadJSON("state", function(state) {
+    loadJSON("state", function (state) {
         console.log("State is updated to " + JSON.stringify(current_state))
         current_state = state;
-        drawMap(state.board);
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+function moveLeft() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=W", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+
+function moveRight() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=E", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+
+function moveDownRight() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=SE", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+
+function moveDownLeft() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=SW", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
     }, current_state, "POST");
 }
 
 
+function rotateC() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=C", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
+
+function rotateCC() {
+    console.log("Current state is " + JSON.stringify(current_state))
+    loadJSON("state?command=CC", function (state) {
+        console.log("State is updated to " + JSON.stringify(current_state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+}
 
 window.addEventListener('resize', resize, false);
 resize();

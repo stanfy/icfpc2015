@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var brain = require('../logic/brain');
+var lcg = require('../logic/lcg');
+var Long = require("long");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -10,15 +12,56 @@ router.get('/', function (req, res, next) {
 
 router.post('/initial', function (req, res, next) {
     var board = req.body;
-    console.error(board  + "---");
+    // TODO : allow to select SEED
+    console.error(board + "---");
     var state = brain.initTransform(board);
-    res.json(state);
+    console.error(board + "---");
+
+    var stateWithUnit = brain.getNextUnit(state);
+    console.error(board + "---" + stateWithUnit.state.unit);
+
+    var nextState = brain.placeUnitOnTop(stateWithUnit, stateWithUnit.state.unit);
+    console.error(board + "---");
+
+    res.json(nextState);
 });
 
+/*
+ States expects "state" object which was set up at the inital method
+ */
 router.post('/state', function (req, res, next) {
     var state = req.body;
-    state.board.filled.push({x:2,y:2});
-    res.json(state);
+    var params = req.query;
+    console.error("Query is "+ JSON.stringify(req.query));
+
+    //move [ E | W | SE | SW | C | CC]
+    //Move all members of the unit one cell in the given direction.
+    //    turn [ clockwise | counter-clockwise ]
+    var nextState = state;
+    if (params.command == "E") {
+        // Move left
+        nextState = brain.moveLeft(state);
+    } else if (params.command == "W") {
+        nextState = brain.moveRight(state);
+
+    } else if (params.command == "SE") {
+        nextState = brain.moveDownLeft(state);
+
+    } else if (params.command == "SW") {
+        nextState = brain.moveDownRight(state);
+
+    } else if (params.command == "C") {
+        nextState = brain.rotateC(state);
+
+    } else if (params.command == "CC") {
+        nextState = brain.rotateCC(state);
+
+    }
+    //
+    //
+    //state.board.filled.push({x: 2, y: 2});
+    //nextState = brain.moveLeft(state);
+    res.json(nextState);
 });
 
 module.exports = router;
