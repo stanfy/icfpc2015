@@ -103,11 +103,11 @@ function resize() {
     var height;
 
     if (windowRatio < canvasRatio) {
-        height = window.innerHeight / 3 * 2;
-        width = (height / canvasRatio) / 3 *2;
+        height = window.innerHeight
+        width = (height / canvasRatio);
     } else {
-        width = window.innerWidth / 3 * 2;
-        height = width * canvasRatio / 3 * 2;
+        width = window.innerWidth;
+        height = width * canvasRatio;
     }
 
     canvas.style.width = width + 'px';
