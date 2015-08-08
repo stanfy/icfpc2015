@@ -262,8 +262,23 @@ function rotateCC() {
 }
 
 function logCommand(command) {
-    commandLog += command + " ";
-    document.getElementById("commandSequence").value = commandLog;
+  commandLog += command + " ";
+  document.getElementById("commandLog").value = commandLog;
+}
+
+function submitCommandSequence(sequence) {
+    console.log("Submit command sequence: " + JSON.stringify(current_state))
+    current_state.sequence = sequence;
+    loadJSON("state?command=SEQUENCE", function (state) {
+        console.log("CC State is updated to " + JSON.stringify(state))
+        current_state = state;
+        if (state.commandHistory) {
+          logCommand(state.commandHistory);
+          delete state.commandHistory;
+        }
+        drawMap(state.board, state.state);
+    }, current_state, "POST");
+    delete current_state.sequence;
 }
 
 window.addEventListener('resize', resize, false);
