@@ -68,7 +68,8 @@ exports.placeUnitOnTop = function (state, unit) {
             state: "ok",
             unit: updatedUnit,
             score: state.state.score,
-            seed: state.state.seed
+            seed: state.state.seed,
+            ls_old: state.state.ls_old
         }
     };
 
@@ -121,7 +122,8 @@ exports.getNextUnit = function (state) {
             state: "waiting for placing figure",
             unit: unit,
             score: state.state.score,
-            seed: nexSeed
+            seed: nexSeed,
+            ls_old: state.state.ls_old
         }
     };
 
@@ -156,6 +158,16 @@ var pointIsBlockedAtBoard = function (board, x, y) {
     }, false);
     return boardFilled;
 };
+
+
+exports.removeAllLines = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
+    return state;
+};
+
 
 var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failure) {
     if (exports.stateIsFinished(state)) {
@@ -198,7 +210,8 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
                 state: "ok",
                 unit: nextUnit,
                 score: state.state.score,
-                seed: state.state.seed
+                seed: state.state.seed,
+                ls_old: state.state.ls_old
             }
         };
     } else {
@@ -206,6 +219,7 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failu
             return failure();
         }
         var nextState = exports.lockUnit(state);
+        nextState = exports.removeAllLines(state);
         nextState = exports.getNextUnit(nextState);
         nextState = exports.placeUnitOnTop(nextState, nextState.state.unit);
         return nextState;

@@ -59,13 +59,10 @@ describe('Locking', function () {
         });
         it('add all unit to filled items', function () {
             var unit = state.state.unit;
-            var origin = state.state.unitOrigin;
             state = brain.lockUnit(state);
             assert.equal(unit.members.every(function (cell) {
                 return state.board.filled.some(function (filledCell) {
-                    var x = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0));
-                    var y = cell.y + origin.y;
-                    return filledCell.x == x && filledCell.y == y;
+                    return filledCell.x == cell.x && filledCell.y == cell.y;
                 })
             }), true, "All items should be put as locked to the board")
         });
