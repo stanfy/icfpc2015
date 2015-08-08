@@ -32,7 +32,16 @@ router.post('/initial', function (req, res, next) {
 router.post('/state', function (req, res, next) {
     var state = req.body;
     var params = req.query;
-    console.error("Query is "+ JSON.stringify(req.query));
+    console.error("Query is " + JSON.stringify(req.query));
+
+    // Skipe everyting,if current state is not ok
+    if (state.state.state != "ok") {
+        res.json(state);
+        console.error("Skipings since previous state is not OK " + state.state.state);
+
+        return;
+    }
+
 
     //move [ E | W | SE | SW | C | CC]
     //Move all members of the unit one cell in the given direction.
