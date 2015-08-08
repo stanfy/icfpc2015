@@ -20,7 +20,7 @@ describe("brain", function () {
                 width: 10,
                 height: 10,
                 sourceSeeds: [17],
-                filled:[],
+                filled: [],
                 units: [{
                     pivot: {x: 1, y: 2},
                     members: [{x: 1, y: 2}]
@@ -39,7 +39,7 @@ describe("brain", function () {
                     score: 0,
                     unitIndex: 0,
                     seed: 0,
-                    ls_old:2
+                    ls_old: 2
                 }
             };
 

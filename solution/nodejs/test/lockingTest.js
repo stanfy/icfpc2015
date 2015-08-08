@@ -67,12 +67,13 @@ describe('Locking', function () {
             }), true, "All items should be put as locked to the board")
         });
 
-        it('Should increase score by ate least amount of members in unit', function () {
-            var unit = state.state.unit;
-            var origin = state.state.unitOrigin;
-            var nextState = brain.lockUnit(state);
-            assert.equal(nextState.state.score, state.state.score + unit.members.length);
-        });
+        // It should be on remove all lines
+        //it('Should increase score by ate least amount of members in unit', function () {
+        //    var unit = state.state.unit;
+        //    var origin = state.state.unitOrigin;
+        //    var nextState = brain.lockUnit(state);
+        //    assert.equal(nextState.state.score, state.state.score + unit.members.length);
+        //});
 
         it('Return state in result', function () {
             state = brain.lockUnit(state);
