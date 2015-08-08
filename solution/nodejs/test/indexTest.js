@@ -9,6 +9,7 @@ describe("initial", function () {
         var board = {};
         var validBoard = {
             sourceSeeds:[123],
+            filled:[],
             units:[{
                 pivot:{x:1,y:2},
                 members:[{x:1,y:2}]
