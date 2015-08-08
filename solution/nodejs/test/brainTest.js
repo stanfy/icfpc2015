@@ -150,6 +150,25 @@ describe("brain", function () {
                 assert.notEqual(result.board, undefined, "We should provide board in result");
             });
 
+            it('return finish when theres no more items', function () {
+                state.board.sourceLength = 0
+                result = brain.getNextUnit(state);
+                assert.equal(result.state.state, "finished", "We shoudl update state for specific case");
+                assert.notEqual(result.state.message, undefined, "We should notify user why is that");
+            });
+
+            it('return decrease numbe of item when gets new unit', function () {
+                state.board.sourceLength = 2;
+                result = brain.getNextUnit(state);
+                assert.equal(result.board.sourceLength, 1, "return decrease numbe of item when gets new unit'");
+
+                state.board.sourceLength = 5;
+                result = brain.getNextUnit(state);
+                assert.equal(result.board.sourceLength, 4, "return decrease numbe of item when gets new unit'");
+
+            });
+
+
         });
 
 

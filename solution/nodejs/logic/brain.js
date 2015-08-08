@@ -81,15 +81,27 @@ exports.getNextUnit = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
+    if (state.board.sourceLength == 0) {
+        return {
+            board: state.board,
+            state: {
+                state: "finished",
+                message: "No more figures in source",
+                score: state.state.score
+            }
+        };
+    }
 
     var seedL = new Long(state.state.seed);
     var lcgValue = lcg.lcgValue(seedL);
     var nexSeed = lcgValue.seed;
     var value = lcgValue.value;
     var unit = state.board.units[value % state.board.units.length];
+    var updatedBoard = extend({}, state.board);
+    updatedBoard.sourceLength = updatedBoard.sourceLength - 1;
 
     var result = {
-        board: state.board,
+        board: updatedBoard,
         state: {
             state: "waiting for placing figure",
             unit: unit,
@@ -224,7 +236,6 @@ exports.rotateC = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
-
 
 
     var movePointFunction = function (cell, origin, pivot) {
