@@ -314,7 +314,7 @@ exports.lockUnit = function (state) {
     var unit = state.state.unit;
     var origin = state.state.unitOrigin;
 
-    state.state.unit.members.forEach(function (cell) {
+    unit.members.forEach(function (cell) {
         var x = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0));
         var y = cell.y + origin.y;
         if (!updatedBoard.filled.some(function (filledCell) {
@@ -328,8 +328,8 @@ exports.lockUnit = function (state) {
         board: updatedBoard,
         state: {
             state: "locked",
-            unit: state.state.unit,
-            score: state.state.score,
+            unit: unit,
+            score: state.state.score +  unit.members.length,
             seed: state.state.seed
         }
     }

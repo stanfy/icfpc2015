@@ -18,7 +18,7 @@ describe('Locking', function () {
             width: 10,
             height: 10,
             sourceSeeds: [17],
-            filled:[],
+            filled: [],
             units: [{
                 pivot: {x: 1, y: 2},
                 members: [{x: 1, y: 2}]
@@ -69,6 +69,13 @@ describe('Locking', function () {
                     return filledCell.x == x && filledCell.y == y;
                 })
             }), true, "All items should be put as locked to the board")
+        });
+
+        it('Should increase score by ate least amount of members in unit', function () {
+            var unit = state.state.unit;
+            var origin = state.state.unitOrigin;
+            var nextState = brain.lockUnit(state);
+            assert.equal(nextState.state.score, state.state.score + unit.members.length);
         });
 
         it('Return state in result', function () {
