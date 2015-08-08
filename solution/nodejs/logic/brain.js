@@ -58,6 +58,9 @@ exports.placeUnitOnTop = function (state, unit) {
         x: (emptySpace / 2 | 0), // Integer division :)
         y: 0
     };
+
+
+    // check ig unit can be placed
     var result = {
         board: state.board,
         state: {
@@ -69,8 +72,20 @@ exports.placeUnitOnTop = function (state, unit) {
         }
     };
 
-    return result;
-}
+    // Try to place
+    return moveWithMovementFunction(result, "Place", function (cell, origin) {
+        return {x: origin.x + cell.x, y: origin.y + cell.y}
+    }, null, function () {
+        return {
+            board: state.board,
+            state: {
+                state: "finished",
+                message: "Cannot place new item",
+                score: state.state.score
+            }
+        };
+    });
+};
 
 
 /*
@@ -142,7 +157,7 @@ var pointIsBlockedAtBoard = function (board, x, y) {
     return boardFilled;
 };
 
-var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
+var moveWithMovementFunction = function (state, name, movePoint, moveUnit, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -182,7 +197,9 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
             }
         };
     } else {
-        // TODO : Handle ncorrrect movements
+        if (failure) {
+            return failure();
+        }
         var nextState = exports.lockUnit(state);
         nextState = exports.getNextUnit(nextState);
         nextState = exports.placeUnitOnTop(nextState, nextState.state.unit);
