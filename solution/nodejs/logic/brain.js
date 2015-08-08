@@ -5,6 +5,8 @@ var Long = require("long");
 var lcg = require('../logic/lcg');
 var extend = require('util')._extend;
 var transform = require("../logic/transformations");
+var estimator = require("../logic/estimator");
+
 exports.stateIsFinished = function (state) {
     return state && state.state && state.state.state == "finished" || state.state.state == "error";
 };
@@ -91,6 +93,7 @@ exports.placeUnitOnTop = function (state, unit) {
             seed: state.state.seed,
             ls_old: state.state.ls_old,
             hashes: hashes,
+            estimation:state.state.estimation,
         }
     };
 
@@ -145,7 +148,9 @@ exports.getNextUnit = function (state) {
             score: state.state.score,
             seed: nexSeed,
             ls_old: state.state.ls_old,
-            hashes: state.state.hashes
+            hashes: state.state.hashes,
+            estimation:state.state.estimation,
+
         }
     };
 
@@ -244,6 +249,8 @@ exports.removeAllLines = function (state) {
             seed: state.state.seed,
             ls_old: linesclearedAt.length,
             hashes: state.state.hashes,
+            estimation:state.state.estimation,
+
         }
     };
 
@@ -310,7 +317,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         }
         nextHashes.push(updatedUnitHash);
 
-        return {
+        var result = {
             board: state.board,
             state: {
                 state: "ok",
@@ -319,8 +326,11 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
                 seed: state.state.seed,
                 ls_old: state.state.ls_old,
                 hashes: nextHashes,
+                estimation:state.state.estimation
             }
         };
+        result.state.estimation = JSON.stringify(estimator.estimatePosition(result));
+        return result;
     } else {
         if (failure) {
             return failure();

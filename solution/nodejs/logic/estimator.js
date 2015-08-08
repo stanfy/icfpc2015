@@ -2,7 +2,7 @@
  * Created by ptaykalo on 8/8/15.
  */
 
-var fastboard = require('fastboard');
+var fastboard = require('./fastboard');
 
 /*
  Estimates postition on the board by some coefficitend :
@@ -12,9 +12,9 @@ exports.estimatePosition = function (state) {
     var boardSize = state.board.width * state.board.height;
 
     var score = state.state.score ? state.state.score : 0;
-    var scoreCoef = 100.0;
+    var scoreCoef = 10.0;
     var itemsLeft = state.board.sourceLength ? state.board.sourceLength : 0;
-    var itemsLeftCoef = 10;
+    var itemsLeftCoef = 5;
     var holesCoef = 1;
     var linesCoef = 1;
 
@@ -38,7 +38,7 @@ exports.estimatePosition = function (state) {
             } else {
                 currentHoleLength++;
                 if (currentLineLength != 0) {
-                    linesSum += currentLineLength * 1.8;
+                    linesSum += currentLineLength * currentLineLength;
                     currentLineLength = 0;
                 }
             }
@@ -60,5 +60,5 @@ exports.estimatePosition = function (state) {
     base += linesSum * linesCoef;
     base += itemsLeft * itemsLeftCoef;
 
-    return base;
+    return {value:base, score:score * scoreCoef, holes:holesSum * holesCoef, lines:linesSum * linesCoef, items:itemsLeft * itemsLeftCoef};
 }
