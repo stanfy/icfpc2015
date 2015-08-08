@@ -51,13 +51,13 @@ function pivot(i, j, color) {
 
 function drawUnit(unit, origin) {
     unit.members.forEach(function (member) {
-        fill(member.x + origin.x + (origin.y %2 ==0 ?  0: (member.y %2 == 1 ? 1 : 0)), member.y + origin.y, unitColor)
+        fill(member.x + origin.x + (origin.y % 2 == 0 ? 0 : (member.y % 2 == 1 ? 1 : 0)), member.y + origin.y, unitColor)
     });
 
 }
 
 function drawPivot(unit, origin) {
-    pivot(unit.pivot.x + origin.x + (origin.y %2 ==0 ?  0: (unit.pivot.y %2 == 1 ? 1 : 0)), unit.pivot.y + origin.y, pivotColor);
+    pivot(unit.pivot.x + origin.x + (origin.y % 2 == 0 ? 0 : (unit.pivot.y % 2 == 1 ? 1 : 0)), unit.pivot.y + origin.y, pivotColor);
 }
 
 function drawMap(map, state) {
@@ -65,7 +65,7 @@ function drawMap(map, state) {
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-
+    console.log("Map " + map.width + "x" + map.height);
     drawBoard(map.width, map.height, cellSize, gapSize);
     map.filled.forEach(function (item) {
         fill(item.x, item.y, filledColor)
@@ -105,10 +105,17 @@ function resize() {
 
 document.addEventListener('keydown', function (event) {
     if (event.keyCode == 37) {
-        alert('Left was pressed');
-    }
-    else if (event.keyCode == 39) {
-        alert('Right was pressed');
+        moveLeft();
+    } else if (event.keyCode == 39) {
+        moveRight();
+    } else if (event.keyCode == 90) { // z
+        moveDownLeft();
+    } else if (event.keyCode == 88) { // x
+        moveDownRight();
+    } else if (event.keyCode == 188) { // ,
+        rotateC();
+    } else if (event.keyCode == 190) { // .
+        rotateCC();
     }
 });
 
@@ -156,7 +163,7 @@ function refresh() {
 function getInitialState() {
     console.log("Current board is " + JSON.stringify(current_board))
     loadJSON("initial", function (state) {
-        console.log("State is updated to " + JSON.stringify(state))
+        console.log("Initial State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_board, "POST");
@@ -165,7 +172,7 @@ function getInitialState() {
 function getNextState() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_state, "POST");
@@ -173,7 +180,7 @@ function getNextState() {
 function moveLeft() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state?command=W", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("W State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_state, "POST");
@@ -182,7 +189,7 @@ function moveLeft() {
 function moveRight() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state?command=E", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("E State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_state, "POST");
@@ -191,7 +198,7 @@ function moveRight() {
 function moveDownRight() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state?command=SE", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("SE State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_state, "POST");
@@ -200,8 +207,9 @@ function moveDownRight() {
 function moveDownLeft() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state?command=SW", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("SW State is updated to " + JSON.stringify(state))
         current_state = state;
+
         drawMap(state.board, state.state);
     }, current_state, "POST");
 }
@@ -210,7 +218,7 @@ function moveDownLeft() {
 function rotateC() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state?command=C", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("C State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_state, "POST");
@@ -219,7 +227,7 @@ function rotateC() {
 function rotateCC() {
     console.log("Current state is " + JSON.stringify(current_state))
     loadJSON("state?command=CC", function (state) {
-        console.log("State is updated to " + JSON.stringify(current_state))
+        console.log("CC State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
     }, current_state, "POST");
