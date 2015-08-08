@@ -20,7 +20,9 @@
     NSMutableString * megaString = [NSMutableString new];
     [array enumerateObjectsUsingBlock:^(NSString * command, NSUInteger idx, BOOL * stop) {
          NSString * letter = [[self class] substitutionStringForCommand:command];
-         [megaString appendString:letter];
+        if (letter) {
+           [megaString appendString:letter];
+        }        
     }];
 
     // TODO: powerwords
