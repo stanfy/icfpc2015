@@ -66,9 +66,7 @@
 
     if (intBoard == 22) {
         if (intSeed == 0) {
-            return @"\n"
-                "tt.kilew [2:59 PM]2:59\n"
-                "E E E C E SE SE C C W W W SW SW SW W W C C SW SW SW SW W SW SW SW SW W SW SW SW SE SW SW SW SE SE SE SE SE C E E E E E E C E E SE SW SE C E E E SE SE SE SE SE SW SW SW W W SW SW SW C C W W W SW SW C SE E C C SE SE E E E C SE C E E E E E E E";
+            return @"E E E C E SE SE C C W W W SW SW SW W W C C SW SW SW SW W SW SW SW SW W SW SW SW SE SW SW SW SE SE SE SE SE C E E E E E E C E E SE SW SE C E E E SE SE SE SE SE SW SW SW W W SW SW SW C C W W W SW SW C SE E C C SE SE E E E C SE C E E E E E E E";
         }
     }
 
