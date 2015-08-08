@@ -5,6 +5,8 @@ var Long = require("long");
 var lcg = require('../logic/lcg');
 var extend = require('util')._extend;
 var transform = require("../logic/transformations");
+var estimator = require("../logic/estimator");
+
 exports.stateIsFinished = function (state) {
     return state && state.state && state.state.state == "finished" || state.state.state == "error";
 };
@@ -91,6 +93,7 @@ exports.placeUnitOnTop = function (state, unit) {
             seed: state.state.seed,
             ls_old: state.state.ls_old,
             hashes: hashes,
+            estimation:state.state.estimation,
         }
     };
 
@@ -145,7 +148,9 @@ exports.getNextUnit = function (state) {
             score: state.state.score,
             seed: nexSeed,
             ls_old: state.state.ls_old,
-            hashes: state.state.hashes
+            hashes: state.state.hashes,
+            estimation:state.state.estimation,
+
         }
     };
 
@@ -154,30 +159,26 @@ exports.getNextUnit = function (state) {
 
 var pointIsBlockedAtBoard = function (board, x, y) {
     if (x < 0) {
-        console.error("  X < 0 " + x);
+        //console.error("  X < 0 " + x);
         return true;
     }
     if (x >= board.width) {
-        console.error("  X >= " + x + "sattBoard " + board.width);
+        //console.error("  X >= " + x + "sattBoard " + board.width);
         return true;
     }
     if (y < 0) {
-        console.error("  Y < 0 " + y);
+        //console.error("  Y < 0 " + y);
         return true;
     }
     if (y >= board.height) {
-        console.error("  Y >= " + y + "sattBoard " + board.height);
+        //console.error("  Y >= " + y + "sattBoard " + board.height);
         return true;
     }
 
 
-    var boardFilled = board.filled.reduce(function (prev, cell) {
-        if (prev) {
-            return prev;
-        }
+    var boardFilled = board.filled.some(function (cell) {
         return cell.x == x && cell.y == y;
-
-    }, false);
+    });
     return boardFilled;
 };
 
@@ -206,7 +207,7 @@ exports.removeAllLines = function (state) {
             }
         }
         if (should) {
-            console.error("Adding line" + y);
+            //console.error("Adding line" + y);
             linesclearedAt.push(y);
         }
     }
@@ -248,6 +249,8 @@ exports.removeAllLines = function (state) {
             seed: state.state.seed,
             ls_old: linesclearedAt.length,
             hashes: state.state.hashes,
+            estimation:state.state.estimation,
+
         }
     };
 
@@ -265,7 +268,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
     var pivot = unit.pivot;
     // simple -1 for all X
 
-    console.log("Unit.memers" + unit.members);
+    //console.log("Unit.memers" + unit.members);
     var canMoveInDirection = unit.members.reduce(function (prev, cell) {
         if (!prev) {
             return false;
@@ -273,13 +276,13 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         var nextCell = movePoint(cell, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
-            console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
+            ////console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
             return false;
         }
         return true
     }, true);
 
-    console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
+    ////console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
 
         // update all points with move point
@@ -291,12 +294,12 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
 
         //check next hash
-        //console.error("Original unit : " + JSON.stringify(unit))
-        //console.error("Original unit hash: " + JSON.stringify(exports.unitHash(unit)))
-        //console.error("Next unit : " + JSON.stringify(updatedUnit))
+        ////console.error("Original unit : " + JSON.stringify(unit))
+        ////console.error("Original unit hash: " + JSON.stringify(exports.unitHash(unit)))
+        ////console.error("Next unit : " + JSON.stringify(updatedUnit))
         var updatedUnitHash = exports.unitHash(updatedUnit);
 
-        //console.error("Next unit hash: " + JSON.stringify(updatedUnitHash))
+        ////console.error("Next unit hash: " + JSON.stringify(updatedUnitHash))
         if (exports.unitHashIsInHashes(updatedUnitHash, state.state.hashes)) {
             return {
                 board: state.board,
@@ -307,14 +310,14 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
             }
         }
 
-       var nextUnit = updatedUnit;
+        var nextUnit = updatedUnit;
         var nextHashes = state.state.hashes.splice(0);
         if (nextUnit.pivot.y != unit.pivot.y) {
             nextHashes = []
         }
         nextHashes.push(updatedUnitHash);
 
-        return {
+        var result = {
             board: state.board,
             state: {
                 state: "ok",
@@ -323,8 +326,11 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
                 seed: state.state.seed,
                 ls_old: state.state.ls_old,
                 hashes: nextHashes,
+                estimation:state.state.estimation
             }
         };
+        result.state.estimation = JSON.stringify(estimator.estimatePosition(result));
+        return result;
     } else {
         if (failure) {
             return failure();
@@ -349,37 +355,37 @@ exports.moveLeft = function (state, failure) {
 };
 
 
-exports.moveRight = function (state,failure) {
+exports.moveRight = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "Right", function (cell) {
         return {x: cell.x + 1, y: cell.y}
-    },failure);
+    }, failure);
 };
 
-exports.moveDownLeft = function (state,failure) {
+exports.moveDownLeft = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
         return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1}
-    },failure);
+    }, failure);
 };
 
-exports.moveDownRight = function (state,failure) {
+exports.moveDownRight = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
 
     return moveWithMovementFunction(state, "DownRight", function (cell) {
         return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
-    },failure);
+    }, failure);
 };
 
-exports.rotateC = function (state,failure) {
+exports.rotateC = function (state, failure) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -389,7 +395,7 @@ exports.rotateC = function (state,failure) {
         return transform.rotateRight(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateC", movePointFunction,failure);
+    return moveWithMovementFunction(state, "rotateC", movePointFunction, failure);
 
 };
 
@@ -402,7 +408,7 @@ exports.rotateCC = function (state, failure) {
         return transform.rotateLeft(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateCC", movePointFunction,failure);
+    return moveWithMovementFunction(state, "rotateCC", movePointFunction, failure);
 
 };
 
@@ -450,7 +456,7 @@ exports.lockUnit = function (state) {
 };
 
 exports.performSequence = function (state) {
-    console.error(state.sequence);
+    //console.error(state.sequence);
 
     if (state.sequence.length == 0) {
         console.log("Command sequence is empty");
@@ -464,7 +470,7 @@ exports.performSequence = function (state) {
         var c = sequence[i];
         console.log("Sequence execution. Current command: " + c);
 
-        console.error(state.state.state);
+        //console.error(state.state.state);
 
         if (state.state.state != "ok") {
             state.commandHistory = history;

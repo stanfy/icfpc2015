@@ -1,6 +1,6 @@
 var canvas = document.getElementById('c');
-var cellSize = 30;
-var gapSize = 5;
+var cellSize = 20;
+var gapSize = 2;
 
 var defaultColor = '#eee';
 var filledColor = '#FFD700';
@@ -75,6 +75,7 @@ function drawMap(map, state) {
         "State: " + state.state + "\n"
         + "Score: " + state.score + "\n"
         + "Seed: " + state.seed + "\n"
+        + "Estimation: " + state.estimation + "\n"
         + "\nFull state: \n"
         + JSON.stringify(state, null, 4);
 
@@ -102,8 +103,8 @@ function resize() {
     var height;
 
     if (windowRatio < canvasRatio) {
-        height = window.innerHeight;
-        width = height / canvasRatio;
+        height = window.innerHeight
+        width = (height / canvasRatio);
     } else {
         width = window.innerWidth;
         height = width * canvasRatio;
