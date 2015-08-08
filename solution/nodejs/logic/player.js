@@ -12,9 +12,8 @@ exports.initializeOneBoard = function (board, seed) {
 exports.nextState = function (state, params) {
     // Skip everyting,if current state is not ok
     if (state.state.state != "ok") {
-        res.json(state);
         console.error("Skipping since previous state is not OK " + state.state.state);
-        return;
+        return null;
     }
 
     //move [ E | W | SE | SW | C | CC]
