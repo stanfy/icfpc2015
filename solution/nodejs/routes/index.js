@@ -37,11 +37,9 @@ router.post('/state', function (req, res, next) {
     // Skipe everyting,if current state is not ok
     if (state.state.state != "ok") {
         res.json(state);
-        console.error("Skipings since previous state is not OK " + state.state.state);
-
+        console.error("Skipping since previous state is not OK " + state.state.state);
         return;
     }
-
 
     //move [ E | W | SE | SW | C | CC]
     //Move all members of the unit one cell in the given direction.

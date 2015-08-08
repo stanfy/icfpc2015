@@ -121,6 +121,20 @@ describe("brain", function () {
                 result = brain.placeUnitOnTop(state, unit);
                 assert.equal(result.state.unitOrigin.x, 1, "We should set unit in center");
             });
+
+            it('Should not be placed if state is in eror state', function () {
+                state.state.state = "error";
+                result = brain.placeUnitOnTop(state, unit);
+                assert.equal(result.state.unitOrigin, undefined, "We should set anything in case of error");
+
+                state.board.width = 4;
+                result = brain.placeUnitOnTop(state, unit);
+                assert.equal(result.state.unitOrigin, undefined, "We should set unit in center");
+
+                state.board.width = 5;
+                result = brain.placeUnitOnTop(state, unit);
+                assert.equal(result.state.unitOrigin, undefined, "We should set anything in case of error");
+            });
         });
 
         context('When asked for new unit', function () {
@@ -134,8 +148,8 @@ describe("brain", function () {
                 assert.equal(result.state.score, state.state.score, "We shouldn't alter score on placing");
                 assert.notEqual(result.state.unit, undefined, "We should provide unit");
                 assert.notEqual(result.board, undefined, "We should provide board in result");
-
             });
+
         });
 
 

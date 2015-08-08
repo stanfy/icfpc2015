@@ -105,10 +105,13 @@ function resize() {
 
 document.addEventListener('keydown', function (event) {
     if (event.keyCode == 37) {
-        alert('Left was pressed');
-    }
-    else if (event.keyCode == 39) {
-        alert('Right was pressed');
+        moveLeft();
+    } else if (event.keyCode == 39) {
+        moveRight();
+    } else if (event.keyCode == 90) { // z
+        moveDownLeft();
+    } else if (event.keyCode == 88) { // x
+        moveDownRight();
     }
 });
 

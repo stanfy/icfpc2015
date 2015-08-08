@@ -5,6 +5,9 @@ var Long = require("long");
 var lcg = require('../logic/lcg');
 var extend = require('util')._extend;
 
+exports.stateIsFinished = function (state) {
+    return state && state.state && state.state.state == "finished" || state.state.state == "error";
+};
 
 exports.initTransform = function (board) {
     if (!board) {
@@ -40,6 +43,9 @@ exports.initTransform = function (board) {
  * Doesn't peform any checks on it
  * */
 exports.placeUnitOnTop = function (state, unit) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
 
     // get rightmost item of unit
     var maxX = unit.members.reduce(function (prev, curr) {
@@ -71,6 +77,10 @@ exports.placeUnitOnTop = function (state, unit) {
  Returns state with next unit
  */
 exports.getNextUnit = function (state) {
+
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
 
     var seedL = new Long(state.state.seed);
     var lcgValue = lcg.lcgValue(seedL);
@@ -121,6 +131,10 @@ var pointIsBlockedAtBoard = function (board, x, y) {
 };
 
 var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     // get active unit
     var unit = state.state.unit;
     var origin = state.state.unitOrigin;
@@ -166,6 +180,10 @@ var moveWithMovementFunction = function (state, name, movePoint, moveUnit) {
 
 
 exports.moveLeft = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     return moveWithMovementFunction(state, "Left", function (cell, origin) {
         return {x: origin.x + cell.x - 1, y: origin.y + cell.y}
     });
@@ -173,24 +191,40 @@ exports.moveLeft = function (state) {
 
 
 exports.moveRight = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     return moveWithMovementFunction(state, "Right", function (cell, origin) {
         return {x: origin.x + cell.x + 1, y: origin.y + cell.y}
     });
 };
 
 exports.moveDownLeft = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
         return {x: origin.x + cell.x - ((origin.y + cell.y) % 2 == 0 ? 1 : 0), y: origin.y + cell.y + 1}
     });
 };
 
 exports.moveDownRight = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     return moveWithMovementFunction(state, "DownLeft", function (cell, origin) {
         return {x: origin.x + cell.x + ((origin.y + cell.y) % 2 == 0 ? 0 : 1), y: origin.y + cell.y + 1}
     });
 };
 
 exports.rotateC = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
 
     var movePointFunction = function (cell, origin, pivot) {
 
@@ -243,6 +277,10 @@ exports.rotateC = function (state) {
 };
 
 exports.rotateCC = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     return state;
 };
 
@@ -250,6 +288,10 @@ exports.rotateCC = function (state) {
  Locks unit at current positiong
  */
 exports.lockUnit = function (state) {
+    if (exports.stateIsFinished(state)) {
+        return state;
+    }
+
     if (!state.state.unit) {
         return {
             board: state.board,
@@ -259,7 +301,7 @@ exports.lockUnit = function (state) {
             }
         }
     }
-    var updatedBoard = extend({},state.board);
+    var updatedBoard = extend({}, state.board);
     updatedBoard.filled = state.board.filled.slice();
 
     var unit = state.state.unit;
