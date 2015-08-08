@@ -28,6 +28,12 @@
         }
     }
 
+    if (intBoard ==  13) {
+        if (intSeed == 0) {
+            return @"SE SE SW SW SW SW SW SE SE SW CC CC CC SW SW W SW SW SW SW SE SE SE SW SW SW CC CC CC SW E E SE SE SW SW SE SW SW SE SW SE SE SE SE SE CC CC SE CC SE CC SE SE SE SE SE SE SE SW SE SW SE SW SE SE W SE W W SE SE W SW SW SW SW SW SE SW SE SE SE SE CC SE SE E SE SE SE CC CC W";
+        }
+    }
+
     return nil;
 }
 
