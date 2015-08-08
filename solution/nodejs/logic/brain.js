@@ -236,6 +236,7 @@ exports.rotateC = function (state) {
     }
 
 
+
     var movePointFunction = function (cell, origin, pivot) {
 
         var CX = cell.x + origin.x + (origin.y % 2 == 0 ? 0 : (cell.y % 2 == 1 ? 1 : 0))
