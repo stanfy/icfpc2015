@@ -6,6 +6,7 @@
 #import "DummySolver.h"
 #import "Board.h"
 #import "Solution.h"
+#import "LightningSolver.h"
 
 
 @implementation DummySolver {
@@ -38,10 +39,16 @@
 
     for (NSNumber * seed in self.board.sourceSeeds) {
 
+        NSString * letters = [LightningSolver lettersForBoardID:boardID seed:seed];
+
+        if (!letters) {
+            letters = [self randomLetters];
+        }
+
         Solution * s = [Solution solutionWithProblemId:boardID
                                                   seed:seed
                                                    tag:[self tagForBoardID:boardID seed:seed]
-                                              commands:[self randomCommand]];
+                                               letters:letters];
         [array addObject:s];
     }
 
@@ -49,16 +56,17 @@
 }
 
 
-- (NSString * )randomCommand {
+
+- (NSString * )randomLetters {
     NSInteger length = arc4random_uniform(100);
     NSMutableString * str = [NSMutableString string];
     for (int i = 0; i < length; i++) {
         NSInteger odd = arc4random_uniform(10);
-        //[str appendString:(odd > 5) ? @"a" : @"l"];
-        [str appendString:@"oga"];
+        [str appendString:(odd > 5) ? @"a" : @"l"];
     }
     return str;
 }
+
 
 
 - (NSString * )jsonFromSolutions:(NSArray * )solutions {

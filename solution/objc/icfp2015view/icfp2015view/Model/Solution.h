@@ -15,7 +15,7 @@
 
 - (instancetype)initWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag commands:(NSString *)commands;
 
-+ (instancetype)solutionWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag commands:(NSString *)commands;
++ (instancetype)solutionWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag letters:(NSString *)commands;
 
 - (NSString *)jsonString;
 

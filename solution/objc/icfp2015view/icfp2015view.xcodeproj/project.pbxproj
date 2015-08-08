@@ -25,6 +25,7 @@
 		192EA3AE82A04D5B5114C24B /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAE425F7FA63CD86B3E72 /* BoardCell.m */; };
 		192EA41A199F8FDA9422C499 /* problem_23.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EAB6E5D6F30F96814A44A /* problem_23.json */; };
 		192EA4545742813D38308033 /* BoardCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EADC0E899F07F66E15CF1 /* BoardCreator.m */; };
+		192EA4EB27205B1833F0B14C /* LightningSolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA4D018F9ADA5F60C49E9 /* LightningSolver.m */; };
 		192EA5142638B7577A6F3045 /* problem_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA0F45001CC853081CC27 /* problem_1.json */; };
 		192EA53D8A04E97BC26A1A77 /* problem_16.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA6041183E4697BB32304 /* problem_16.json */; };
 		192EA56C595ED16FE6C9F933 /* BoardUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAF9120DFE1ADA6985EB5 /* BoardUnit.m */; };
@@ -44,6 +45,7 @@
 		192EACFEC1DBFE55740F6BB0 /* problem_22.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA9189261C7E5CB5ACC32 /* problem_22.json */; };
 		192EAD47724672A85CFF93E2 /* problem_15.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA76A04C43470EFA0AEAE /* problem_15.json */; };
 		192EADB4688C2C7B1354D249 /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA9CF8C9DD7DE444B075E /* Board.m */; };
+		192EADDC8C8EC4585E5BD79C /* CommandToLettersConvertor.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA6DA3AE33C41A35AE934 /* CommandToLettersConvertor.m */; };
 		192EAE6D36991B9DF64991C6 /* problem_21.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA32B9F9A66D159F174A7 /* problem_21.json */; };
 		192EAEA70511EC90F21388D0 /* problem_8.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA66553283D7F804F2155 /* problem_8.json */; };
 		192EAF5A3CBE68C79AC030F4 /* problem_18.json in Resources */ = {isa = PBXBuildFile; fileRef = 192EA7A29017DFA3ECF73820 /* problem_18.json */; };
@@ -58,6 +60,8 @@
 		7327FD4B1B6CAF1F00D693ED /* icfp2015viewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7327FD4A1B6CAF1F00D693ED /* icfp2015viewTests.m */; };
 		7344E20F1B75153E00AA8A6F /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAE425F7FA63CD86B3E72 /* BoardCell.m */; };
 		7344E2101B75154100AA8A6F /* BoardUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EAF9120DFE1ADA6985EB5 /* BoardUnit.m */; };
+		7344E2131B760C0500AA8A6F /* LightningSolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA4D018F9ADA5F60C49E9 /* LightningSolver.m */; };
+		7344E2141B760C0F00AA8A6F /* CommandToLettersConvertor.m in Sources */ = {isa = PBXBuildFile; fileRef = 192EA6DA3AE33C41A35AE934 /* CommandToLettersConvertor.m */; };
 		73481A771B750D24006C7E9D /* libclilibrary.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 73481A6C1B750D24006C7E9D /* libclilibrary.dylib */; };
 		73481A831B750DA8006C7E9D /* LinearCongruentGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 1737CB752B798028B79127CC /* LinearCongruentGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73481A881B7515B2006C7E9D /* BoardCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 192EA97BD2FCC1AEC7B3AD63 /* BoardCreator.h */; };
@@ -94,16 +98,19 @@
 		1737CC970A350CF01B65C7DD /* DummySolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DummySolver.m; sourceTree = "<group>"; };
 		192EA0F45001CC853081CC27 /* problem_1.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_1.json; sourceTree = "<group>"; };
 		192EA18D31E1A30D1B52C360 /* problem_11.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_11.json; sourceTree = "<group>"; };
+		192EA1B5ABCDA2E39C21203B /* LightningSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightningSolver.h; sourceTree = "<group>"; };
 		192EA2D4E0C99997C9684A5F /* problem_6.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_6.json; sourceTree = "<group>"; };
 		192EA32B9F9A66D159F174A7 /* problem_21.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_21.json; sourceTree = "<group>"; };
 		192EA34D042722F949322FA3 /* problem_13.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_13.json; sourceTree = "<group>"; };
 		192EA3F915557AF1EADA5906 /* BoardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardCell.h; sourceTree = "<group>"; };
 		192EA427A917547C39FEA7C6 /* problem_2.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_2.json; sourceTree = "<group>"; };
 		192EA45D14B09527D55C9F66 /* problem_12.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_12.json; sourceTree = "<group>"; };
+		192EA4D018F9ADA5F60C49E9 /* LightningSolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightningSolver.m; sourceTree = "<group>"; };
 		192EA5DA704F7B143A324101 /* BoardsConfigCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardsConfigCollection.h; sourceTree = "<group>"; };
 		192EA6041183E4697BB32304 /* problem_16.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_16.json; sourceTree = "<group>"; };
 		192EA66553283D7F804F2155 /* problem_8.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_8.json; sourceTree = "<group>"; };
 		192EA67AA212C31E098DBC21 /* BoardsConfigCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardsConfigCollection.m; sourceTree = "<group>"; };
+		192EA6DA3AE33C41A35AE934 /* CommandToLettersConvertor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandToLettersConvertor.m; sourceTree = "<group>"; };
 		192EA76A04C43470EFA0AEAE /* problem_15.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_15.json; sourceTree = "<group>"; };
 		192EA7A29017DFA3ECF73820 /* problem_18.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_18.json; sourceTree = "<group>"; };
 		192EA81B948775F057C59D1E /* problem_4.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_4.json; sourceTree = "<group>"; };
@@ -115,6 +122,7 @@
 		192EA94A558AF0474F4D20E6 /* problem_0.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_0.json; sourceTree = "<group>"; };
 		192EA95D748AD5126371E53F /* problem_10.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_10.json; sourceTree = "<group>"; };
 		192EA97BD2FCC1AEC7B3AD63 /* BoardCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardCreator.h; sourceTree = "<group>"; };
+		192EA9A29FD14033E13F7CEC /* CommandToLettersConvertor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandToLettersConvertor.h; sourceTree = "<group>"; };
 		192EA9C7A6018E222906C978 /* problem_5.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = problem_5.json; sourceTree = "<group>"; };
 		192EA9CF8C9DD7DE444B075E /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
 		192EAB6D9EB9DC3F3BB9B7E0 /* BoardUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardUnit.h; sourceTree = "<group>"; };
@@ -189,6 +197,10 @@
 			children = (
 				1737CC970A350CF01B65C7DD /* DummySolver.m */,
 				1737C9AF8E9A294A401986A3 /* DummySolver.h */,
+				192EA6DA3AE33C41A35AE934 /* CommandToLettersConvertor.m */,
+				192EA9A29FD14033E13F7CEC /* CommandToLettersConvertor.h */,
+				192EA4D018F9ADA5F60C49E9 /* LightningSolver.m */,
+				192EA1B5ABCDA2E39C21203B /* LightningSolver.h */,
 			);
 			path = Solvers;
 			sourceTree = "<group>";
@@ -529,6 +541,8 @@
 				192EA3AE82A04D5B5114C24B /* BoardCell.m in Sources */,
 				192EA56C595ED16FE6C9F933 /* BoardUnit.m in Sources */,
 				192EAB3C13FC08070EEA843B /* BoardsConfigCollection.m in Sources */,
+				192EADDC8C8EC4585E5BD79C /* CommandToLettersConvertor.m in Sources */,
+				192EA4EB27205B1833F0B14C /* LightningSolver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,7 +565,9 @@
 				1737CEB141F9CAAFC8C4B850 /* Command.m in Sources */,
 				7344E20F1B75153E00AA8A6F /* BoardCell.m in Sources */,
 				7344E2101B75154100AA8A6F /* BoardUnit.m in Sources */,
+				7344E2131B760C0500AA8A6F /* LightningSolver.m in Sources */,
 				192EA00A2DA94AE96FE12F68 /* Board.m in Sources */,
+				7344E2141B760C0F00AA8A6F /* CommandToLettersConvertor.m in Sources */,
 				192EA4545742813D38308033 /* BoardCreator.m in Sources */,
 				192EA920E5639B7C366E7953 /* BoardsConfigCollection.m in Sources */,
 			);

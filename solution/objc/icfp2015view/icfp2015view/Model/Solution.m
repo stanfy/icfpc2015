@@ -30,7 +30,7 @@
 }
 
 
-+ (instancetype)solutionWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag commands:(NSString *)commands {
++ (instancetype)solutionWithProblemId:(NSNumber *)problemId seed:(NSNumber *)seed tag:(NSString *)tag letters:(NSString *)commands {
     return [[self alloc] initWithProblemId:problemId seed:seed tag:tag commands:commands];
 }
 
