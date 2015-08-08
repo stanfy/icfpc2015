@@ -150,6 +150,13 @@ describe("brain", function () {
                 assert.notEqual(result.board, undefined, "We should provide board in result");
             });
 
+            it('return finish when theres no more items', function () {
+                state.board.sourceLength = 0
+                result = brain.getNextUnit(state);
+                assert.equal(result.state.state, "finished", "We shoudl update state for specific case");
+                assert.notEqual(result.state.message, undefined, "We should notify user why is that");
+            });
+
         });
 
 

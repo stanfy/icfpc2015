@@ -81,6 +81,16 @@ exports.getNextUnit = function (state) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
+    if (state.board.sourceLength == 0) {
+        return {
+            board: state.board,
+            state: {
+                state: "finished",
+                message: "No more figures in source",
+                score: state.state.score
+            }
+        };
+    }
 
     var seedL = new Long(state.state.seed);
     var lcgValue = lcg.lcgValue(seedL);
