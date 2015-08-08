@@ -9,7 +9,7 @@ exports.stateIsFinished = function (state) {
     return state && state.state && state.state.state == "finished" || state.state.state == "error";
 };
 
-exports.initTransform = function (board) {
+exports.initTransform = function (board, seed) {
     if (!board) {
         return {
             state: {
@@ -33,7 +33,7 @@ exports.initTransform = function (board) {
         state: {
             state: "ok",
             score: 0,
-            seed: board.sourceSeeds[0]
+            seed: seed
         }
     };
     initialState = exports.getNextUnit(initialState);

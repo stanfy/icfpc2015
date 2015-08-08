@@ -11,10 +11,11 @@ router.get('/', function (req, res, next) {
 
 
 router.post('/initial', function (req, res, next) {
-    var board = req.body;
-    // TODO : allow to select SEED
+    var board = req.body.board;
+    var seed = req.body.seed;
+
     console.error(board + "---");
-    var state = brain.initTransform(board);
+    var state = brain.initTransform(board, seed);
     console.error(board + "---");
 
     var stateWithUnit = brain.getNextUnit(state);

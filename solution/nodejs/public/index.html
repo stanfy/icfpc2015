@@ -1,8 +1,14 @@
 <html>
 <body>
 <div>
-	<input type="text" id="mapNumber" value="1">
-	<input type="button" value="Refresh" onclick="refresh()"/>
+	<div>
+        Map:
+        <input type="text" id="mapNumber" value="5">
+    </div>
+    <div>SeedIndex	<input type="text" id="mapSeedIndex" value="0">
+    </div>
+
+    <input type="button" value="Refresh" onclick="refresh()"/>
 	<input type="button" value="Next state" onclick="getNextState()"/>
 	<input type="button" value="Left" onclick="moveLeft()"/>
 	<input type="button" value="Right" onclick="moveRight()"/>

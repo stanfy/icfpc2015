@@ -151,35 +151,41 @@ function loadJSON(path, callback, jsonObject, method) {
     }
 }
 
-function loadMap(callback, id) {
+function loadMap(callback, id, seedIndex) {
     loadJSON('problems/problem_' + id + '.json', function (result) {
         current_board = result;
-        getInitialState()
+        var seed = current_board.sourceSeeds[seedIndex];
+        getInitialState(seed )
     })
 }
 
 function init() {
+    var mapNumber = document.getElementById('mapNumber').value;
+    var mapSeedIndex = document.getElementById('mapSeedIndex').value;
     loadMap(function (actual_JSON) {
         drawMap(actual_JSON);
-    }, 5);
+    }, mapNumber, mapSeedIndex );
 };
 
 function refresh() {
     commandLog = "";
     logCommand("");
+    var mapNumber = document.getElementById('mapNumber').value;
+    var mapSeedIndex = document.getElementById('mapSeedIndex').value;
     loadMap(function (actual_JSON) {
         // Parse JSON string into object
         drawMap(actual_JSON);
-    }, document.getElementById('mapNumber').value);
+    }, mapNumber, mapSeedIndex);
 }
 
-function getInitialState() {
+function getInitialState(seed) {
     console.log("Current board is " + JSON.stringify(current_board))
+    var seededBoard = {seed: seed, board: current_board};
     loadJSON("initial", function (state) {
         console.log("Initial State is updated to " + JSON.stringify(state))
         current_state = state;
         drawMap(state.board, state.state);
-    }, current_board, "POST");
+    }, seededBoard, "POST");
 }
 
 function getNextState() {
