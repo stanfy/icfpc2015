@@ -8,7 +8,8 @@
 1. Ei!
 3. Ia!
 5. R'lyeh
-7. Yuggot
+7. Yuggo
+8. Ia! Ia!
 9. .....
 
 

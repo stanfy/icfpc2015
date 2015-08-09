@@ -3,6 +3,7 @@
  */
 var brain = require("../logic/brain");
 var assert = require('assert');
+var fastboard = require('../logic/fastboard');
 
 describe('Locking', function () {
     var unit = {};
@@ -19,6 +20,7 @@ describe('Locking', function () {
             height: 10,
             sourceSeeds: [17],
             filled: [],
+            filledOpt:{},
             units: [{
                 pivot: {x: 1, y: 2},
                 members: [{x: 1, y: 2}]
@@ -61,9 +63,7 @@ describe('Locking', function () {
             var unit = state.state.unit;
             state = brain.lockUnit(state);
             assert.equal(unit.members.every(function (cell) {
-                return state.board.filled.some(function (filledCell) {
-                    return filledCell.x == cell.x && filledCell.y == cell.y;
-                })
+                return fastboard.isCellFilledAtBoard(state.board,cell.x,cell.y);
             }), true, "All items should be put as locked to the board")
         });
 

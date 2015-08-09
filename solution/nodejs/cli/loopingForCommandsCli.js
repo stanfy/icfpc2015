@@ -10,13 +10,11 @@ program
     .version('0.0.1')
     .option("-f, --file [value]", "File containing JSON encoded input")
     .option("-o, --outputFile [value]", "File containing JSON encoded input")
-    .option("-s, --score [value]", "min needed score", parseInt)
     .parse(process.argv);
 
 //console.log('hello, you\'re running our cli with options:');
 
 const file = program.file;
-const score = program.score;
 const outputFile = program.outputFile;
 
 // reading file
@@ -35,7 +33,7 @@ fs.readFile(file, 'utf8', function (err,data) {
         // initialize all!
         var solver = require("../logic/solver");
 
-        var result = solver.solveBoardForAllSeeds(json, score, function(partial_result) {
+        var result = solver.solveBoardForAllSeeds(json, "", function(partial_result) {
             fs.writeFileSync(outputFile, JSON.stringify(partial_result, null, "\t"));
         });
 

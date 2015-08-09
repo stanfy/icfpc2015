@@ -4,6 +4,7 @@ var gapSize = 2;
 
 var defaultColor = '#eee';
 var filledColor = '#FFD700';
+var filledColorTr = 'rgba(0,128,128,0.5)';
 var unitColor = '#66FF99';
 var pivotColor = '#6600FF';
 
@@ -51,10 +52,10 @@ function pivot(i, j, color) {
         cellSize / 3, color);
 }
 
-function drawUnit(unit) {
+function drawUnit(unit, customColor) {
     unit.members.forEach(function (member) {
         fill(member.x, member.y,
-            unitColor
+            customColor ? customColor : unitColor
         )
     });
 
@@ -76,13 +77,22 @@ function drawMap(map, state) {
         + "Score: " + state.score + "\n"
         + "Seed: " + state.seed + "\n"
         + "Estimation: " + state.estimation + "\n"
+        //+ "FilledOpt: " +  JSON.stringify(map.filledOpt, null, 4)+ "\n"
         + "\nFull state: \n"
         + JSON.stringify(state, null, 4);
 
     drawBoard(map.width, map.height, cellSize, gapSize);
-    map.filled.forEach(function (item) {
-        fill(item.x, item.y, filledColor)
-    });
+
+    if (map.filledOpt) {
+        for (var num in map.filledOpt) {
+           fill(num % 1000, num / 1000, filledColor);
+        }
+    }
+    //if (map.filled) {
+    //    map.filled.forEach(function (item) {
+    //        fill(item.x, item.y, filledColor)
+    //    });
+    //}
 
     // Draw state
     if (state) {
@@ -90,6 +100,13 @@ function drawMap(map, state) {
         if (unit) {
             drawUnit(unit)
             drawPivot(unit)
+        }
+
+        var estimations = state.estimatedPositions;
+        if (estimations && estimations.length) {
+            for (var i = 0 ; i < estimations.length  && i < 10;i ++) {
+                drawUnit(estimations[i].unit, "rgba(0," + (10.0 - i) * 255.0 +",0,0.2)")
+            }
         }
     }
 }
@@ -116,6 +133,9 @@ function resize() {
 
 
 document.addEventListener('keydown', function (event) {
+    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+        return;
+    }
     if (event.keyCode == 65) { // a
         moveLeft();
     } else if (event.keyCode == 68) { // d
@@ -124,11 +144,9 @@ document.addEventListener('keydown', function (event) {
         moveDownLeft();
     } else if (event.keyCode == 88) { // x
         moveDownRight();
-    }
-    else if (event.keyCode == 67) { // c
+    } else if (event.keyCode == 67) { // c
         moveDownRight();
-    }
-    else if (event.keyCode == 188) { // ,
+    } else if (event.keyCode == 188) { // ,
         rotateC();
     } else if (event.keyCode == 190) { // .
         rotateCC();
@@ -241,9 +259,10 @@ function logCommand(command) {
         return;
     }
 
-    commandLog += command + " ";
+    commandLog += command.trim() + " ";
     document.getElementById("commandLog").value = commandLog;
 }
+
 
 function submitCommandSequence(sequence) {
     console.log("Submit command sequence: " + JSON.stringify(current_state))
@@ -261,15 +280,23 @@ function submitCommandSequence(sequence) {
 }
 
 
-function submitCommandAuto(sequence) {
-    console.log("Submit command sequence: " + JSON.stringify(current_state))
+function submitCommandsAuto(commands) {
+    console.log("Submit commands sequence: " + commands);
+    var letters = lettersFromCommands(commands);
+    console.log("Letters: " + letters);
+    submitLettersAuto(letters);
+}
+
+
+function submitLettersAuto(sequence) {
+    console.log("Submit letters sequence: " + JSON.stringify(current_state));
     if (sequence.length > 0) {
         var char = sequence.charAt(0);
         var nexSequence = sequence.substring(1);
 
         current_state.sequence = char;
         loadJSON("state?command=SEQUENCE", function (state) {
-            console.log("CC State is updated to " + JSON.stringify(state))
+            console.log("CC State is updated to " + JSON.stringify(state));
             current_state = state;
             if (state.commandHistory) {
                 logCommand(state.commandHistory);
@@ -278,8 +305,8 @@ function submitCommandAuto(sequence) {
             drawMap(state.board, state.state);
 
             setTimeout(function (s) {
-                submitCommandAuto((nexSequence));
-            }, 100);
+                submitLettersAuto((nexSequence));
+            }, 10);
         }, current_state, "POST");
     }
 }

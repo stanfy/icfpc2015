@@ -16,12 +16,17 @@
 	<input type="button" value="C" onclick="rotateC()"/>
 	<input type="button" value="CC" onclick="rotateCC()"/>
 </div>
-
+<br>
+<div>
+	Letter sequence: <input type="text" id="letterSequence">
+	<input type="button" value="Letters (alal)" onclick="submitLettersAuto(document.getElementById('letterSequence').value)"/>
+</div>
+<br>
 <div>
 	Command sequence: <input type="text" id="commandSequence">
-	<input type="button" value="Submit" onclick="submitCommandAuto(document.getElementById('commandSequence').value)"/>
+	<input type="button" value="Commands (SE SW)" onclick="submitCommandsAuto(document.getElementById('commandSequence').value)"/>
 </div>
-
+<br>
 <div>
 	<canvas id="c" width="1500" height="500"/>
 	<button>Get Initial state</button>
@@ -29,7 +34,7 @@
 
 <div>
 	<p>Command log:</p>
-	<textarea id="commandLog" rows="5" cols="120"></textarea>
+	<textarea id="commandLog" rows="5" cols="120" readonly="readonly"></textarea>
 </div>
 
 <div>
@@ -37,7 +42,9 @@
 	<pre id="currentState"></pre>
 </div>
 
+<script type="text/javascript" src="js/letterCommandInterpretator.js"></script>
 <script type="text/javascript" src="js/render.js"></script>
+
 
 </body>
 </html>

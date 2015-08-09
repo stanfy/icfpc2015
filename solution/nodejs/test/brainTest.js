@@ -21,6 +21,7 @@ describe("brain", function () {
                 height: 10,
                 sourceSeeds: [17],
                 filled: [],
+                filledOpt:{},
                 units: [{
                     pivot: {x: 1, y: 2},
                     members: [{x: 1, y: 2}]
