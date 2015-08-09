@@ -25,8 +25,11 @@ function pathTo(node){
         path.push(curr);
         curr = curr.parent;
     }
+    //path.push(curr);
     return path.reverse();
 }
+
+
 
 function getHeap() {
     return new BinaryHeap(function(node) {
@@ -50,6 +53,7 @@ var astar = {
         start = new GridNode(startState.state.unit.pivot.x, startState.state.unit.pivot.y, 0,0, 1);
         this.cleanNode(start);
         start.state = startState;
+        start.step = "initial";
 
 
         end = new GridNode(endState.state.unit.pivot.x, endState.state.unit.pivot.y, 0,0, 1);
@@ -68,18 +72,38 @@ var astar = {
 
         openHeap.push(start);
 
+
+        var f = function(n){
+            return   "" + n.step + " (" + n.x + "," + n.y + ")";
+        }
         var p = function(n){
-            console.log( "\t" + n.step + " (" + n.x + "," + n.y + ")")
+            console.log(f(n) );
+
+
         };
+
+
+        var sf = function(n) {
+            var path = pathTo(n);
+            var res = [];
+            path.reverse().forEach(function(x){ res.push(""+ f(x) +"->" );} );
+            return res;
+        }
+        var sp = function(n){
+            console.log(sf(n));
+        }
+
+
         while(openHeap.size() > 0) {
 
+            console.log("current Heap content: ")
+            openHeap.content.forEach(sp);
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
-            console.log("current Heap content: ")
-            openHeap.content.forEach(p);
             // End case -- result has been found, return the traced path.
             console.log("Current node now is :");
-            p(currentNode);
+            //p(currentNode);
+            sp(currentNode);
             console.log("end node is:");
             p(end);
             var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
@@ -121,8 +145,9 @@ var astar = {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
-                    console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
-                    + " to parent " + currentNode.step + " (" + currentNode.x + "," + currentNode.y + ")");
+                   // console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
+                   // + " to parent " + sf(currentNode) );
+
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
@@ -136,8 +161,7 @@ var astar = {
                     }
 
                     if (!beenVisited) {
-                        console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
-                            + " to HEAP ");
+                        console.log("adding node [" + sf(neighbor)+ "] to HEAP ");
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
                     }
@@ -178,7 +202,6 @@ var astar = {
         node.visited = false;
         node.closed = false;
         node.parent = null;
-        node.move = "";
         node.state = {};
     }
 };
@@ -256,12 +279,13 @@ Graph.prototype.neighbors = function(node) {
     }else
     if(leftState.state.state === "ok") {
         var p = leftState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodeLeft = grid[p.x][p.y][l][r];
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+
+        var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
             nodeLeft.step = "W";
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
-        }
+        //}
     }
 
 
@@ -274,12 +298,12 @@ Graph.prototype.neighbors = function(node) {
     }else
     if(rightState.state.state === "ok") {
         var p = rightState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodeRight = grid[p.x][p.y][l][r];
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodeRight = new GridNode(p.x, p.y, l, r, 1);
             nodeRight.step = "E";
             nodeRight.state = rightState;
             ret.push(nodeRight);
-        }
+        //}
     }
 
     //// se
@@ -290,12 +314,12 @@ Graph.prototype.neighbors = function(node) {
     }else
     if(seState.state.state === "ok") {
         var p = seState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodese = grid[p.x][p.y][l][r];
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
             nodese.state = seState;
             ret.push(nodese);
-        }
+        //}
     }
 
     //// sw
@@ -307,12 +331,12 @@ Graph.prototype.neighbors = function(node) {
     }else
     if(swState.state.state === "ok") {
         var p = swState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodesw = grid[p.x][p.y][l][r];
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
             nodesw.state = swState;
             ret.push(nodesw);
-        }
+        //}
     }
     //
     //// rotate left
