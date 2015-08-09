@@ -6,6 +6,7 @@ var lcg = require('../logic/lcg');
 var extend = require('util')._extend;
 var transform = require("../logic/transformations");
 var estimator = require("../logic/estimator");
+var fastboard = require("../logic/fastboard");
 
 exports.stateIsFinished = function (state) {
     return state && state.state && state.state.state == "finished" || state.state.state == "error";
@@ -29,6 +30,11 @@ exports.initTransform = function (board, seed) {
             }
         }
     }
+
+    board.filledOpt = board.filled.reduce(function (dict, cell) {
+        dict[cell.y * 1000 + cell.x] = true;
+        return dict;
+    }, {});
 
     var initialState = {
         board: board,
@@ -158,28 +164,7 @@ exports.getNextUnit = function (state) {
 };
 
 var pointIsBlockedAtBoard = function (board, x, y) {
-    if (x < 0) {
-        //console.error("  X < 0 " + x);
-        return true;
-    }
-    if (x >= board.width) {
-        //console.error("  X >= " + x + "sattBoard " + board.width);
-        return true;
-    }
-    if (y < 0) {
-        //console.error("  Y < 0 " + y);
-        return true;
-    }
-    if (y >= board.height) {
-        //console.error("  Y >= " + y + "sattBoard " + board.height);
-        return true;
-    }
-
-
-    var boardFilled = board.filled.some(function (cell) {
-        return cell.x == x && cell.y == y;
-    });
-    return boardFilled;
+    return fastboard.isCellFilledAtBoard(board,x,y);
 };
 
 
@@ -195,13 +180,7 @@ exports.removeAllLines = function (state) {
         // if we have all filled items here
         var should = true;
         for (var x = 0; x < board.width; x++) {
-            var py = y;
-            var px = x;
-            var boardFilled = board.filled.some(function (cell) {
-                return cell.x == px && cell.y == py;
-
-            });
-            if (!boardFilled) {
+            if (!fastboard.isCellFilledAtBoard(board,x,y)) {
                 should = false;
                 break;
             }
@@ -224,21 +203,7 @@ exports.removeAllLines = function (state) {
     // Starting from the top
     var updatedBoard = extend({}, state.board);
 
-    linesclearedAt.forEach(function (line) {
-        // remove all items in the board
-        updatedBoard.filled = updatedBoard.filled
-            .filter(function (cell) {
-                return cell.y != line;
-            })
-            .map(function (cell) {
-                if (cell.y > line) {
-                    return cell;
-                }
-                else
-                    return {x: cell.x, y: cell.y + 1};
-            });
-    });
-
+    updatedBoard = fastboard.removeLinesMutator(updatedBoard, linesclearedAt);
 
     var result = {
         board: updatedBoard,
@@ -266,9 +231,8 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
     // get active unit
     var unit = state.state.unit;
     var pivot = unit.pivot;
-    // simple -1 for all X
+    //console.log("Unit.memers" + JSON.stringify(unit.members));
 
-    //console.log("Unit.memers" + unit.members);
     var canMoveInDirection = unit.members.reduce(function (prev, cell) {
         if (!prev) {
             return false;
@@ -276,13 +240,13 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         var nextCell = movePoint(cell, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
-            ////console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
+            //console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
             return false;
         }
         return true
     }, true);
 
-    ////console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
+    //console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
 
         // update all points with move point
@@ -379,7 +343,7 @@ exports.moveDownLeft = function (state, failure) {
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1}
+        return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1};
     }, failure);
 };
 
@@ -438,19 +402,9 @@ exports.lockUnit = function (state) {
         }
     }
     var updatedBoard = extend({}, state.board);
-    updatedBoard.filled = state.board.filled.slice();
-
     var unit = state.state.unit;
 
-    unit.members.forEach(function (cell) {
-        var x = cell.x;
-        var y = cell.y;
-        if (!updatedBoard.filled.some(function (filledCell) {
-                return filledCell.x == x && filledCell.y == y;
-            })) {
-            updatedBoard.filled.push({x: x, y: y});
-        }
-    });
+    updatedBoard = fastboard.lockUnitAtBoardMutator(updatedBoard, unit);
 
     return {
         board: updatedBoard,
