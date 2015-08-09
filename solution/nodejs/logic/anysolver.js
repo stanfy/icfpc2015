@@ -177,6 +177,7 @@ var solveBoard = function (board, seed) {
 
         state = exports.makeNextMoveAndLock(state);
         commands = state.state._commandsToReachThisState ? state.state._commandsToReachThisState : commands;
+        score = state.state.score ? state.state.score : score;
     }
 
     var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
