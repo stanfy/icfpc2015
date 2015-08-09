@@ -32,12 +32,14 @@ fs.readFile(file, 'utf8', function (err,data) {
     } else {
         // initialize all!
         var solver = require("../logic/solver");
+        var solution = require("../logic/oneSolution");
 
-        var result = solver.solveBoardForAllSeeds(json, "", function(partial_result) {
-            fs.writeFileSync(outputFile, JSON.stringify(partial_result, null, "\t"));
+        solver.solveBoardForAllSeeds(json, "", function(partial_solutions) {
+            var jsonedSolutions = partial_solutions.map(function (s) {
+                return solution.prepareJson(s);
+            });
+            fs.writeFileSync(outputFile, JSON.stringify(jsonedSolutions, null, "\t"));
         });
-
-        console.log(JSON.stringify(result));
     }
 });
 
