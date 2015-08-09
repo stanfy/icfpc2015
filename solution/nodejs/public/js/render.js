@@ -77,7 +77,7 @@ function drawMap(map, state) {
         + "Score: " + state.score + "\n"
         + "Seed: " + state.seed + "\n"
         + "Estimation: " + state.estimation + "\n"
-        + "FilledOpt: " +  JSON.stringify(map.filledOpt, null, 4)+ "\n"
+        //+ "FilledOpt: " +  JSON.stringify(map.filledOpt, null, 4)+ "\n"
         + "\nFull state: \n"
         + JSON.stringify(state, null, 4);
 
@@ -296,7 +296,7 @@ function submitCommandAuto(sequence) {
 
             setTimeout(function (s) {
                 submitCommandAuto((nexSequence));
-            }, 100);
+            }, 10);
         }, current_state, "POST");
     }
 }
