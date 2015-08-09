@@ -5,24 +5,25 @@
 
 exports.isCellFilledAtBoard = function (board, x, y) {
     if (x < 0) {
-        console.error("  X < 0 " + x);
+        //console.error("  X < 0 " + x);
         return true;
     }
     if (x >= board.width) {
-        console.error("  X >= " + x + "sattBoard " + board.width);
+        //console.error("  X >= " + x + "sattBoard " + board.width);
         return true;
     }
     if (y < 0) {
-        console.error("  Y < 0 " + y);
+        //console.error("  Y < 0 " + y);
         return true;
     }
     if (y >= board.height) {
-        console.error("  Y >= " + y + "sattBoard " + board.height);
+        //console.error("  Y >= " + y + "sattBoard " + board.height);
         return true;
     }
-    return board.filled.some(function (cell) {
-        return cell.x == x && cell.y == y;
-    });
+    return board.filledOpt[y * 1000 + x];
+    //return board.filled.some(function (cell) {
+    //    return cell.x == x && cell.y == y;
+    //});
 }
 
 
@@ -33,17 +34,23 @@ exports.isCellFilledAtBoard = function (board, x, y) {
 exports.removeLinesMutator = function (board, linesArray) {
     linesArray.forEach(function (line) {
         // remove all items in the board
-        board.filled = board.filled
-            .filter(function (cell) {
-                return cell.y != line;
-            })
-            .map(function (cell) {
-                if (cell.y > line) {
-                    return cell;
-                }
-                else
-                    return {x: cell.x, y: cell.y + 1};
-            });
+
+        board.filledOpt =
+            Object.keys(board.filledOpt)
+                .filter(function (num) {
+                    return num / 1000 != line
+                })
+                .map(function (cell) {
+                    if (cell / 1000 > line) {
+                        return cell;
+                    } else {
+                        return cell + 1000;
+                    }
+                })
+                .reduce(function (dict, curr) {
+                    dict[curr] = true;
+                    return dict;
+                }, {});
     });
     return board;
 }
@@ -54,15 +61,16 @@ exports.removeLinesMutator = function (board, linesArray) {
  */
 exports.lockUnitAtBoardMutator = function (brd, unit) {
     var board = brd;
-    board.filled = board.filled.slice();
+    //board.filled = board.filled.slice();
+
+    var nextFilledOpt = {};
+    for (var p in board.filledOpt) {
+        nextFilledOpt[p] = true
+    }
+    board.filledOpt = nextFilledOpt
+
     unit.members.forEach(function (cell) {
-        var x = cell.x;
-        var y = cell.y;
-        if (!board.filled.some(function (filledCell) {
-                return filledCell.x == x && filledCell.y == y;
-            })) {
-            board.filled.push({x: x, y: y});
-        }
+        board.filledOpt[cell.y * 1000 + cell.x] = true;
     });
     return board;
 }

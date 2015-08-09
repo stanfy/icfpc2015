@@ -4,6 +4,7 @@ var gapSize = 2;
 
 var defaultColor = '#eee';
 var filledColor = '#FFD700';
+var filledColorTr = 'rgba(0,128,128,0.5)';
 var unitColor = '#66FF99';
 var pivotColor = '#6600FF';
 
@@ -76,6 +77,7 @@ function drawMap(map, state) {
         + "Score: " + state.score + "\n"
         + "Seed: " + state.seed + "\n"
         + "Estimation: " + state.estimation + "\n"
+        + "FilledOpt: " +  JSON.stringify(map.filledOpt, null, 4)+ "\n"
         + "\nFull state: \n"
         + JSON.stringify(state, null, 4);
 
@@ -83,13 +85,14 @@ function drawMap(map, state) {
 
     if (map.filledOpt) {
         for (var num in map.filledOpt) {
-           fill(num / 1000, num % 1000);
+           fill(num % 1000, num / 1000, filledColorTr);
         }
-    } else {
-        map.filled.forEach(function (item) {
-            fill(item.x, item.y, filledColor)
-        });
     }
+    //if (map.filled) {
+    //    map.filled.forEach(function (item) {
+    //        fill(item.x, item.y, filledColor)
+    //    });
+    //}
 
     // Draw state
     if (state) {

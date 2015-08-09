@@ -32,7 +32,7 @@ exports.initTransform = function (board, seed) {
     }
 
     board.filledOpt = board.filled.reduce(function (dict, cell) {
-        dict[cell.y * 1000 + cell.y] = true;
+        dict[cell.y * 1000 + cell.x] = true;
         return dict;
     }, {});
 
