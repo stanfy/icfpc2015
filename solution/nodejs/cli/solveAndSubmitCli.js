@@ -79,6 +79,9 @@ function solveProblemAndRewrite() {
     var solver = require("../logic/solver");
     var solution = require("../logic/oneSolution");
     var iteration = 0;
+    var maxIterations = (100 / (_problem.height * _problem.width)) * 5000;
+    maxIterations = Math.floor(maxIterations);
+    console.log("maxIterations " + maxIterations);
 
     solver.solveBoardForAllSeeds(_problem, "", function(partial_solutions) {
 
@@ -103,9 +106,9 @@ function solveProblemAndRewrite() {
             fs = require('fs');
             fs.writeFileSync(_outputFile, JSON.stringify(_previousSolution, null, "\t"));
             fs.writeFileSync(_bestResultFile, JSON.stringify(_bestScores, null, "\t"));
-            sendSolutionIfNeeded();
         }
-    });
+        sendSolutionIfNeeded();
+    }, maxIterations);
 }
 
 
@@ -127,20 +130,20 @@ function submitFoundSolution() {
         }
     };
 
-    console.log("sending request...");
+    var solution = JSON.stringify(_previousSolution, null, "\t");
+    console.log("sending request...\n" + solution);
     var request = http.request(options, function(response) {
         console.log("statusCode: ", response.statusCode);
         console.log("headers: ", response.headers);
 
         var data = "";
         response.on('data', function(chunk) {
-            return data += chunk;
+            data += chunk;
         });
         response.on('end', function() {
-            return console.log("response " + data);
+            console.log("response " + data);
         });
     });
-    var solution = JSON.stringify(_previousSolution, null, "\t");
     request.write(solution);
     request.end();
 
