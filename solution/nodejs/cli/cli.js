@@ -45,9 +45,10 @@ files.forEach(function(file) {
         } else {
             // initialize all!
             var solver = require("../logic/solver");
+            var anysolver = require("../logic/anysolver");
             var solution = require("../logic/oneSolution");
 
-            var solutions = solver.solveBoardForAllSeeds(json, phrases);
+            var solutions = anysolver.solveBoardForAllSeeds(json, phrases);
 
             var jsonedSolutions = solutions.map(function (s) {
                 return solution.prepareJson(s);

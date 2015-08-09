@@ -5,6 +5,7 @@ var extend = require('util')._extend;
 var estimator = require("../logic/estimator");
 var fastboard = require("../logic/fastboard");
 var astar = require("../logic/astar");
+var pwMatcher = require('./powerWordsMatcher');
 
 
 exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
@@ -139,6 +140,9 @@ exports.makeNextMoveAndLock = function (st) {
         // Okay, let's lock it
         var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
             var nextState = player.nextState(finalState, {"command": command});
+            if (nextState.state.state == "BOOM!") {
+                return false;
+            }
             return nextState.state.score != finalState.state.score;
         });
 
@@ -156,6 +160,8 @@ exports.makeNextMoveAndLock = function (st) {
     // TODO :What to do here if we weren't able to reach it ?
 
     // TODO : Try harde or just exit? for now - lets' finish an return
+    state.state.state = "finished";
+
     return state;
 
 }
@@ -173,9 +179,11 @@ var solveBoard = function (board, seed) {
         commands = state.state._commandsToReachThisState ? state.state._commandsToReachThisState : commands;
     }
 
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
+    var letters = lettersAndScores.letters;
+    var newScores = lettersAndScores.scores;
 
-    var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    return solution.init(board.id, seed, letters, score);
+    return solution.init(board.id, seed, letters, newScores);
 };
 
 
