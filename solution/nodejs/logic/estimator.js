@@ -19,8 +19,9 @@ exports.estimatePosition = function (state) {
     var scoreCoef = 10.0;
     var itemsLeft = state.board.sourceLength ? state.board.sourceLength : 0;
     var itemsLeftCoef = 5;
-    var holesCoef = 1;
+    var holesCoef = 0;
     var linesCoef = 1;
+    var filledSum = 0;
 
     var holesSum = 0;
     var linesSum = 0;
@@ -39,6 +40,7 @@ exports.estimatePosition = function (state) {
                     holesSum += (-10 / currentHoleLength);
                     currentHoleLength = 0;
                 }
+                filledSum += (y * y * y);
             } else {
                 currentHoleLength++;
                 if (currentLineLength != 0) {
@@ -63,13 +65,15 @@ exports.estimatePosition = function (state) {
     base += holesSum * holesCoef;
     base += linesSum * linesCoef;
     base += itemsLeft * itemsLeftCoef;
+    base += filledSum;
 
     return {
         value: base,
         score: score * scoreCoef,
         holes: holesSum * holesCoef,
         lines: linesSum * linesCoef,
-        items: itemsLeft * itemsLeftCoef
+        items: itemsLeft * itemsLeftCoef,
+        filled: filledSum
     };
 }
 
@@ -99,27 +103,66 @@ exports.findBestPositionsForCurrentState = function (state) {
     }
 
     var estimations = [];
+    var unit = state.state.unit;
 
-    for (var y = 0; y < state.board.height; y++) {
-        for (var x = 0; x < state.board.width; x++) {
-            // place and lock item at specified position
-            var stateAfterPlacing = placeItemAtPositionInState(state, x, y);
-            if (stateAfterPlacing) {
-                stateAfterPlacing = brain.lockUnit(stateAfterPlacing);
-                stateAfterPlacing = brain.removeAllLines(stateAfterPlacing);
-                var estimation = exports.estimatePosition(stateAfterPlacing);
-                estimations.push({x: x, y: y, est: estimation, unit:stateAfterPlacing.state.unit});
+    var updatedUnits =
+        [0, 1, 2, 3, 4, 5].reduce(function (units, nubmer) {
+            //  rotate
+            var lastUnit = units[units.length - 1];
+            var rotatedUnit = extend({}, lastUnit);
+            rotatedUnit.members = lastUnit.members.map(function (mem) {
+                return transformations.rotateLeft(mem, unit.pivot)
+            });
+            units.push(rotatedUnit);
+            return units;
+        }, [unit]);
 
-                if (estimations.length > 50) {
-                    estimations = estimations.sort(function (est1, est2) {
-                        return est2.est.value - est1.est.value;
-                    });
-                    estimations = estimations.slice(0, 10);
+    var hashes = [];
+    updatedUnits = updatedUnits.filter(function (unit) {
+        var hash = brain.unitHash(unit);
+        if (brain.unitHashIsInHashes(hash, hashes)) {
+            return false;
+        }
+        hashes.push(hash);
+        return true;
+    });
+
+    updatedUnits.map(function (currUnit) {
+        var st = extend({}, state.state);
+        st.unit = currUnit;
+        return {
+            board: state.board,
+            state: st
+        }
+    })
+        .forEach(function (state) {
+
+            for (var y = 0; y < state.board.height; y++) {
+                for (var x = 0; x < state.board.width; x++) {
+                    // place and lock item at specified position
+
+                    var stateAfterPlacing = placeItemAtPositionInState(state, x, y);
+
+                    if (stateAfterPlacing) {
+                        stateAfterPlacing = brain.lockUnit(stateAfterPlacing);
+                        stateAfterPlacing = brain.removeAllLines(stateAfterPlacing);
+                        var estimation = exports.estimatePosition(stateAfterPlacing);
+                        estimations.push({x: x, y: y, est: estimation, unit: stateAfterPlacing.state.unit});
+
+                        if (estimations.length > 50) {
+                            estimations = estimations.sort(function (est1, est2) {
+                                return est2.est.value - est1.est.value;
+                            });
+                            estimations = estimations.slice(0, 5);
+                        }
+                    }
+
+
                 }
             }
 
-        }
-    }
+        })
+    estimations = estimations.slice(0, 5);
 
     return estimations;
 

@@ -38,13 +38,13 @@ exports.removeLinesMutator = function (board, linesArray) {
         board.filledOpt =
             Object.keys(board.filledOpt)
                 .filter(function (num) {
-                    return num / 1000 != line
+                    return (num / 1000 >>> 0) != line
                 })
                 .map(function (cell) {
-                    if (cell / 1000 > line) {
+                    if (((cell / 1000 ) >>> 0) > line) {
                         return cell;
                     } else {
-                        return cell + 1000;
+                        return Number(cell) + 1000.0;
                     }
                 })
                 .reduce(function (dict, curr) {

@@ -2,21 +2,37 @@
 /**
  * Created by hdf on 08.08.15.
  */
+var kBoardId;
+var kSeed;
+var kCommands;
+var kTag;
 
 exports.init = function(boardId, seed, commands, score) {
-    var tag = generateTag(boardId, seed);
-    var json = {
-        "problemId": boardId   /* The `id` of the game configuration */
-        , "seed":      seed   /* The seed for the particular game */
-        , "tag":       tag   /* A tag for this solution. */
-        , "solution":  commands
-        , "score":  score
-    };
+    kTag = generateTag(boardId, seed, score);
+    kBoardId = boardId;
+    kCommands = commands;
+    kSeed = seed;
 
-    return json;
+    return {
+        "problemId": kBoardId   /* The `id` of the game configuration */
+        , "seed": kSeed   /* The seed for the particular game */
+        , "tag": kTag   /* A tag for this solution. */
+        , "solution": kCommands
+        , "score" : score
+    };
 };
 
 
-var generateTag = function (boardId, seed) {
-    return "st-"+boardId + "-" + seed + "-" + Date();
+exports.prepareJson = function(solution) {
+    return {
+        "problemId": kBoardId   /* The `id` of the game configuration */
+        , "seed": kSeed   /* The seed for the particular game */
+        , "tag": kTag   /* A tag for this solution. */
+        , "solution": kCommands
+    };
+};
+
+
+var generateTag = function (boardId, seed, score) {
+    return "st_b_"+boardId + "_s_" + seed + "_sc_" + score + "_" + Date();
 };
