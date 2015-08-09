@@ -1,5 +1,5 @@
 var canvas = document.getElementById('c');
-var cellSize = 20;
+var cellSize = 30;
 var gapSize = 2;
 
 var defaultColor = '#eee';
@@ -38,6 +38,22 @@ function drawBoard(h, v, size, gap) {
         }
     }
 }
+
+function drawTexts(h, v, size, gap) {
+    var ctx = canvas.getContext('2d');
+    for (var i = 0; i < h; i++) {
+        for (var j = 0; j < v; j++) {
+            ctx.font= cellSize/3 + "px Georgia";
+            ctx.fillStyle = "black";
+            ctx.fillText(
+                i+","+j,
+                cellSize / 4 + j % 2 * (cellSize + gapSize) / 2 + i * (cellSize + gapSize),
+                cellSize * 3/ 4 + j * (cellSize - cellSize / 4 + gapSize));
+        }
+    }
+}
+
+
 
 function fill(i, j, color) {
     draw(canvas,
@@ -112,6 +128,9 @@ function drawMap(map, state) {
         var estimations = state.estimatedPositions;
         drawEstimations(estimations);
     }
+
+    drawTexts(map.width, map.height, cellSize, gapSize);
+
 }
 
 function resize() {
