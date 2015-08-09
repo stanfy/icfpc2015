@@ -34,17 +34,35 @@ String.prototype.splice = function(start, length, replacement) {
     return this.substr(0,start)+replacement+this.substr(start+length);
 }
 
-exports.lettersWithPowerWords = function(commands) {
+exports.lettersAndScoresWithPowerWords = function(commands, scores) {
     var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    var matchings = this.powerWordsMatchingsThroughCommands(commands, this.powerWords)
+    var matchings = this.powerWordsMatchingsThroughCommands(commands, this.powerWords);
 
     var that = this;
     matchings.forEach(function(matching) {
         var powerWord = that.powerWords[matching.powerWordIndex]
         letters = letters.splice(matching.commandIndex, powerWord.length, powerWord)
     });
-    return letters;
+
+    var newScores = this.scoresForPowerWords(matchings, scores);
+
+    return {
+        "letters":letters,
+        "scores" : newScores
+    };
 };
+
+
+exports.scoresForPowerWords = function(matchings, oldScores) {
+    var powerScores = 0;
+
+    matchings.forEach(function(matching) {
+        powerScores += 2 * matching.powerWordLength;
+    });
+    powerScores += 300;
+    return oldScores + powerScores;
+};
+
 
 /*
 * @return {Array<matchings>}

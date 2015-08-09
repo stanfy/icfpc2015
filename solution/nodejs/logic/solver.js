@@ -82,9 +82,11 @@ var solveBoard = function (board, seed) {
     }
 
     //var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    var lettersWithPower = pwMatcher.lettersWithPowerWords(commands);
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
+    var letters = lettersAndScores.letters;
+    var newScores = lettersAndScores.scores;
 
-    return solution.init(board.id, seed, lettersWithPower, score);
+    return solution.init(board.id, seed, letters, newScores);
 };
 
 

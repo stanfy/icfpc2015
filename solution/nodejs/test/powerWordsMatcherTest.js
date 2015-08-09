@@ -45,10 +45,13 @@ describe('Power Words Matcher', function () {
     });
 
     it('should find & replace powerWords', function () {
-
-        var letters = pwMatcher.lettersWithPowerWords(commands);
-
-        assert.equal(letters, "abeecthulhuakdlap");
-
+        var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands);
+        assert.equal(lettersAndScores.letters, "abeecthulhuakdlap");
     });
+
+    it ('should calculate scores including power words', function() {
+        var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, 10);
+        assert.equal(lettersAndScores.letters, "abeecthulhuakdlap");
+        assert.equal(lettersAndScores.scores, 330);
+    })
 });
