@@ -38,6 +38,41 @@ function getHeap() {
         return node.f;
     });
 }
+    function countProps(obj) {
+        var count = 0;
+        for (k in obj) {
+            if (obj.hasOwnProperty(k)) {
+                count++;
+            }
+        }
+        return count;
+    };
+    function objectEquals(v1, v2) {
+
+        if (typeof(v1) !== typeof(v2)) {
+            return false;
+        }
+
+        if (typeof(v1) === "function") {
+            return v1.toString() === v2.toString();
+        }
+
+        if (v1 instanceof Object && v2 instanceof Object) {
+            if (countProps(v1) !== countProps(v2)) {
+                return false;
+            }
+            var r = true;
+            for (k in v1) {
+                r = objectEquals(v1[k], v2[k]);
+                if (!r) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return v1 === v2;
+        }
+    }
 
 var astar = {
     /**
@@ -95,42 +130,9 @@ var astar = {
              console.log(sf(n));
         }
 
-        function countProps(obj) {
-            var count = 0;
-            for (k in obj) {
-                if (obj.hasOwnProperty(k)) {
-                    count++;
-                }
-            }
-            return count;
-        };
 
-        function objectEquals(v1, v2) {
 
-            if (typeof(v1) !== typeof(v2)) {
-                return false;
-            }
 
-            if (typeof(v1) === "function") {
-                return v1.toString() === v2.toString();
-            }
-
-            if (v1 instanceof Object && v2 instanceof Object) {
-                if (countProps(v1) !== countProps(v2)) {
-                    return false;
-                }
-                var r = true;
-                for (k in v1) {
-                    r = objectEquals(v1[k], v2[k]);
-                    if (!r) {
-                        return false;
-                    }
-                }
-                return true;
-            } else {
-                return v1 === v2;
-            }
-        }
 
         while(openHeap.size() > 0) {
 
@@ -318,13 +320,18 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(leftState.state.state === "ok") {
-        var p = leftState.state.unit.pivot;
+        var uniq = leftState.state.unit;
+        var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
 
-        var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
+        if(!inGrid) {
+            this.grid.push(uniq);
+            var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
             nodeLeft.step = "W";
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
+        }
         //}
     }
 
@@ -337,13 +344,19 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(rightState.state.state === "ok") {
-        var p = rightState.state.unit.pivot;
+        var uniq = rightState.state.unit;
+        var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
+
+        if(!inGrid) {
+            this.grid.push(uniq);
             var nodeRight = new GridNode(p.x, p.y, l, r, 1);
             nodeRight.step = "E";
             nodeRight.state = rightState;
             ret.push(nodeRight);
-        //}
+            //}
+        }
     }
 
     //// se
@@ -353,13 +366,19 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(seState.state.state === "ok") {
-        var p = seState.state.unit.pivot;
+        var uniq = seState.state.unit;
+        var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
+
+        if(!inGrid) {
+            this.grid.push(uniq);
             var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
             nodese.state = seState;
             ret.push(nodese);
-        //}
+            //}
+        }
     }
 
     //// sw
@@ -370,13 +389,19 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(swState.state.state === "ok") {
-        var p = swState.state.unit.pivot;
+        var uniq = swState.state.unit;
+        var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
+
+        if(!inGrid) {
+            this.grid.push(uniq);
             var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
             nodesw.state = swState;
             ret.push(nodesw);
-        //}
+            //}
+        }
     }
 
     //// rotateLeft
@@ -387,13 +412,19 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(ccState.state.state === "ok") {
-        var p = ccState.state.unit.pivot;
+        var uniq = ccState.state.unit;
+        var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var nodecc = new GridNode(p.x, p.y, l, r, 1);
-        nodecc.step = "CC";
-        nodecc.state = ccState;
-        ret.push(nodecc);
-        //}
+        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
+
+        if(!inGrid) {
+            this.grid.push(uniq);
+            var nodecc = new GridNode(p.x, p.y, l, r, 1);
+            nodecc.step = "CC";
+            nodecc.state = ccState;
+            ret.push(nodecc);
+            //}
+        }
     }
 
     //// rotateRight
@@ -404,14 +435,21 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(cState.state.state === "ok") {
-        var p = cState.state.unit.pivot;
+        var uniq = cState.state.unit;
+        var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var nodec = new GridNode(p.x, p.y, l, r, 1);
-        nodec.step = "C";
-        nodec.state = cState;
-        ret.push(nodec);
-        //}
+        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
+
+        if(!inGrid) {
+            this.grid.push(uniq);
+            var nodec = new GridNode(p.x, p.y, l, r, 1);
+            nodec.step = "C";
+            nodec.state = cState;
+            ret.push(nodec);
+            //}
+        }
     }
+    console.log(grid.length);
     return ret;
 };
 
