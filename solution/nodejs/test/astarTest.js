@@ -275,7 +275,7 @@ describe("astar", function () {
             var end_10_0 = {"board":{"filledOpt":{"1000":true,"1002":true,"1004":true,"1006":true,"1008":true,"5001":true,"5002":true,"5003":true,"5004":true,"5005":true,"5006":true,"5007":true,"5008":true},"sourceLength":99,"filled":[{"x":0,"y":1},{"x":2,"y":1},{"x":4,"y":1},{"x":6,"y":1},{"x":8,"y":1},{"x":1,"y":5},{"x":2,"y":5},{"x":3,"y":5},{"x":4,"y":5},{"x":5,"y":5},{"x":6,"y":5},{"x":7,"y":5},{"x":8,"y":5}],"id":10,"units":[{"members":[{"x":2,"y":0},{"x":3,"y":0}],"pivot":{"x":0,"y":0}}],"sourceSeeds":[0],"width":10,"height":7},"state":{"state":"ok","unit":{"members":[{"x":0,"y":5},{"x":1,"y":6}],"pivot":{"x":-1,"y":3}},"score":0,"seed":12345,"hashes":[{"5":true,"65542":true}],"estimation":"{\"value\":1569,\"score\":0,\"holes\":0,\"lines\":69,\"items\":495,\"filled\":1005}"}};
             var res = executeSearch(initial_10_0, end_10_0);
             //  expect(res.letters).to.equal("l");
-            expect(res.comsText).to.equal("SW SW");
+            expect(res.comsText).to.equal("W C SW W W SW SE");
         });
 
 
