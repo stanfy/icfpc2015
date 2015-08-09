@@ -16,7 +16,7 @@ exports.estimatePosition = function (state) {
     var boardSize = state.board.width * state.board.height;
 
     var score = state.state.score ? state.state.score : 0;
-    var scoreCoef = 100.0;
+    var scoreCoef = state.board.width * state.board.width * state.board.width;
     var itemsLeft = state.board.sourceLength ? state.board.sourceLength : 0;
     var itemsLeftCoef = 5;
     var holesCoef = 0;
@@ -104,6 +104,10 @@ exports.findBestPositionsForCurrentState = function (state) {
 
     var estimations = [];
     var unit = state.state.unit;
+    if (!unit) {
+        console.log("FAILURE? " + JSON.stringify(state));
+        return;
+    }
 
     var updatedUnits =
         [1, 2, 3, 4, 5].reduce(function (units, nubmer) {

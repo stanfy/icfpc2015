@@ -5,9 +5,10 @@ var extend = require('util')._extend;
 var estimator = require("../logic/estimator");
 var fastboard = require("../logic/fastboard");
 var astar = require("../logic/astar");
+var pwMatcher = require('./powerWordsMatcher');
 
 
-exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -15,7 +16,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         return solution.init(board.id, seed, "", 0)
     });
 
-    var max_cycles = 10000;
+    var max_cycles = max_cycles_constraint ? max_cycles_constraint : 10000;
     if (!partial_result) {
         max_cycles = 1;
     }
@@ -31,18 +32,13 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         });
 
         if (partial_result && atLeastOneWasBetter) {
-            partial_result(
-                solutions.map(function (s) {
-                    return solution.prepareJson(s);
-                })
-            );
+            partial_result(solutions);
         }
         max_cycles--;
     }
-    return solutions.map(function (s) {
-        return solution.prepareJson(s);
-    });
+    return solutions;
 };
+
 
 /*
  Returns next state
@@ -87,49 +83,103 @@ exports.makeNextMove = function (state) {
         });
 }
 
+exports.makeNextMoveAndLock = function (st) {
+    console.error("MAkign next move");
+
+    var value = estimator.findBestPositionsForCurrentState(st);
+
+    // Try to get command
+    var commands = null;
+
+    var state = st;
+
+
+    commands = value.reduce(function (old, estimatedPoint) {
+        if (old) {
+            return old;
+        }
+        var mapStart = state;
+
+        var endState = extend({}, state.state);
+        endState.unit = estimatedPoint.unit;
+        var mapEnd = {
+            board: state.board,
+            state: endState
+        };
+        var g = new astar.Graph(mapStart);
+        var res = astar.astar.search(g, mapStart, mapEnd);
+        var coms = res.map(function (command) {
+            return command.step;
+        });
+        console.log("Commnds" + coms);
+
+        var resultState = extend({}, state.state);
+        resultState.estimatedPositions = value;
+        resultState._nextCommands = coms;
+
+        var res = {
+            board: state.board,
+            state: resultState
+        };
+        if (res && res.state && res.state._nextCommands && res.state._nextCommands.length) {
+            return res.state._nextCommands;
+        }
+        return old;
+    }, null);
+
+    if (commands) {
+        var finalState = commands.reduce(function (st, command) {
+            return player.nextState(st, {"command": command});
+        }, state);
+
+        // Okay, let's lock it
+        var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
+            var nextState = player.nextState(finalState, {"command": command});
+            if (nextState.state.state == "BOOM!") {
+                return false;
+            }
+            return nextState.state.score != finalState.state.score;
+        });
+
+        commands.push(lockCommands[0]);
+        finalState = player.nextState(finalState, {"command": lockCommands[0]});
+
+        finalState.state._nextCommands = commands;
+        finalState.state._commandsToReachThisState = (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []).concat(commands);
+
+        console.error("Returnint state" + finalState + "Commands" + commands);
+
+        return finalState;
+    }
+
+    // TODO :What to do here if we weren't able to reach it ?
+
+    // TODO : Try harde or just exit? for now - lets' finish an return
+    state.state.state = "finished";
+
+    return state;
+
+}
+
+
 var solveBoard = function (board, seed) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
     var lastState = state;
     var score = state.state.score;
 
-    while (state) {
-        // generate state
-        var alreadyUsedCommands = [];
-        var possibleCommand = generateNextCommand(board, seed, alreadyUsedCommands);
-        var possibleState = player.nextState(state, {"command": possibleCommand});
+    while (state && state.state.state != "finished") {
 
-        // if state is error - try another command
-        var stateAfterCommand = possibleState ? possibleState.state.state : null;
-
-        if (!possibleState
-            || stateAfterCommand == "BOOM!"
-            || stateAfterCommand == "finished") {
-
-            // but don't repeat commands
-            var anotherCommand = possibleCommand;
-
-            do {
-                alreadyUsedCommands.push(anotherCommand);
-                anotherCommand = generateNextCommand(board, seed, alreadyUsedCommands, commands.last);
-                possibleState = player.nextState(state, {"command": anotherCommand});
-                stateAfterCommand = possibleState ? possibleState.state.state : null;
-            } while ((possibleState == null
-            || stateAfterCommand == "BOOM!")
-            && anotherCommand);
-
-            possibleCommand = anotherCommand;
-        }
-
-        if (possibleCommand) commands.push(possibleCommand);
-
-        state = possibleState;
-        lastState = possibleState ? possibleState : lastState;
-        score = lastState.state.score;
+        state = exports.makeNextMoveAndLock(state);
+        commands = state.state._commandsToReachThisState ? state.state._commandsToReachThisState : commands;
+        score = state.state.score ? state.state.score : score;
     }
 
-    var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    return solution.init(board.id, seed, letters, score);
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
+    var letters = lettersAndScores.letters;
+    var newScores = lettersAndScores.scores;
+
+    return solution.init(board.id, seed, letters, newScores);
 };
 
 

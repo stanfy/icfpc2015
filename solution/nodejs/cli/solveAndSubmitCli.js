@@ -76,11 +76,14 @@ function readFilesFirstThen() {
 function solveProblemAndRewrite() {
     console.log("solving problem..");
 
-    var solver = require("../logic/solver");
+    var anysolver = require("../logic/anysolver");
     var solution = require("../logic/oneSolution");
     var iteration = 0;
+    var maxIterations = 1;//(100 / (_problem.height * _problem.width)) * 2000;
+    maxIterations = Math.floor(maxIterations);
+    console.log("maxIterations " + maxIterations);
 
-    solver.solveBoardForAllSeeds(_problem, "", function(partial_solutions) {
+    anysolver.solveBoardForAllSeeds(_problem, "", function(partial_solutions) {
 
         var shouldRewriteFile = false;
 
@@ -103,9 +106,11 @@ function solveProblemAndRewrite() {
             fs = require('fs');
             fs.writeFileSync(_outputFile, JSON.stringify(_previousSolution, null, "\t"));
             fs.writeFileSync(_bestResultFile, JSON.stringify(_bestScores, null, "\t"));
-            sendSolutionIfNeeded();
         }
-    });
+        if (iteration == maxIterations) {
+        	submitFoundSolution();
+        }
+    }, maxIterations);
 }
 
 
@@ -127,20 +132,20 @@ function submitFoundSolution() {
         }
     };
 
-    console.log("sending request...");
+    var solution = JSON.stringify(_previousSolution, null, "\t");
+    console.log("sending request...\n" + solution);
     var request = http.request(options, function(response) {
         console.log("statusCode: ", response.statusCode);
         console.log("headers: ", response.headers);
 
         var data = "";
         response.on('data', function(chunk) {
-            return data += chunk;
+            data += chunk;
         });
         response.on('end', function() {
-            return console.log("response " + data);
+            console.log("response " + data);
         });
     });
-    var solution = JSON.stringify(_previousSolution, null, "\t");
     request.write(solution);
     request.end();
 
@@ -149,16 +154,16 @@ function submitFoundSolution() {
     });
 }
 
-function sendSolutionIfNeeded() {
-    var current = new Date();
-    var timeDifference = current.getTime() - (_lastDateWhenSolutionSend ? _lastDateWhenSolutionSend.getTime() : 0);
-    var minutes = 1000 * 60 * 5;
-
-    if (timeDifference > minutes) {
-        _lastDateWhenSolutionSend = current;
-        submitFoundSolution();
-    }
-}
+// function sendSolutionIfNeeded() {
+//     var current = new Date();
+//     var timeDifference = current.getTime() - (_lastDateWhenSolutionSend ? _lastDateWhenSolutionSend.getTime() : 0);
+//     var minutes = 1000 * 60 * 5;
+// 
+//     if (timeDifference > minutes) {
+//         _lastDateWhenSolutionSend = current;
+//         submitFoundSolution();
+//     }
+// }
 
 // -----------------------------------------
 

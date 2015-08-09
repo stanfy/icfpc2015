@@ -2,7 +2,7 @@ var player = require('./player');
 var solution = require('./oneSolution');
 var pwMatcher = require('./powerWordsMatcher');
 
-exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -10,7 +10,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         return solution.init(board.id, seed, "", 0)
     });
 
-    var max_cycles = 10000;
+    var max_cycles = max_cycles_constraint ? max_cycles_constraint : 10000;
     if (!partial_result) {
         max_cycles = 1;
     }
@@ -116,7 +116,7 @@ var generateNextCommand = function (board, seed, alreadyUsedCommands, previousCo
         "E", "E", "E", "E",
         "E", "E", "E", "E",
         "W", "W"
-        //,"CC", "C"
+        ,"CC", "C"
     ];
 
     var commandToFilter = null;

@@ -62,4 +62,19 @@ router.post('/nextMove', function (req, res, next) {
     res.json(moves);
 });
 
+router.post('/makeMove', function (req, res, next) {
+    var state = req.body;
+    var params = req.query;
+
+    // Skip everyting,if current state is not ok
+    if (state.state.state != "ok") {
+        res.json(state);
+        console.error("Skipping since previous state is not OK " + state.state.state);
+        return;
+    }
+
+    var state = anysolver.makeNextMoveAndLock(state);
+    res.json(state);
+});
+
 module.exports = router;
