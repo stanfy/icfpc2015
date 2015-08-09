@@ -288,7 +288,7 @@ Graph.prototype.neighbors = function(node) {
 
     //// sw
     //
-    var swState = brain.moveDownRight(node.state, function(){return "swFailure"});
+    var swState = brain.moveDownLeft(node.state, function(){return "swFailure"});
 
     if(swState === "swFailure"){
 
