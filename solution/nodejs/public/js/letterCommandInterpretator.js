@@ -23,30 +23,26 @@ var lettersFromCommands = function (commands) {
     return letters;
 };
 
-
-var selectLetterFromCommand = function (command) {
-    var letters = [];
+var allLettersForCommand = function(command) {
     switch (command) {
         case "W":
-            letters = lettersForW;
-            break;
+            return lettersForW;
         case "E":
-            letters = lettersForE;
-            break;
+            return lettersForE;
         case "SW":
-            letters = lettersForSW;
-            break;
+            return lettersForSW;
         case "SE":
-            letters = lettersForSE;
-            break;
+            return lettersForSE;
         case "C":
-            letters = lettersForC;
-            break;
+            return lettersForC;
         case "CC":
-            letters = lettersForCC;
-            break;
+            return lettersForCC;
     }
+    return ""
+}
 
+var selectLetterFromCommand = function (command) {
+    var letters = allLettersForCommand(command);
     return letters.length > 0 ? letters[0] : "";
     //return letters[Math.floor(Math.random()*letters.length)];
 };
@@ -88,6 +84,7 @@ var selectCommandFromLetter = function (letter) {
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     exports.commandsFromLetters = commandsFromLetters;
     exports.lettersFromCommands = lettersFromCommands;
+    exports.allLettersForCommand = allLettersForCommand;
 } else {
     window.commandsFromLetters = commandsFromLetters;
     window.lettersFromCommands = lettersFromCommands;

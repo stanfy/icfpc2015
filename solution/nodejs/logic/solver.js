@@ -1,8 +1,8 @@
 var player = require('./player');
 var solution = require('./oneSolution');
-var letterCommandInterpretator = require('./../public/js/letterCommandInterpretator');
+var pwMatcher = require('./powerWordsMatcher');
 
-exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, maxCycles) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -10,7 +10,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         return solution.init(board.id, seed, "", 0)
     });
 
-    var max_cycles = 10000;
+    var max_cycles = maxCycles ? maxCycles : 10000;
     if (!partial_result) {
         max_cycles = 1;
     }
@@ -75,8 +75,12 @@ var solveBoard = function (board, seed) {
         score = lastState.state.score;
     }
 
-    var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    return solution.init(board.id, seed, letters, score);
+    //var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
+    var letters = lettersAndScores.letters;
+    var newScores = lettersAndScores.scores;
+
+    return solution.init(board.id, seed, letters, newScores);
 };
 
 
@@ -113,7 +117,7 @@ var generateNextCommand = function (board, seed, alreadyUsedCommands, previousCo
         "E", "E", "E", "E",
         "E", "E", "E", "E",
         "W", "W"
-        //,"CC", "C"
+        ,"CC", "C"
     ];
 
     var commandToFilter = null;
