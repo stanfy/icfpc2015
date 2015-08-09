@@ -16,7 +16,7 @@ exports.estimatePosition = function (state) {
     var boardSize = state.board.width * state.board.height;
 
     var score = state.state.score ? state.state.score : 0;
-    var scoreCoef = 100.0;
+    var scoreCoef = state.board.width * state.board.width * state.board.width;
     var itemsLeft = state.board.sourceLength ? state.board.sourceLength : 0;
     var itemsLeftCoef = 5;
     var holesCoef = 0;
