@@ -90,7 +90,7 @@ var astar = {
             return res;
         }
         var sp = function(n){
-            // console.log(sf(n));
+             console.log(sf(n));
         }
 
 
@@ -103,7 +103,7 @@ var astar = {
             // End case -- result has been found, return the traced path.
             // console.log("Current node now is :");
             //p(currentNode);
-            // sp(currentNode);
+            sp(currentNode);
             // console.log("end node is:");
             //p(end);
             var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
