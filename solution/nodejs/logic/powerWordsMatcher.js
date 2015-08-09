@@ -36,7 +36,8 @@ String.prototype.splice = function(start, length, replacement) {
 
 exports.lettersAndScoresWithPowerWords = function(commands, scores, additionalPowerWords) {
     var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    var allPowerWords = powerWordsWithAdditional(this.powerWords, additionalPowerWords)
+    var allPowerWords = powerWordsWithAdditional(this.powerWords, additionalPowerWords);
+
     var matchings = this.powerWordsMatchingsThroughCommands(commands, allPowerWords);
 
     var that = this;

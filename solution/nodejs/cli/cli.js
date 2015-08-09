@@ -25,7 +25,7 @@ const files = program.files;
 const time = program.time;
 const memory = program.memory;
 const cores = program.cores;
-const phrases = program.phrases;
+const phrases = program.phrases ? program.phrases : [];
 
 
 // reading files
