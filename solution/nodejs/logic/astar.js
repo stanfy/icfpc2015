@@ -223,24 +223,24 @@ function Graph(state, options){
     this.diagonal = !!options.diagonal;
     this.grid = [];
     this.state = state;
-    for (var x = 0; x < maxX; x++) {
-        this.grid[x] = [];
-
-        for (var y = 0; y < maxY; y++) {
-            this.grid[x][y] = [];
-            for ( var l =0; l< maxL; l++){
-                this.grid[x][y][l] = [];
-                for(var r =0; r<maxR; r++) {
-                    // initialization of potential states
-                    var node = new GridNode(x, y, l, r, 1);
-
-                    this.grid[x][y][l][r] = node;
-                    this.nodes.push(node);
-                }
-            }
-
-        }
-    }
+    //for (var x = 0; x < maxX; x++) {
+    //    this.grid[x] = [];
+    //
+    //    for (var y = 0; y < maxY; y++) {
+    //        this.grid[x][y] = [];
+    //        for ( var l =0; l< maxL; l++){
+    //            this.grid[x][y][l] = [];
+    //            for(var r =0; r<maxR; r++) {
+    //                // initialization of potential states
+    //                var node = new GridNode(x, y, l, r, 1);
+    //
+    //                this.grid[x][y][l][r] = node;
+    //                this.nodes.push(node);
+    //            }
+    //        }
+    //
+    //    }
+    //}
     this.init = function() {
         this.dirtyNodes = [];
         for (var i = 0; i < this.nodes.length; i++) {
