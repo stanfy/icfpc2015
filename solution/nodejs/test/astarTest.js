@@ -5,7 +5,6 @@ var assert = require('assert');
 var expect = require("chai").expect;
 var astar = require("../logic/astar");
 
-
 describe("astar", function () {
 
     context("neighbours test", function () {
@@ -22,7 +21,7 @@ describe("astar", function () {
 
             var g = new astar.Graph(initialState);
             var res = astar.astar.search(g, initialState, closeState);
-            console.log(res);
+            res.forEach()
         });
 
 

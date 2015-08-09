@@ -4,7 +4,7 @@
  */
 var transform = require("../logic/transformations");
 var brain = require("../logic/brain");
-var lod = require("lodash");
+var assert = require('assert');
 
 (function(definition) {
     /* global module, define */
@@ -74,8 +74,13 @@ var astar = {
             var currentNode = openHeap.pop();
 
             // End case -- result has been found, return the traced path.
-            if(currentNode.state.state.unit.pivot === end.state.state.unit.pivot &&
-                currentNode.state.state.unit.members === end.state.state.unit.members
+            var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
+            var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
+            var pivotEq =  jsoncur === jsonEnd;
+            var jsonMemCur = JSON.stringify(currentNode.state.state.unit.members);
+            var jsonMemEnd = JSON.stringify(end.state.state.unit.members);
+            var membersEq = jsonMemCur == jsonMemEnd;
+            if(pivotEq && membersEq
             ) {
                 return pathTo(currentNode);
             }
@@ -232,7 +237,7 @@ Graph.prototype.neighbors = function(node) {
         grid = this.grid;
 
 
-        var leftState = brain.moveLeft(node.state, function(){return "leftFailure"});
+    var leftState = brain.moveLeft(node.state, function(){return "leftFailure"});
 
     if(leftState === "leftFailure"){
 
@@ -248,45 +253,55 @@ Graph.prototype.neighbors = function(node) {
     }
 
 
-    // right
-    //
-    //var rightState = brain.moveRight(node, function(){return "rightFailure"});
-    //
-    //if(rightState != "rightFailure" && rightState && rightState.state.state === "ok") {
-    //    var right = transform.moveRight({x: x, y: y});
-    //    if (grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]) {
-    //        var nodeRight = grid[right.x][right.y][l][r];
-    //        nodeRight.step = "R";
-    //        nodeRight.state = rightState;
-    //        ret.push(nodeRight);
-    //    }
-    //}
-    //
+     //right
+
+    var rightState = brain.moveRight(node.state, function(){return "rightFailure"});
+
+    if(rightState === "rightFailure"){
+
+    }else
+    if(rightState.state.state === "ok") {
+        var p = rightState.state.unit.pivot;
+        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodeRight = grid[p.x][p.y][l][r];
+            nodeRight.step = "R";
+            nodeRight.state = rightState;
+            ret.push(nodeRight);
+        }
+    }
+
     //// se
-    //var seState = brain.moveDownRight(node, function(){return "seFailure";});
-    //if(seState != "seFailure" && seState && seState.state.state === "ok") {
-    //    var se = transform.moveSE({x: x, y: y});
-    //    if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
-    //        var nodeSe = grid[se.x][se.y][l][r];
-    //        nodeSe.step = "SE";
-    //        nodeSe.state = seState;
-    //        ret.push(nodeSe);
-    //    }
-    //}
-    //
+    var seState = brain.moveDownRight(node.state, function(){return "seFailure"});
+
+    if(seState === "seFailure"){
+
+    }else
+    if(seState.state.state === "ok") {
+        var p = seState.state.unit.pivot;
+        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodese = grid[p.x][p.y][l][r];
+            nodese.step = "SE";
+            nodese.state = seState;
+            ret.push(nodese);
+        }
+    }
+
     //// sw
     //
-    //var swState = brain.moveDownLeft(node, function(){return "swFailure";});
-    //if(swState != "swFailure" && swState && swState.state.state == "ok") {
-    //
-    //    var sw = transform.moveSW({x: x, y: y});
-    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]) {
-    //        var nodeSw = grid[sw.x][sw.y][l][r];
-    //        nodeSw.step = "SW";
-    //        nodeSe.state = swState;
-    //        ret.push(nodeSw);
-    //    }
-    //}
+    var swState = brain.moveDownRight(node.state, function(){return "swFailure"});
+
+    if(swState === "swFailure"){
+
+    }else
+    if(swState.state.state === "ok") {
+        var p = swState.state.unit.pivot;
+        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodesw = grid[p.x][p.y][l][r];
+            nodesw.step = "SW";
+            nodesw.state = swState;
+            ret.push(nodesw);
+        }
+    }
     //
     //// rotate left
     //var ccState = brain.rotateCC(node, function(){return "ccFailure";});
