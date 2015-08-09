@@ -136,6 +136,15 @@ exports.makeNextMoveAndLock = function (st) {
             return player.nextState(st, {"command": command});
         }, state);
 
+        // Okay, let's lock it
+        var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
+            var nextState = player.nextState(finalState, {"command": command});
+            return nextState.state.score != finalState.state.score;
+        });
+
+        commands.push(lockCommands[0]);
+        finalState = player.nextState(finalState, {"command": lockCommands[0]});
+
         finalState.state._nextCommands = commands;
         finalState.state._commandsToReachThisState = (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []).concat(commands);
 
@@ -163,7 +172,7 @@ var solveBoard = function (board, seed) {
         state = exports.makeNextMoveAndLock(state);
         commands = state.state._commandsToReachThisState ? state.state._commandsToReachThisState : commands;
     }
-    
+
 
     var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
     return solution.init(board.id, seed, letters, score);
