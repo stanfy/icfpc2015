@@ -73,8 +73,29 @@ function getHeap() {
             return v1 === v2;
         }
     }
+    var f = function(n){
+        return   "" + n.step + " (" + n.x + "," + n.y + ")";
+    }
+    var p = function(n){
+        // console.log(f(n) );
 
-var astar = {
+
+    };
+
+
+    var sf = function(n) {
+        var path = pathTo(n);
+        var res = [];
+        path.reverse().forEach(function(x){ res.push(""+ f(x) +"->" );} );
+        return res.join(" ");
+    }
+    var sp = function(n){
+        console.log(sf(n));
+    }
+
+
+
+    var astar = {
     /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
@@ -97,6 +118,7 @@ var astar = {
         this.cleanNode(end);
         end.state = endState;
 
+        this.visited = [];
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
@@ -108,31 +130,6 @@ var astar = {
         start.h = heuristic(start, end);
 
         openHeap.push(start);
-
-
-        var f = function(n){
-            return   "" + n.step + " (" + n.x + "," + n.y + ")";
-        }
-        var p = function(n){
-            // console.log(f(n) );
-
-
-        };
-
-
-        var sf = function(n) {
-            var path = pathTo(n);
-            var res = [];
-            path.reverse().forEach(function(x){ res.push(""+ f(x) +"->" );} );
-            return res.join(" ");
-        }
-        var sp = function(n){
-             console.log(sf(n));
-        }
-
-
-
-
 
         while(openHeap.size() > 0) {
 
@@ -161,7 +158,9 @@ var astar = {
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
-
+            if(! this.visited.some(function (x) { objectEquals(x, currentNode.state.state.unit)})) {
+                this.visited.push(currentNode.state.state.unit);
+            }
             // Find all neighbors for the current node.
 
             var neighbors = graph.neighbors(currentNode);
@@ -177,6 +176,9 @@ var astar = {
                     continue;
                 }
 
+                if(this.visited.some(function (x) { objectEquals(x, neighbor.state.state.unit)})){
+                    continue;
+                }
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
                 var gScore = currentNode.g + neighbor.getCost(currentNode),
