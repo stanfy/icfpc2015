@@ -75,8 +75,7 @@ var solveBoard = function (board, seed) {
         score = lastState.state.score;
     }
 
-    //var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, []);
     var letters = lettersAndScores.letters;
     var newScores = lettersAndScores.scores;
 

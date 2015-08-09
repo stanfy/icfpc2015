@@ -51,7 +51,26 @@ describe('Power Words Matcher', function () {
 
     it ('should calculate scores including power words', function() {
         var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, 10);
-        assert.equal(lettersAndScores.letters, "abeecthulhuakdlap");
         assert.equal(lettersAndScores.scores, 330);
+    })
+
+    it ('should use additional power words and insert them if they match', function() {
+        var commands = [
+            'W', 'SE', 'CC',                                                                 // random
+            'E', 'CC', 'SW', 'CC', 'SE', 'SW', 'CC',                                         // cthulhu
+            'C',                                                                             // random
+            'SW', 'C', 'SW', 'CC', 'SW', 'SE', 'CC',                                         // azathoth
+            'SW', 'E', 'E',                                                                  // random
+            'CC', 'SW', 'CC', 'E', 'W', 'SE', 'SW', 'SW', 'SW', 'CC', 'C', 'SW', 'CC', 'SW', // shub.niggurath
+            'SW', 'E',                                                                       // random
+            'SE', 'CC', 'SW'                                                                 // nug
+        ]
+        var additionalPowerWords = [
+            "azathoth",
+            "shub.niggurath",
+            "nug"
+        ]
+        var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, 10, additionalPowerWords)
+        assert.equal(lettersAndScores.letters, "plkcthulhudazathothbbshub.niggurathabnug")
     })
 });
