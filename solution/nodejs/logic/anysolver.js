@@ -87,6 +87,71 @@ exports.makeNextMove = function (state) {
         });
 }
 
+exports.makeNextMoveAndLock = function (st) {
+    console.error("MAkign next move");
+
+    var value = estimator.findBestPositionsForCurrentState(st);
+
+    // Try to get command
+    var commands = null;
+
+    var state = st;
+
+
+    commands = value.reduce(function (old, estimatedPoint) {
+        if (old) {
+            return old;
+        }
+        var mapStart = state;
+
+        var endState = extend({}, state.state);
+        endState.unit = estimatedPoint.unit;
+        var mapEnd = {
+            board: state.board,
+            state: endState
+        };
+        var g = new astar.Graph(mapStart);
+        var res = astar.astar.search(g, mapStart, mapEnd);
+        var coms = res.map(function (command) {
+            return command.step;
+        });
+        console.log("Commnds" + coms);
+
+        var resultState = extend({}, state.state);
+        resultState.estimatedPositions = value;
+        resultState._nextCommands = coms;
+
+        var res = {
+            board: state.board,
+            state: resultState
+        };
+        if (res && res.state && res.state._nextCommands && res.state._nextCommands.length) {
+            return res.state._nextCommands;
+        }
+        return old;
+    }, null);
+
+    if (commands) {
+        var finalState = commands.reduce(function (st, command) {
+            return player.nextState(st, {"command": command});
+        }, state);
+
+        finalState.state._nextCommands = commands;
+        finalState.state._commandsToReachThisState = (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []).concat(commands);
+
+        console.error("Returnint state" + finalState + "Commands" + commands);
+
+        return finalState;
+    }
+
+    // What to do here if we weren't able to reach it ?
+
+    // Try harde or just exit? for now - lets' finish an return
+    return state;
+
+}
+
+
 var solveBoard = function (board, seed) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
@@ -95,6 +160,8 @@ var solveBoard = function (board, seed) {
 
     while (state) {
         // generate state
+
+        //
         var alreadyUsedCommands = [];
         var possibleCommand = generateNextCommand(board, seed, alreadyUsedCommands);
         var possibleState = player.nextState(state, {"command": possibleCommand});

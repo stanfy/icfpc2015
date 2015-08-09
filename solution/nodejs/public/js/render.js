@@ -259,14 +259,23 @@ function rotateCC() {
 }
 
 var current_available_states = [];
+
 function askNextMove() {
-    loadJSON("nextMove", function (states) {
-        console.log("Next move State is updated to " + JSON.stringify(states))
-        current_available_states = states;
-        if (states.length > 0) {
-            drawEstimations([states[0].state.estimatedPositions[0]]);
+    console.log("Current state is " + JSON.stringify(current_state))
+    if (current_state.state.state != "ok") {
+        return;
+    }
+
+    loadJSON("makeMove", function (state) {
+        if (state.state.state == "BOOM!") {
+            alert("Your last move was incorrect! Returning to previous state");
+            return;
         }
-    }, current_state, "POST");
+        console.log("MOVE State is updated to " + JSON.stringify(state))
+        current_state = state;
+        drawMap(state.board, state.state);
+    }, current_state, "POST")
+
 }
 
 function runAskedMove() {
