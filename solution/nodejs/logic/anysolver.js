@@ -144,9 +144,9 @@ exports.makeNextMoveAndLock = function (st) {
         return finalState;
     }
 
-    // What to do here if we weren't able to reach it ?
+    // TODO :What to do here if we weren't able to reach it ?
 
-    // Try harde or just exit? for now - lets' finish an return
+    // TODO : Try harde or just exit? for now - lets' finish an return
     return state;
 
 }
@@ -158,42 +158,12 @@ var solveBoard = function (board, seed) {
     var lastState = state;
     var score = state.state.score;
 
-    while (state) {
-        // generate state
+    while (state && state.state.state != "finished") {
 
-        //
-        var alreadyUsedCommands = [];
-        var possibleCommand = generateNextCommand(board, seed, alreadyUsedCommands);
-        var possibleState = player.nextState(state, {"command": possibleCommand});
-
-        // if state is error - try another command
-        var stateAfterCommand = possibleState ? possibleState.state.state : null;
-
-        if (!possibleState
-            || stateAfterCommand == "BOOM!"
-            || stateAfterCommand == "finished") {
-
-            // but don't repeat commands
-            var anotherCommand = possibleCommand;
-
-            do {
-                alreadyUsedCommands.push(anotherCommand);
-                anotherCommand = generateNextCommand(board, seed, alreadyUsedCommands, commands.last);
-                possibleState = player.nextState(state, {"command": anotherCommand});
-                stateAfterCommand = possibleState ? possibleState.state.state : null;
-            } while ((possibleState == null
-            || stateAfterCommand == "BOOM!")
-            && anotherCommand);
-
-            possibleCommand = anotherCommand;
-        }
-
-        if (possibleCommand) commands.push(possibleCommand);
-
-        state = possibleState;
-        lastState = possibleState ? possibleState : lastState;
-        score = lastState.state.score;
+        state = exports.makeNextMoveAndLock(state);
+        commands = state.state._commandsToReachThisState ? state.state._commandsToReachThisState : commands;
     }
+    
 
     var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
     return solution.init(board.id, seed, letters, score);
