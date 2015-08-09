@@ -26,17 +26,11 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         });
 
         if (partial_result && atLeastOneWasBetter) {
-            partial_result(
-                solutions.map(function (s) {
-                    return solution.prepareJson(s);
-                })
-            );
+            partial_result(solutions);
         }
         max_cycles--;
     }
-    return solutions.map(function (s) {
-        return solution.prepareJson(s);
-    });
+    return solutions;
 };
 
 

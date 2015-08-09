@@ -2,10 +2,6 @@
 /**
  * Created by otaykalo on 8-8-2015.
  */
-var transform = require("../logic/transformations");
-var brain = require("../logic/brain");
-var assert = require('assert');
-
 (function(definition) {
     /* global module, define */
     if(typeof module === 'object' && typeof module.exports === 'object') {
@@ -18,23 +14,88 @@ var assert = require('assert');
         window.Graph = exports.Graph;
     }
 })(function() {
-function pathTo(node){
+
+    var transform = require("../logic/transformations");
+    var brain = require("../logic/brain");
+    var assert = require('assert');
+    var lodash = require('lodash');
+
+    function pathTo(node){
     var curr = node,
         path = [];
     while(curr.parent) {
         path.push(curr);
         curr = curr.parent;
     }
+    //path.push(curr);
     return path.reverse();
 }
+
+
 
 function getHeap() {
     return new BinaryHeap(function(node) {
         return node.f;
     });
 }
+    function countProps(obj) {
+        var count = 0;
+        for (k in obj) {
+            if (obj.hasOwnProperty(k)) {
+                count++;
+            }
+        }
+        return count;
+    };
+    function objectEquals(v1, v2) {
+        return brain.unitsAreEqual(v1,v2);
+        if (typeof(v1) !== typeof(v2)) {
+            return false;
+        }
 
-var astar = {
+        if (typeof(v1) === "function") {
+            return v1.toString() === v2.toString();
+        }
+
+        if (v1 instanceof Object && v2 instanceof Object) {
+            if (countProps(v1) !== countProps(v2)) {
+                return false;
+            }
+            var r = true;
+            for (k in v1) {
+                r = objectEquals(v1[k], v2[k]);
+                if (!r) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return v1 === v2;
+        }
+    }
+    var f = function(n){
+        return   "" + n.step + " (" + n.x + "," + n.y + ")";
+    }
+    var p = function(n){
+        // console.log(f(n) );
+
+
+    };
+
+
+    var sf = function(n) {
+        var path = pathTo(n);
+        var res = [];
+        path.reverse().forEach(function(x){ res.push(""+ f(x) +"->" );} );
+        return res.join(" ");
+    }
+    var sp = function(n){
+        console.log(sf(n));
+    }
+
+
+
+    var astar = {
     /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
@@ -50,12 +111,14 @@ var astar = {
         start = new GridNode(startState.state.unit.pivot.x, startState.state.unit.pivot.y, 0,0, 1);
         this.cleanNode(start);
         start.state = startState;
+        start.step = "initial";
 
 
         end = new GridNode(endState.state.unit.pivot.x, endState.state.unit.pivot.y, 0,0, 1);
         this.cleanNode(end);
         end.state = endState;
 
+        this.visited = [];
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
@@ -70,24 +133,34 @@ var astar = {
 
         while(openHeap.size() > 0) {
 
+            //console.log("current Heap content: ")
+            //openHeap.content.forEach(sp);
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
-
             // End case -- result has been found, return the traced path.
-            var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
-            var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
-            var pivotEq =  jsoncur === jsonEnd;
-            var jsonMemCur = JSON.stringify(currentNode.state.state.unit.members);
-            var jsonMemEnd = JSON.stringify(end.state.state.unit.members);
-            var membersEq = jsonMemCur == jsonMemEnd;
-            if(pivotEq && membersEq
-            ) {
+            // console.log("Current node now is :");
+            //p(currentNode);
+            //sp(currentNode);
+            // console.log("end node is:");
+            //p(end);
+            //var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
+            //var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
+            // var pe=  objectEquals(currentNode.state.state.unit.pivot, end.state.state.unit.pivot);
+           // var pivotEq =  jsoncur === jsonEnd;
+            //var jsonMemCur = JSON.stringify(currentNode.state.state.unit.members);
+            //var jsonMemEnd = JSON.stringify(end.state.state.unit.members);
+            //var membersEq = jsonMemCur == jsonMemEnd;
+            var me =  objectEquals(currentNode.state.state.unit, end.state.state.unit);
+            //var me = currentNode.state.state.unit.members.deepEquals(end.state.state.unit.members);
+            if(me  ) {
                 return pathTo(currentNode);
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
-
+            if(! this.visited.some(function (x) { return objectEquals( x, currentNode.state.state.unit)})) {
+                this.visited.push(currentNode.state.state.unit);
+            }
             // Find all neighbors for the current node.
 
             var neighbors = graph.neighbors(currentNode);
@@ -103,6 +176,9 @@ var astar = {
                     continue;
                 }
 
+                if(this.visited.some(function (x) { return objectEquals( x, neighbor.state.state.unit)})){
+                    continue;
+                }
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
                 var gScore = currentNode.g + neighbor.getCost(currentNode),
@@ -113,6 +189,9 @@ var astar = {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
+                   // console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
+                   // + " to parent " + sf(currentNode) );
+
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
@@ -126,6 +205,7 @@ var astar = {
                     }
 
                     if (!beenVisited) {
+                        // console.log("adding node [" + sf(neighbor)+ "] to HEAP ");
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
                     }
@@ -166,7 +246,6 @@ var astar = {
         node.visited = false;
         node.closed = false;
         node.parent = null;
-        node.move = "";
         node.state = {};
     }
 };
@@ -188,24 +267,24 @@ function Graph(state, options){
     this.diagonal = !!options.diagonal;
     this.grid = [];
     this.state = state;
-    for (var x = 0; x < maxX; x++) {
-        this.grid[x] = [];
-
-        for (var y = 0; y < maxY; y++) {
-            this.grid[x][y] = [];
-            for ( var l =0; l< maxL; l++){
-                this.grid[x][y][l] = [];
-                for(var r =0; r<maxR; r++) {
-                    // initialization of potential states
-                    var node = new GridNode(x, y, l, r, 1);
-
-                    this.grid[x][y][l][r] = node;
-                    this.nodes.push(node);
-                }
-            }
-
-        }
-    }
+    //for (var x = 0; x < maxX; x++) {
+    //    this.grid[x] = [];
+    //
+    //    for (var y = 0; y < maxY; y++) {
+    //        this.grid[x][y] = [];
+    //        for ( var l =0; l< maxL; l++){
+    //            this.grid[x][y][l] = [];
+    //            for(var r =0; r<maxR; r++) {
+    //                // initialization of potential states
+    //                var node = new GridNode(x, y, l, r, 1);
+    //
+    //                this.grid[x][y][l][r] = node;
+    //                this.nodes.push(node);
+    //            }
+    //        }
+    //
+    //    }
+    //}
     this.init = function() {
         this.dirtyNodes = [];
         for (var i = 0; i < this.nodes.length; i++) {
@@ -243,13 +322,17 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(leftState.state.state === "ok") {
-        var p = leftState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodeLeft = grid[p.x][p.y][l][r];
+        var uniq = leftState.state.unit;
+        var p = uniq.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+
+            // this.grid.push(uniq);
+            var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
             nodeLeft.step = "W";
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
-        }
+
+        //}
     }
 
 
@@ -261,13 +344,17 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(rightState.state.state === "ok") {
-        var p = rightState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodeRight = grid[p.x][p.y][l][r];
+        var uniq = rightState.state.unit;
+        var p = uniq.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+
+            // this.grid.push(uniq);
+            var nodeRight = new GridNode(p.x, p.y, l, r, 1);
             nodeRight.step = "E";
             nodeRight.state = rightState;
             ret.push(nodeRight);
-        }
+            //}
+
     }
 
     //// se
@@ -277,13 +364,16 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(seState.state.state === "ok") {
-        var p = seState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodese = grid[p.x][p.y][l][r];
+        var uniq = seState.state.unit;
+        var p = uniq.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+                    // this.grid.push(uniq);
+            var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
             nodese.state = seState;
             ret.push(nodese);
-        }
+            //}
+
     }
 
     //// sw
@@ -294,37 +384,61 @@ Graph.prototype.neighbors = function(node) {
 
     }else
     if(swState.state.state === "ok") {
-        var p = swState.state.unit.pivot;
-        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            var nodesw = grid[p.x][p.y][l][r];
+        var uniq = swState.state.unit;
+        var p = uniq.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            // this.grid.push(uniq);
+            var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
             nodesw.state = swState;
             ret.push(nodesw);
-        }
+            //}
+
     }
+
+    //// rotateLeft
     //
-    //// rotate left
-    //var ccState = brain.rotateCC(node, function(){return "ccFailure";});
-    //if(ccState != "ccFailure" && ccState && ccState.state.state === "ok") {
-    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
-    //        var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
-    //        nodeCC.step = "CC";
-    //        nodeCC.state = ccState;
-    //        ret.push(nodeCC);
-    //    }
-    //}
+    var ccState = brain.rotateCC(node.state, function(){return "ccFailure"});
+
+    if(ccState === "ccFailure"){
+
+    }else
+    if(ccState.state.state === "ok") {
+        var uniq = ccState.state.unit;
+        var p = uniq.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            // this.grid.push(uniq);
+            var nodecc = new GridNode(p.x, p.y, l, r, 1);
+            nodecc.step = "CC";
+            nodecc.state = ccState;
+            ret.push(nodecc);
+            //}
+
+    }
+
+    //// rotateRight
     //
-    //// rotate right
+    var cState = brain.rotateC(node.state, function(){return "cFailure"});
+
+    if(cState === "cFailure"){
+
+    }else
+    if(cState.state.state === "ok") {
+        var uniq = cState.state.unit;
+        var p = uniq.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            // this.grid.push(uniq);
+            var nodec = new GridNode(p.x, p.y, l, r, 1);
+            nodec.step = "C";
+            nodec.state = cState;
+            ret.push(nodec);
+            //}
+
+    }
+    //if(grid.length % 100 == 0) {
     //
-    //var cState = brain.rotateC(node, function(){return "cFailure";});
-    //if( cState != "cFailure" && cState && cState.state.state === "ok") {
     //
-    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
-    //        var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
-    //        nodeC.step = "C";
-    //        nodeC.state = cState;
-    //        ret.push(nodeC);
-    //    }
+    //    console.log(grid.length);
     //}
     return ret;
 };
@@ -493,6 +607,85 @@ BinaryHeap.prototype = {
         }
     }
 };
+
+    // attach the .equals method to Array's prototype to call it on any array
+    Array.prototype.equals = function (array) {
+        // if the other array is a falsy value, return
+        if (!array)
+            return false;
+
+        // compare lengths - can save a lot of time
+        if (this.length != array.length)
+            return false;
+
+        for (var i = 0, l=this.length; i < l; i++) {
+            // Check if we have nested arrays
+            if (this[i] instanceof Array && array[i] instanceof Array) {
+                // recurse into the nested arrays
+                if (!this[i].equals(array[i]))
+                    return false;
+            }
+            else if (this[i] != array[i]) {
+                // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                return false;
+            }
+        }
+        return true;
+    };
+
+
+    Object.prototype.equals = function(object2) {
+        //For the first loop, we only check for types
+        for (propName in this) {
+            //Check for inherited methods and properties - like .equals itself
+            //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
+            //Return false if the return value is different
+            if (this.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
+                return false;
+            }
+            //Check instance type
+            else if (typeof this[propName] != typeof object2[propName]) {
+                //Different types => not equal
+                return false;
+            }
+        }
+        //Now a deeper check using other objects property names
+        for(propName in object2) {
+            //We must check instances anyway, there may be a property that only exists in object2
+            //I wonder, if remembering the checked values from the first loop would be faster or not
+            if (this.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
+                return false;
+            }
+            else if (typeof this[propName] != typeof object2[propName]) {
+                return false;
+            }
+            //If the property is inherited, do not check any more (it must be equa if both objects inherit it)
+            if(!this.hasOwnProperty(propName))
+                continue;
+
+            //Now the detail check and recursion
+
+            //This returns the script back to the array comparing
+            /**REQUIRES Array.equals**/
+            if (this[propName] instanceof Array && object2[propName] instanceof Array) {
+                // recurse into the nested arrays
+                if (!this[propName].equals(object2[propName]))
+                    return false;
+            }
+            else if (this[propName] instanceof Object && object2[propName] instanceof Object) {
+                // recurse into another objects
+                //console.log("Recursing to compare ", this[propName],"with",object2[propName], " both named \""+propName+"\"");
+                if (!this[propName].equals(object2[propName]))
+                    return false;
+            }
+            //Normal value comparison for strings and numbers
+            else if(this[propName] != object2[propName]) {
+                return false;
+            }
+        }
+        //If everything passed, let's say YES
+        return true;
+    };
 
     return {
         astar: astar,

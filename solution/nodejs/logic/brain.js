@@ -68,6 +68,13 @@ exports.unitHashIsInHashes = function (hash, hashes) {
     });
 };
 
+exports.unitsAreEqual = function (unit1, unit2) {
+    return typeof(unit1) == typeof(unit2) &&
+        unit1.pivot.x == unit2.pivot.x &&
+        unit1.pivot.y == unit2.pivot.y &&
+        ((unit1.rot ? unit1.rot : 0) == (unit2.rot ? unit2.rot : 0));
+};
+
 /** Simply puts unit on the board, centering
  * Doesn't peform any checks on it
  * */
@@ -143,6 +150,7 @@ exports.getNextUnit = function (state) {
     var nexSeed = lcgValue.seed;
     var value = lcgValue.value;
     var unit = state.board.units[value % state.board.units.length];
+    unit.rot = 0;
     var updatedBoard = extend({}, state.board);
     updatedBoard.sourceLength = updatedBoard.sourceLength - 1;
 
@@ -223,7 +231,7 @@ exports.removeAllLines = function (state) {
 };
 
 
-var moveWithMovementFunction = function (state, name, movePoint, failure) {
+var moveWithMovementFunction = function (state, name, movePoint, failure, unitUpdate) {
     if (exports.stateIsFinished(state)) {
         return state;
     }
@@ -256,6 +264,10 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
             return movePoint(mem, unit.pivot)
         });
         updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
+
+        if (unitUpdate) {
+            unitUpdate(updatedUnit);
+        }
 
         //check next hash
         ////console.error("Original unit : " + JSON.stringify(unit))
@@ -321,7 +333,7 @@ exports.moveLeft = function (state, failure) {
         return state;
     }
 
-    return moveWithMovementFunction(state, "Left", function (cell, pivot) {
+    return moveWithMovementFunction(state, "Left", function (cell) {
         return {x: cell.x - 1, y: cell.y}
     }, failure);
 };
@@ -353,8 +365,9 @@ exports.moveDownRight = function (state, failure) {
     }
 
     return moveWithMovementFunction(state, "DownRight", function (cell) {
-        return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
-    }, failure);
+            return {x: cell.x + (cell.y % 2 == 0 ? 0 : 1), y: cell.y + 1}
+        },
+        failure);
 };
 
 exports.rotateC = function (state, failure) {
@@ -367,7 +380,11 @@ exports.rotateC = function (state, failure) {
         return transform.rotateRight(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateC", movePointFunction, failure);
+    var unitUpdate = function (unit) {
+        // + 1
+        unit.rot = unit.rot ? (unit.rot + 1) % 6 : 1;
+    };
+    return moveWithMovementFunction(state, "rotateC", movePointFunction, failure, unitUpdate);
 
 };
 
@@ -380,7 +397,11 @@ exports.rotateCC = function (state, failure) {
         return transform.rotateLeft(cell, pivot);
     };
 
-    return moveWithMovementFunction(state, "rotateCC", movePointFunction, failure);
+    var unitUpdate = function (unit) {
+        // - 1
+        unit.rot = unit.rot ? (unit.rot - 1 + 6) % 6 : 5;
+    };
+    return moveWithMovementFunction(state, "rotateCC", movePointFunction, failure, unitUpdate);
 
 };
 

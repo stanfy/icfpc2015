@@ -16,7 +16,7 @@ exports.estimatePosition = function (state) {
     var boardSize = state.board.width * state.board.height;
 
     var score = state.state.score ? state.state.score : 0;
-    var scoreCoef = 10.0;
+    var scoreCoef = 100.0;
     var itemsLeft = state.board.sourceLength ? state.board.sourceLength : 0;
     var itemsLeftCoef = 5;
     var holesCoef = 0;
@@ -40,7 +40,7 @@ exports.estimatePosition = function (state) {
                     holesSum += (-10 / currentHoleLength);
                     currentHoleLength = 0;
                 }
-                filledSum += (y * y * y);
+                filledSum += ((y * y * y) + (Math.abs(state.board.width / 2 - x) / state.board.width));
             } else {
                 currentHoleLength++;
                 if (currentLineLength != 0) {
@@ -106,16 +106,18 @@ exports.findBestPositionsForCurrentState = function (state) {
     var unit = state.state.unit;
 
     var updatedUnits =
-        [0, 1, 2, 3, 4, 5].reduce(function (units, nubmer) {
+        [1, 2, 3, 4, 5].reduce(function (units, nubmer) {
             //  rotate
             var lastUnit = units[units.length - 1];
             var rotatedUnit = extend({}, lastUnit);
             rotatedUnit.members = lastUnit.members.map(function (mem) {
                 return transformations.rotateLeft(mem, unit.pivot)
             });
+            rotatedUnit.rot = lastUnit.rot ? (lastUnit.rot - 1 + 6) % 6 : 5;
             units.push(rotatedUnit);
             return units;
         }, [unit]);
+    //var updatedUnits = [unit];
 
     var hashes = [];
     updatedUnits = updatedUnits.filter(function (unit) {
@@ -153,16 +155,17 @@ exports.findBestPositionsForCurrentState = function (state) {
                             estimations = estimations.sort(function (est1, est2) {
                                 return est2.est.value - est1.est.value;
                             });
-                            estimations = estimations.slice(0, 5);
+                            estimations = estimations.slice(0, 100);
                         }
                     }
-
-
                 }
             }
 
         })
-    estimations = estimations.slice(0, 5);
+    estimations = estimations.sort(function (est1, est2) {
+        return est2.est.value - est1.est.value;
+    });
+    estimations = estimations.slice(0, 10);
 
     return estimations;
 
