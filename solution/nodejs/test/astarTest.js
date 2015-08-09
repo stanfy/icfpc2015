@@ -11,7 +11,7 @@ describe("astar", function () {
     var executeSearch = function(a1, a2){
 
         var g = new astar.Graph(a1);
-        var res = astar.astar.search(g, a1, a2);
+        var res = astar.astar.search(g, a1, a2, {closest:true});
         var coms = [];
         res.forEach(function(x){coms.push(x.step)});
         var comsText = coms.join(" ");
