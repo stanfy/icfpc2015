@@ -77,7 +77,7 @@ var astar = {
             return   "" + n.step + " (" + n.x + "," + n.y + ")";
         }
         var p = function(n){
-            console.log(f(n) );
+            // console.log(f(n) );
 
 
         };
@@ -90,22 +90,22 @@ var astar = {
             return res;
         }
         var sp = function(n){
-            console.log(sf(n));
+            // console.log(sf(n));
         }
 
 
         while(openHeap.size() > 0) {
 
-            console.log("current Heap content: ")
-            openHeap.content.forEach(sp);
+            //console.log("current Heap content: ")
+            //openHeap.content.forEach(sp);
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
             // End case -- result has been found, return the traced path.
-            console.log("Current node now is :");
+            // console.log("Current node now is :");
             //p(currentNode);
-            sp(currentNode);
-            console.log("end node is:");
-            p(end);
+            // sp(currentNode);
+            // console.log("end node is:");
+            //p(end);
             var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
             var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
             var pivotEq =  jsoncur === jsonEnd;
@@ -161,7 +161,7 @@ var astar = {
                     }
 
                     if (!beenVisited) {
-                        console.log("adding node [" + sf(neighbor)+ "] to HEAP ");
+                        // console.log("adding node [" + sf(neighbor)+ "] to HEAP ");
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
                     }
@@ -338,30 +338,40 @@ Graph.prototype.neighbors = function(node) {
             ret.push(nodesw);
         //}
     }
+
+    //// rotateLeft
     //
-    //// rotate left
-    //var ccState = brain.rotateCC(node, function(){return "ccFailure";});
-    //if(ccState != "ccFailure" && ccState && ccState.state.state === "ok") {
-    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
-    //        var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
-    //        nodeCC.step = "CC";
-    //        nodeCC.state = ccState;
-    //        ret.push(nodeCC);
-    //    }
-    //}
+    var ccState = brain.rotateCC(node.state, function(){return "ccFailure"});
+
+    if(ccState === "ccFailure"){
+
+    }else
+    if(ccState.state.state === "ok") {
+        var p = ccState.state.unit.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+        var nodecc = new GridNode(p.x, p.y, l, r, 1);
+        nodecc.step = "CC";
+        nodecc.state = ccState;
+        ret.push(nodecc);
+        //}
+    }
+
+    //// rotateRight
     //
-    //// rotate right
-    //
-    //var cState = brain.rotateC(node, function(){return "cFailure";});
-    //if( cState != "cFailure" && cState && cState.state.state === "ok") {
-    //
-    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
-    //        var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
-    //        nodeC.step = "C";
-    //        nodeC.state = cState;
-    //        ret.push(nodeC);
-    //    }
-    //}
+    var cState = brain.rotateC(node.state, function(){return "cFailure"});
+
+    if(cState === "cFailure"){
+
+    }else
+    if(cState.state.state === "ok") {
+        var p = cState.state.unit.pivot;
+        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+        var nodec = new GridNode(p.x, p.y, l, r, 1);
+        nodec.step = "C";
+        nodec.state = cState;
+        ret.push(nodec);
+        //}
+    }
     return ret;
 };
 
