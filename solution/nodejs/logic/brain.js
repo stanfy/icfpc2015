@@ -71,7 +71,7 @@ exports.unitHashIsInHashes = function (hash, hashes) {
 exports.unitsAreEqual = function (unit1, unit2) {
     return unit1.pivot.x == unit2.pivot.x &&
         unit1.pivot.y == unit2.pivot.y &&
-        ((unit1.rot ? unit1.rot : 0) == (unit2.rot ? unit2.rot : 0);
+        ((unit1.rot ? unit1.rot : 0) == (unit2.rot ? unit2.rot : 0));
 };
 
 /** Simply puts unit on the board, centering

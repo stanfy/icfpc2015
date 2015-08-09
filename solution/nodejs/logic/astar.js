@@ -48,7 +48,7 @@ function getHeap() {
         return count;
     };
     function objectEquals(v1, v2) {
-
+        return brain.unitsAreEqual(v1,v2);
         if (typeof(v1) !== typeof(v2)) {
             return false;
         }
@@ -145,20 +145,20 @@ function getHeap() {
             //p(end);
             //var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
             //var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
-            var pe= currentNode.state.state.unit.pivot.equals(end.state.state.unit.pivot);
+            // var pe=  objectEquals(currentNode.state.state.unit.pivot, end.state.state.unit.pivot);
            // var pivotEq =  jsoncur === jsonEnd;
             //var jsonMemCur = JSON.stringify(currentNode.state.state.unit.members);
             //var jsonMemEnd = JSON.stringify(end.state.state.unit.members);
             //var membersEq = jsonMemCur == jsonMemEnd;
-            var me = objectEquals(currentNode.state.state.unit.members, end.state.state.unit.members);
+            var me =  objectEquals(currentNode.state.state.unit, end.state.state.unit);
             //var me = currentNode.state.state.unit.members.deepEquals(end.state.state.unit.members);
-            if(pe && me  ) {
+            if(me  ) {
                 return pathTo(currentNode);
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
-            if(! this.visited.some(function (x) { objectEquals(x, currentNode.state.state.unit)})) {
+            if(! this.visited.some(function (x) { objectEquals( x, currentNode.state.state.unit)})) {
                 this.visited.push(currentNode.state.state.unit);
             }
             // Find all neighbors for the current node.
@@ -176,7 +176,7 @@ function getHeap() {
                     continue;
                 }
 
-                if(this.visited.some(function (x) { objectEquals(x, neighbor.state.state.unit)})){
+                if(this.visited.some(function (x) { objectEquals( x, neighbor.state.state.unit)})){
                     continue;
                 }
                 // The g score is the shortest distance from start to current node.
@@ -325,15 +325,13 @@ Graph.prototype.neighbors = function(node) {
         var uniq = leftState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
 
-        if(!inGrid) {
             this.grid.push(uniq);
             var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
             nodeLeft.step = "W";
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
-        }
+
         //}
     }
 
@@ -349,16 +347,14 @@ Graph.prototype.neighbors = function(node) {
         var uniq = rightState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
 
-        if(!inGrid) {
             this.grid.push(uniq);
             var nodeRight = new GridNode(p.x, p.y, l, r, 1);
             nodeRight.step = "E";
             nodeRight.state = rightState;
             ret.push(nodeRight);
             //}
-        }
+
     }
 
     //// se
@@ -371,16 +367,13 @@ Graph.prototype.neighbors = function(node) {
         var uniq = seState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
-
-        if(!inGrid) {
-            this.grid.push(uniq);
+                    this.grid.push(uniq);
             var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
             nodese.state = seState;
             ret.push(nodese);
             //}
-        }
+
     }
 
     //// sw
@@ -394,16 +387,13 @@ Graph.prototype.neighbors = function(node) {
         var uniq = swState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
-
-        if(!inGrid) {
             this.grid.push(uniq);
             var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
             nodesw.state = swState;
             ret.push(nodesw);
             //}
-        }
+
     }
 
     //// rotateLeft
@@ -417,16 +407,13 @@ Graph.prototype.neighbors = function(node) {
         var uniq = ccState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
-
-        if(!inGrid) {
             this.grid.push(uniq);
             var nodecc = new GridNode(p.x, p.y, l, r, 1);
             nodecc.step = "CC";
             nodecc.state = ccState;
             ret.push(nodecc);
             //}
-        }
+
     }
 
     //// rotateRight
@@ -440,18 +427,19 @@ Graph.prototype.neighbors = function(node) {
         var uniq = cState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-        var inGrid = grid.some(function (x) { objectEquals(x, uniq)});
-
-        if(!inGrid) {
             this.grid.push(uniq);
             var nodec = new GridNode(p.x, p.y, l, r, 1);
             nodec.step = "C";
             nodec.state = cState;
             ret.push(nodec);
             //}
-        }
+
     }
-    console.log(grid.length);
+    if(grid.length % 100 == 0) {
+
+
+        console.log(grid.length);
+    }
     return ret;
 };
 
