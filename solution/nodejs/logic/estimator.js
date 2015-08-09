@@ -19,7 +19,7 @@ exports.estimatePosition = function (state) {
     var scoreCoef = 10.0;
     var itemsLeft = state.board.sourceLength ? state.board.sourceLength : 0;
     var itemsLeftCoef = 5;
-    var holesCoef = 1;
+    var holesCoef = 0;
     var linesCoef = 1;
     var filledSum = 0;
 
@@ -40,7 +40,7 @@ exports.estimatePosition = function (state) {
                     holesSum += (-10 / currentHoleLength);
                     currentHoleLength = 0;
                 }
-                filledSum += (y * y);
+                filledSum += (y * y * y);
             } else {
                 currentHoleLength++;
                 if (currentLineLength != 0) {
@@ -153,7 +153,7 @@ exports.findBestPositionsForCurrentState = function (state) {
                             estimations = estimations.sort(function (est1, est2) {
                                 return est2.est.value - est1.est.value;
                             });
-                            estimations = estimations.slice(0, 10);
+                            estimations = estimations.slice(0, 5);
                         }
                     }
 
@@ -162,6 +162,7 @@ exports.findBestPositionsForCurrentState = function (state) {
             }
 
         })
+    estimations = estimations.slice(0, 5);
 
     return estimations;
 
