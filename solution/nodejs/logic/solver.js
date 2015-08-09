@@ -25,11 +25,17 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         });
 
         if (partial_result && atLeastOneWasBetter) {
-            partial_result(solutions);
+            partial_result(
+                solutions.map(function (s) {
+                    return solution.prepareJson(s);
+                })
+            );
         }
         max_cycles--;
     }
-    return solutions;
+    return solutions.map(function (s) {
+        return solution.prepareJson(s);
+    });
 };
 
 
@@ -103,6 +109,7 @@ var solveBoardForLetters = function (board, seed, letters) {
 
 // --------------------------------------------
 
+
 // -> SW W E W E
 // <- aaaalllaalla
 var lettersFromCommands = function (commands) {
@@ -115,6 +122,7 @@ var lettersFromCommands = function (commands) {
     return letters;
 };
 
+exports.lfc = lettersFromCommands;
 
 var selectLetterFromCommand = function (command) {
     var letters = [];
