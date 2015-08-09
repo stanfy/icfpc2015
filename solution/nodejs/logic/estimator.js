@@ -99,27 +99,65 @@ exports.findBestPositionsForCurrentState = function (state) {
     }
 
     var estimations = [];
+    var unit = state.state.unit;
 
-    for (var y = 0; y < state.board.height; y++) {
-        for (var x = 0; x < state.board.width; x++) {
-            // place and lock item at specified position
-            var stateAfterPlacing = placeItemAtPositionInState(state, x, y);
-            if (stateAfterPlacing) {
-                stateAfterPlacing = brain.lockUnit(stateAfterPlacing);
-                stateAfterPlacing = brain.removeAllLines(stateAfterPlacing);
-                var estimation = exports.estimatePosition(stateAfterPlacing);
-                estimations.push({x: x, y: y, est: estimation, unit:stateAfterPlacing.state.unit});
+    var updatedUnits =
+        [0, 1, 2, 3, 4, 5].reduce(function (units, nubmer) {
+            //  rotate
+            var lastUnit = units[units.length - 1];
+            var rotatedUnit = extend({}, lastUnit);
+            rotatedUnit.members = lastUnit.members.map(function (mem) {
+                return transformations.rotateLeft(mem, unit.pivot)
+            });
+            units.push(rotatedUnit);
+            return units;
+        }, [unit]);
 
-                if (estimations.length > 50) {
-                    estimations = estimations.sort(function (est1, est2) {
-                        return est2.est.value - est1.est.value;
-                    });
-                    estimations = estimations.slice(0, 10);
+    var hashes = [];
+    updatedUnits = updatedUnits.filter(function (unit) {
+        var hash = brain.unitHash(unit);
+        if (brain.unitHashIsInHashes(hash, hashes)) {
+            return false;
+        }
+        hashes.push(hash);
+        return true;
+    });
+
+    updatedUnits.map(function (currUnit) {
+        var st = extend({}, state.state);
+        st.unit = currUnit;
+        return {
+            board: state.board,
+            state: st
+        }
+    })
+        .forEach(function (state) {
+
+            for (var y = 0; y < state.board.height; y++) {
+                for (var x = 0; x < state.board.width; x++) {
+                    // place and lock item at specified position
+
+                    var stateAfterPlacing = placeItemAtPositionInState(state, x, y);
+
+                    if (stateAfterPlacing) {
+                        stateAfterPlacing = brain.lockUnit(stateAfterPlacing);
+                        stateAfterPlacing = brain.removeAllLines(stateAfterPlacing);
+                        var estimation = exports.estimatePosition(stateAfterPlacing);
+                        estimations.push({x: x, y: y, est: estimation, unit: stateAfterPlacing.state.unit});
+
+                        if (estimations.length > 50) {
+                            estimations = estimations.sort(function (est1, est2) {
+                                return est2.est.value - est1.est.value;
+                            });
+                            estimations = estimations.slice(0, 10);
+                        }
+                    }
+
+
                 }
             }
 
-        }
-    }
+        })
 
     return estimations;
 
