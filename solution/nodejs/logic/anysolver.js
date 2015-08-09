@@ -23,7 +23,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
     while (max_cycles > 0) {
         var atLeastOneWasBetter = false;
         solutions = solutions.map(function (oldSolution) {
-            var newSolution = solveBoard(board, oldSolution.seed, oldSolution.score);
+            var newSolution = solveBoard(board, oldSolution.seed, magicPhrases);
             if (newSolution.score > oldSolution.score) {
                 atLeastOneWasBetter = true;
                 return newSolution;
@@ -128,8 +128,15 @@ exports.makeNextMoveAndLock = function (st) {
     }, null);
 
     if (commands) {
-        var finalState = commands.reduce(function (st, command) {
-            return player.nextState(st, {"command": command});
+        var finalState = commands.reduce(function (state, command) {
+            var nextState = player.nextState(state, {"command": command});
+            if (!nextState) {
+                console.error(" ALARMAAAAAA!!!!!  On calling "  + command);
+                console.error(" Commands here are '" + commands +"'") ;
+                console.error(" last state is '" + JSON.stringify(state)) ;
+            }
+
+            return nextState;
         }, state);
 
         // Okay, let's lock it
@@ -146,9 +153,6 @@ exports.makeNextMoveAndLock = function (st) {
 
         finalState.state._nextCommands = commands;
         finalState.state._commandsToReachThisState = (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []).concat(commands);
-
-        console.error("Returnint state" + finalState + "Commands" + commands);
-
         return finalState;
     }
 
@@ -162,7 +166,7 @@ exports.makeNextMoveAndLock = function (st) {
 }
 
 
-var solveBoard = function (board, seed) {
+var solveBoard = function (board, seed, magicPhrases) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
     var lastState = state;
@@ -175,9 +179,15 @@ var solveBoard = function (board, seed) {
         score = state.state.score ? state.state.score : score;
     }
 
-    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
+    console.log("=====================================");
+    console.log("Solution found. Starting to generate leter");
+    console.log("Score : " + score);
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, magicPhrases);
     var letters = lettersAndScores.letters;
     var newScores = lettersAndScores.scores;
+
+    console.log("Final : " + newScores);
+    console.log("=============DONE =================");
 
     return solution.init(board.id, seed, letters, newScores);
 };
