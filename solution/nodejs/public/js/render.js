@@ -1,5 +1,5 @@
 var canvas = document.getElementById('c');
-var cellSize = 30;
+var cellSize = 5;
 var gapSize = 2;
 
 var defaultColor = '#eee';
