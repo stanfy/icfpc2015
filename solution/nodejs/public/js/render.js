@@ -65,6 +65,13 @@ function drawPivot(unit) {
     pivot(unit.pivot.x, unit.pivot.y, pivotColor);
 }
 
+function drawEstimations(estimations) {
+    if (estimations && estimations.length) {
+        for (var i = 0; i < estimations.length && i < 10; i++) {
+            drawUnit(estimations[i].unit, "rgba(0," + (10.0 - i) * 255.0 + ",0,0.2)")
+        }
+    }
+}
 function drawMap(map, state) {
 
     var ctx = canvas.getContext('2d');
@@ -77,7 +84,7 @@ function drawMap(map, state) {
         + "Score: " + state.score + "\n"
         + "Seed: " + state.seed + "\n"
         + "Estimation: " + state.estimation + "\n"
-        //+ "FilledOpt: " +  JSON.stringify(map.filledOpt, null, 4)+ "\n"
+            //+ "FilledOpt: " +  JSON.stringify(map.filledOpt, null, 4)+ "\n"
         + "\nFull state: \n"
         + JSON.stringify(state, null, 4);
 
@@ -85,7 +92,7 @@ function drawMap(map, state) {
 
     if (map.filledOpt) {
         for (var num in map.filledOpt) {
-           fill(num % 1000, num / 1000, filledColor);
+            fill(num % 1000, num / 1000, filledColor);
         }
     }
     //if (map.filled) {
@@ -103,11 +110,7 @@ function drawMap(map, state) {
         }
 
         var estimations = state.estimatedPositions;
-        if (estimations && estimations.length) {
-            for (var i = 0 ; i < estimations.length  && i < 10;i ++) {
-                drawUnit(estimations[i].unit, "rgba(0," + (10.0 - i) * 255.0 +",0,0.2)")
-            }
-        }
+        drawEstimations(estimations);
     }
 }
 
@@ -234,6 +237,29 @@ function rotateC() {
 
 function rotateCC() {
     runMove("CC");
+}
+
+var current_available_states = [];
+function askNextMove() {
+    loadJSON("nextMove", function (states) {
+        console.log("Next move State is updated to " + JSON.stringify(states))
+        current_available_states = states;
+        if (states.length > 0) {
+            drawEstimations([states[0].state.estimatedPositions[0]]);
+        }
+    }, current_state, "POST");
+}
+
+function runAskedMove() {
+    if (!current_available_states) {
+        return;
+    }
+    var state = current_available_states[0];
+    var commands = state.state._nextCommands.join(" ");
+    console.log("Submit commands sequence: " + commands);
+    var letters = lettersFromCommands(commands);
+    console.log("Letters: " + letters);
+    submitLettersAuto(letters);
 }
 
 function runMove(command) {
