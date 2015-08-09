@@ -259,7 +259,7 @@ function logCommand(command) {
         return;
     }
 
-    commandLog += command + " ";
+    commandLog += command.trim() + " ";
     document.getElementById("commandLog").value = commandLog;
 }
 
@@ -280,15 +280,16 @@ function submitCommandSequence(sequence) {
 }
 
 
-function submitLettersAuto(letters) {
-    console.log("Submit lettes sequence: " + JSON.stringify(current_state));
-    var commands = commandsFromLetters(letters);
-    submitCommandsAuto(commands);
+function submitCommandsAuto(commands) {
+    console.log("Submit commands sequence: " + commands);
+    var letters = lettersFromCommands(commands);
+    console.log("Letters: " + letters);
+    submitLettersAuto(letters);
 }
 
 
-function submitCommandsAuto(sequence) {
-    console.log("Submit commands sequence: " + JSON.stringify(current_state));
+function submitLettersAuto(sequence) {
+    console.log("Submit letters sequence: " + JSON.stringify(current_state));
     if (sequence.length > 0) {
         var char = sequence.charAt(0);
         var nexSequence = sequence.substring(1);
@@ -304,7 +305,7 @@ function submitCommandsAuto(sequence) {
             drawMap(state.board, state.state);
 
             setTimeout(function (s) {
-                submitCommandsAuto((nexSequence));
+                submitLettersAuto((nexSequence));
             }, 10);
         }, current_state, "POST");
     }

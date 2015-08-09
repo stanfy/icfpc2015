@@ -58,28 +58,30 @@ var commandsFromLetters = function (letters) {
     var lettersArray = letters.split("");
     var commands = "";
 
+    var count = lettersArray.length;
     lettersArray.map(function (letter) {
-        commands += selectCommandFromLetter(letter) + " ";
+        commands += selectCommandFromLetter(letter);
+        count--;
+        if (count > 0) {
+            commands += " ";
+        }
     });
     return commands;
 };
 
 var selectCommandFromLetter = function (letter) {
-    switch (letter.toLowerCase()) {
-        case (lettersForW.indexOf(letter) > -1):
-            return "W";
-        case (lettersForE.indexOf(letter) > -1):
-            return "E";
-        case (lettersForSW.indexOf(letter) > -1):
-            return "SW";
-        case (lettersForSE.indexOf(letter) > -1):
-            return "SE";
-        case (lettersForC.indexOf(letter) > -1):
-            return "C";
-        case (lettersForCC.indexOf(letter) > -1):
-            return "CC";
-    }
-    return "";
+    if (lettersForW.indexOf(letter) > -1)
+        return "W";
+    if (lettersForE.indexOf(letter) > -1)
+        return "E";
+    if (lettersForSW.indexOf(letter) > -1)
+        return "SW";
+    if (lettersForSE.indexOf(letter) > -1)
+        return "SE";
+    if (lettersForC.indexOf(letter) > -1)
+        return "C";
+    if (lettersForCC.indexOf(letter) > -1)
+        return "CC";
 };
 
 

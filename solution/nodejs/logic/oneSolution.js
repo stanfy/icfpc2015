@@ -2,22 +2,14 @@
 /**
  * Created by hdf on 08.08.15.
  */
-var kBoardId;
-var kSeed;
-var kCommands;
-var kTag;
 
 exports.init = function(boardId, seed, commands, score) {
-    kTag = generateTag(boardId, seed, score);
-    kBoardId = boardId;
-    kCommands = commands;
-    kSeed = seed;
-
+    var tag = generateTag(boardId, seed, score);
     return {
-        "problemId": kBoardId   /* The `id` of the game configuration */
-        , "seed": kSeed   /* The seed for the particular game */
-        , "tag": kTag   /* A tag for this solution. */
-        , "solution": kCommands
+        "problemId": boardId  /* The `id` of the game configuration */
+        , "seed": seed   /* The seed for the particular game */
+        , "tag": tag   /* A tag for this solution. */
+        , "solution": commands
         , "score" : score
     };
 };
@@ -25,10 +17,10 @@ exports.init = function(boardId, seed, commands, score) {
 
 exports.prepareJson = function(solution) {
     return {
-        "problemId": kBoardId   /* The `id` of the game configuration */
-        , "seed": kSeed   /* The seed for the particular game */
-        , "tag": kTag   /* A tag for this solution. */
-        , "solution": kCommands
+        "problemId": solution.problemId   /* The `id` of the game configuration */
+        , "seed": solution.seed   /* The seed for the particular game */
+        , "tag": solution.tag   /* A tag for this solution. */
+        , "solution": solution.solution
     };
 };
 
