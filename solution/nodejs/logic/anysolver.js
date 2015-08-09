@@ -8,7 +8,7 @@ var astar = require("../logic/astar");
 var pwMatcher = require('./powerWordsMatcher');
 
 
-exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -16,7 +16,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         return solution.init(board.id, seed, "", 0)
     });
 
-    var max_cycles = 10000;
+    var max_cycles = max_cycles_constraint ? max_cycles_constraint : 10000;
     if (!partial_result) {
         max_cycles = 1;
     }
@@ -32,18 +32,13 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
         });
 
         if (partial_result && atLeastOneWasBetter) {
-            partial_result(
-                solutions.map(function (s) {
-                    return solution.prepareJson(s);
-                })
-            );
+            partial_result(solutions);
         }
         max_cycles--;
     }
-    return solutions.map(function (s) {
-        return solution.prepareJson(s);
-    });
+    return solutions;
 };
+
 
 /*
  Returns next state

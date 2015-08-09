@@ -2,7 +2,7 @@ var player = require('./player');
 var solution = require('./oneSolution');
 var pwMatcher = require('./powerWordsMatcher');
 
-exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, maxCycles) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -10,7 +10,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
         return solution.init(board.id, seed, "", 0)
     });
 
-    var max_cycles = maxCycles ? maxCycles : 10000;
+    var max_cycles = max_cycles_constraint ? max_cycles_constraint : 10000;
     if (!partial_result) {
         max_cycles = 1;
     }

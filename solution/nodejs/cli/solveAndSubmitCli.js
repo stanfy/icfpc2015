@@ -76,14 +76,14 @@ function readFilesFirstThen() {
 function solveProblemAndRewrite() {
     console.log("solving problem..");
 
-    var solver = require("../logic/solver");
+    var anysolver = require("../logic/anysolver");
     var solution = require("../logic/oneSolution");
     var iteration = 0;
-    var maxIterations = (100 / (_problem.height * _problem.width)) * 5000;
+    var maxIterations = 1;//(100 / (_problem.height * _problem.width)) * 2000;
     maxIterations = Math.floor(maxIterations);
     console.log("maxIterations " + maxIterations);
 
-    solver.solveBoardForAllSeeds(_problem, "", function(partial_solutions) {
+    anysolver.solveBoardForAllSeeds(_problem, "", function(partial_solutions) {
 
         var shouldRewriteFile = false;
 
@@ -107,7 +107,9 @@ function solveProblemAndRewrite() {
             fs.writeFileSync(_outputFile, JSON.stringify(_previousSolution, null, "\t"));
             fs.writeFileSync(_bestResultFile, JSON.stringify(_bestScores, null, "\t"));
         }
-        sendSolutionIfNeeded();
+        if (iteration == maxIterations) {
+        	submitFoundSolution();
+        }
     }, maxIterations);
 }
 
@@ -152,16 +154,16 @@ function submitFoundSolution() {
     });
 }
 
-function sendSolutionIfNeeded() {
-    var current = new Date();
-    var timeDifference = current.getTime() - (_lastDateWhenSolutionSend ? _lastDateWhenSolutionSend.getTime() : 0);
-    var minutes = 1000 * 60 * 5;
-
-    if (timeDifference > minutes) {
-        _lastDateWhenSolutionSend = current;
-        submitFoundSolution();
-    }
-}
+// function sendSolutionIfNeeded() {
+//     var current = new Date();
+//     var timeDifference = current.getTime() - (_lastDateWhenSolutionSend ? _lastDateWhenSolutionSend.getTime() : 0);
+//     var minutes = 1000 * 60 * 5;
+// 
+//     if (timeDifference > minutes) {
+//         _lastDateWhenSolutionSend = current;
+//         submitFoundSolution();
+//     }
+// }
 
 // -----------------------------------------
 

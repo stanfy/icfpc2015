@@ -31,5 +31,5 @@ var generateTag = function (boardId, seed, score) {
     var day = days[date.getDay()];
     var minute = (date.getMinutes() < 10 ? "0"+date.getMinutes(): date.getMinutes());
     var strDate = day + "_" + date.getHours() + ":" + minute;
-    return "b"+boardId + "_s" + seed + "_sc" + score + "_" + strDate;
+    return "any_" + strDate + "_b"+boardId + "_s" + seed + "_sc" + score;
 };
