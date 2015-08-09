@@ -1,5 +1,6 @@
 var player = require('./player');
 var solution = require('./oneSolution');
+var letterCommandInterpretator = require('./../public/js/letterCommandInterpretator');
 
 exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
     var seeds = json.sourceSeeds;
@@ -80,7 +81,7 @@ var solveBoard = function (board, seed) {
         score = lastState.state.score;
     }
 
-    var letters = lettersFromCommands(commands.join(","));
+    var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
     return solution.init(board.id, seed, letters, score);
 };
 
@@ -104,51 +105,6 @@ var solveBoardForLetters = function (board, seed, letters) {
     state.sequence = letters;
     state = player.nextState(state, {"command": "SEQUENCE"});
     return solution.init(board.id, seed, letters);
-};
-
-
-// --------------------------------------------
-
-
-// -> SW W E W E
-// <- aaaalllaalla
-var lettersFromCommands = function (commands) {
-    var commandsArray = commands.split(",");
-    var letters = "";
-
-    commandsArray.map(function (command) {
-        letters += selectLetterFromCommand(command);
-    });
-    return letters;
-};
-
-exports.lfc = lettersFromCommands;
-
-var selectLetterFromCommand = function (command) {
-    var letters = [];
-    switch (command) {
-        case "W":
-            letters = ["p", "'", "!", ".", "0", "3"];
-            break;
-        case "E":
-            letters = ["b", "c", "e", "f", "y", "2"];
-            break;
-        case "SW":
-            letters = ["a", "g", "h", "i", "j", "4"];
-            break;
-        case "SE":
-            letters = ["l", "m", "n", "o", " ", "5"];
-            break;
-        case "C":
-            letters = ["d", "q", "r", "v", "z", "1"];
-            break;
-        case "CC":
-            letters = ["k", "s", "t", "u", "w", "x"];
-            break;
-    }
-
-    return letters[0];
-    //return letters[Math.floor(Math.random()*letters.length)];
 };
 
 

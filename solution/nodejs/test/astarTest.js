@@ -4,7 +4,8 @@
 var assert = require('assert');
 var expect = require("chai").expect;
 var astar = require("../logic/astar");
-var solver = require("../logic/solver");
+var letterCommandInterpretator = require("../public/js/letterCommandInterpretator");
+
 describe("astar", function () {
 
     context("neighbours test", function () {
@@ -25,7 +26,7 @@ describe("astar", function () {
             var comsText = coms.join(",");
             console.log(comsText);
             expect(comsText).to.equal("W");
-            var letters = solver.lfc(comsText);
+            var letters = letterCommandInterpretator.lettersFromCommands(comsText);
 
             console.log(letters);
             expect(letters).to.equal("p");
@@ -46,7 +47,7 @@ describe("astar", function () {
             var comsText = coms.join(",");
             console.log(comsText);
             expect(comsText).to.equal("E");
-            var letters = solver.lfc(comsText);
+            var letters = letterCommandInterpretator.lettersFromCommands(comsText);
 
             console.log(letters);
             expect(letters).to.equal("b");
