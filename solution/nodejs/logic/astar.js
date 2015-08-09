@@ -4,6 +4,7 @@
  */
 var transform = require("../logic/transformations");
 var brain = require("../logic/brain");
+var lod = require("lodash");
 
 (function(definition) {
     /* global module, define */
@@ -45,7 +46,16 @@ var astar = {
      * @param {Function} [options.heuristic] Heuristic function (see
      *          astar.heuristics).
      */
-    search: function(graph, start, end, options) {
+    search: function(graph, startState, endState, options) {
+        start = new GridNode(startState.state.unit.pivot.x, startState.state.unit.pivot.y, 0,0, 1);
+        this.cleanNode(start);
+        start.state = startState;
+
+
+        end = new GridNode(endState.state.unit.pivot.x, endState.state.unit.pivot.y, 0,0, 1);
+        this.cleanNode(end);
+        end.state = endState;
+
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
@@ -64,7 +74,9 @@ var astar = {
             var currentNode = openHeap.pop();
 
             // End case -- result has been found, return the traced path.
-            if(currentNode === end) {
+            if(currentNode.state.state.unit.pivot === end.state.state.unit.pivot &&
+                currentNode.state.state.unit.members === end.state.state.unit.members
+            ) {
                 return pathTo(currentNode);
             }
 
@@ -130,8 +142,8 @@ var astar = {
     // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
     heuristics: {
         manhattan: function(pos0, pos1) {
-            var d1 = Math.abs(pos1.state.unit.pivot.x - pos0.state.unit.pivot.x);
-            var d2 = Math.abs(pos1.state.unit.pivot.y - pos0.state.unit.pivot.y);
+            var d1 = Math.abs(pos1.state.state.unit.pivot.x - pos0.state.state.unit.pivot.x);
+            var d2 = Math.abs(pos1.state.state.unit.pivot.y - pos0.state.state.unit.pivot.y);
             return d1 + d2;
         },
         diagonal: function(pos0, pos1) {
@@ -220,11 +232,15 @@ Graph.prototype.neighbors = function(node) {
         grid = this.grid;
 
 
-        var leftState = brain.moveLeft(node, function(){return "leftFailure"});
+        var leftState = brain.moveLeft(node.state, function(){return "leftFailure"});
 
-    if(leftState =! "leftFailure" && leftState.state.state === "ok") {
-        if (grid[left.x] && grid[left.x][left.y] && grid[left.x][left.y][left.l] && grid[left.x][left.y][l][r]) {
-            var nodeLeft = grid[left.x][left.y][l][r];
+    if(leftState === "leftFailure"){
+
+    }else
+    if(leftState.state.state === "ok") {
+        var p = leftState.state.unit.pivot;
+        if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+            var nodeLeft = grid[p.x][p.y][l][r];
             nodeLeft.step = "L";
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
@@ -233,68 +249,68 @@ Graph.prototype.neighbors = function(node) {
 
 
     // right
-
-    var rightState = brain.moveRight(node, function(){return "rightFailure"});
-
-    if(rightState != "rightFailure" && rightState && rightState.state.state === "ok") {
-        var right = transform.moveRight({x: x, y: y});
-        if (grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]) {
-            var nodeRight = grid[right.x][right.y][l][r];
-            nodeRight.step = "R";
-            nodeRight.state = rightState;
-            ret.push(nodeRight);
-        }
-    }
-
-    // se
-    var seState = brain.moveDownRight(node, function(){return "seFailure";});
-    if(seState != "seFailure" && seState && seState.state.state === "ok") {
-        var se = transform.moveSE({x: x, y: y});
-        if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
-            var nodeSe = grid[se.x][se.y][l][r];
-            nodeSe.step = "SE";
-            nodeSe.state = seState;
-            ret.push(nodeSe);
-        }
-    }
-
-    // sw
-
-    var swState = brain.moveDownLeft(node, function(){return "swFailure";});
-    if(swState != "swFailure" && swState && swState.state.state == "ok") {
-
-        var sw = transform.moveSW({x: x, y: y});
-        if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]) {
-            var nodeSw = grid[sw.x][sw.y][l][r];
-            nodeSw.step = "SW";
-            nodeSe.state = swState;
-            ret.push(nodeSw);
-        }
-    }
-
-    // rotate left
-    var ccState = brain.rotateCC(node, function(){return "ccFailure";});
-    if(ccState != "ccFailure" && ccState && ccState.state.state === "ok") {
-        if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
-            var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
-            nodeCC.step = "CC";
-            nodeCC.state = ccState;
-            ret.push(nodeCC);
-        }
-    }
-
-    // rotate right
-
-    var cState = brain.rotateC(node, function(){return "cFailure";});
-    if( cState != "cFailure" && cState && cState.state.state === "ok") {
-
-        if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
-            var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
-            nodeC.step = "C";
-            nodeC.state = cState;
-            ret.push(nodeC);
-        }
-    }
+    //
+    //var rightState = brain.moveRight(node, function(){return "rightFailure"});
+    //
+    //if(rightState != "rightFailure" && rightState && rightState.state.state === "ok") {
+    //    var right = transform.moveRight({x: x, y: y});
+    //    if (grid[right.x] && grid[right.x][right.y] && grid[right.x][right.y][right.l] && grid[right.x][right.y][l][r]) {
+    //        var nodeRight = grid[right.x][right.y][l][r];
+    //        nodeRight.step = "R";
+    //        nodeRight.state = rightState;
+    //        ret.push(nodeRight);
+    //    }
+    //}
+    //
+    //// se
+    //var seState = brain.moveDownRight(node, function(){return "seFailure";});
+    //if(seState != "seFailure" && seState && seState.state.state === "ok") {
+    //    var se = transform.moveSE({x: x, y: y});
+    //    if (grid[se.x] && grid[se.x][se.y] && grid[se.x][se.y][se.l] && grid[se.x][se.y][l][r]) {
+    //        var nodeSe = grid[se.x][se.y][l][r];
+    //        nodeSe.step = "SE";
+    //        nodeSe.state = seState;
+    //        ret.push(nodeSe);
+    //    }
+    //}
+    //
+    //// sw
+    //
+    //var swState = brain.moveDownLeft(node, function(){return "swFailure";});
+    //if(swState != "swFailure" && swState && swState.state.state == "ok") {
+    //
+    //    var sw = transform.moveSW({x: x, y: y});
+    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][r]) {
+    //        var nodeSw = grid[sw.x][sw.y][l][r];
+    //        nodeSw.step = "SW";
+    //        nodeSe.state = swState;
+    //        ret.push(nodeSw);
+    //    }
+    //}
+    //
+    //// rotate left
+    //var ccState = brain.rotateCC(node, function(){return "ccFailure";});
+    //if(ccState != "ccFailure" && ccState && ccState.state.state === "ok") {
+    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][(l + 1) % 5][r]) {
+    //        var nodeCC = grid[sw.x][sw.y][(l + 1) % 5][r];
+    //        nodeCC.step = "CC";
+    //        nodeCC.state = ccState;
+    //        ret.push(nodeCC);
+    //    }
+    //}
+    //
+    //// rotate right
+    //
+    //var cState = brain.rotateC(node, function(){return "cFailure";});
+    //if( cState != "cFailure" && cState && cState.state.state === "ok") {
+    //
+    //    if (grid[sw.x] && grid[sw.x][sw.y] && grid[sw.x][sw.y][sw.l] && grid[sw.x][sw.y][l][(r + 1) % 5]) {
+    //        var nodeC = grid[sw.x][sw.y][l][(r + 1) % 5];
+    //        nodeC.step = "C";
+    //        nodeC.state = cState;
+    //        ret.push(nodeC);
+    //    }
+    //}
     return ret;
 };
 
