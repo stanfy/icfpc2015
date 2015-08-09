@@ -160,6 +160,11 @@ function getHeap() {
             currentNode.closed = true;
             if(! this.visited.some(function (x) { objectEquals( x, currentNode.state.state.unit)})) {
                 this.visited.push(currentNode.state.state.unit);
+                if(this.visited.length % 100 == 0) {
+
+
+                    console.log(this.visited.length);
+                }
             }
             // Find all neighbors for the current node.
 
@@ -326,7 +331,7 @@ Graph.prototype.neighbors = function(node) {
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
-            this.grid.push(uniq);
+            //this.grid.push(uniq);
             var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
             nodeLeft.step = "W";
             nodeLeft.state = leftState;
@@ -348,7 +353,7 @@ Graph.prototype.neighbors = function(node) {
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
-            this.grid.push(uniq);
+            //this.grid.push(uniq);
             var nodeRight = new GridNode(p.x, p.y, l, r, 1);
             nodeRight.step = "E";
             nodeRight.state = rightState;
@@ -367,7 +372,7 @@ Graph.prototype.neighbors = function(node) {
         var uniq = seState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-                    this.grid.push(uniq);
+              //      this.grid.push(uniq);
             var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
             nodese.state = seState;
@@ -387,7 +392,7 @@ Graph.prototype.neighbors = function(node) {
         var uniq = swState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            this.grid.push(uniq);
+            //this.grid.push(uniq);
             var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
             nodesw.state = swState;
@@ -407,7 +412,7 @@ Graph.prototype.neighbors = function(node) {
         var uniq = ccState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            this.grid.push(uniq);
+            //this.grid.push(uniq);
             var nodecc = new GridNode(p.x, p.y, l, r, 1);
             nodecc.step = "CC";
             nodecc.state = ccState;
@@ -427,7 +432,7 @@ Graph.prototype.neighbors = function(node) {
         var uniq = cState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
-            this.grid.push(uniq);
+            //this.grid.push(uniq);
             var nodec = new GridNode(p.x, p.y, l, r, 1);
             nodec.step = "C";
             nodec.state = cState;
@@ -435,11 +440,7 @@ Graph.prototype.neighbors = function(node) {
             //}
 
     }
-    if(grid.length % 100 == 0) {
 
-
-        console.log(grid.length);
-    }
     return ret;
 };
 
