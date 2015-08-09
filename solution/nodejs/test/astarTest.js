@@ -119,6 +119,7 @@ describe("astar", function () {
             //  expect(res.letters).to.equal("l");
             expect(res.comsText).to.equal("SE SW");
 
+
         });
 
         it("down left, left", function () {
