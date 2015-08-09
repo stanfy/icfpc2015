@@ -21,6 +21,7 @@ exports.estimatePosition = function (state) {
     var itemsLeftCoef = 5;
     var holesCoef = 1;
     var linesCoef = 1;
+    var filledSum = 0;
 
     var holesSum = 0;
     var linesSum = 0;
@@ -39,6 +40,7 @@ exports.estimatePosition = function (state) {
                     holesSum += (-10 / currentHoleLength);
                     currentHoleLength = 0;
                 }
+                filledSum += (y * y);
             } else {
                 currentHoleLength++;
                 if (currentLineLength != 0) {
@@ -63,13 +65,15 @@ exports.estimatePosition = function (state) {
     base += holesSum * holesCoef;
     base += linesSum * linesCoef;
     base += itemsLeft * itemsLeftCoef;
+    base += filledSum;
 
     return {
         value: base,
         score: score * scoreCoef,
         holes: holesSum * holesCoef,
         lines: linesSum * linesCoef,
-        items: itemsLeft * itemsLeftCoef
+        items: itemsLeft * itemsLeftCoef,
+        filled: filledSum
     };
 }
 
