@@ -231,7 +231,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
     // get active unit
     var unit = state.state.unit;
     var pivot = unit.pivot;
-    console.log("Unit.memers" + JSON.stringify(unit.members));
+    //console.log("Unit.memers" + JSON.stringify(unit.members));
 
     var canMoveInDirection = unit.members.reduce(function (prev, cell) {
         if (!prev) {
@@ -240,13 +240,13 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
         var nextCell = movePoint(cell, pivot);
 
         if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
-            console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
+            //console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
             return false;
         }
         return true
     }, true);
 
-    console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
+    //console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
 
         // update all points with move point
@@ -306,11 +306,11 @@ var moveWithMovementFunction = function (state, name, movePoint, failure) {
 
         // Estimate this one
         //TODO : ESTIMATOR IS HERE
-        var value = estimator.findBestPositionsForCurrentState(nextState);
-        console.error("Best items are : " + JSON.stringify(value));
-        if (nextState && nextState.state) {
-            nextState.state.estimatedPositions = value;
-        }
+        //var value = estimator.findBestPositionsForCurrentState(nextState);
+        //console.error("Best items are : " + JSON.stringify(value));
+        //if (nextState && nextState.state) {
+        //    nextState.state.estimatedPositions = value;
+        //}
         return nextState;
     }
 };
@@ -343,9 +343,7 @@ exports.moveDownLeft = function (state, failure) {
     }
 
     return moveWithMovementFunction(state, "DownLeft", function (cell) {
-        var newVar = {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1};
-        console.error("For " + JSON.stringify(cell) + " -> " + JSON.stringify(newVar));
-        return newVar;
+        return {x: cell.x - (cell.y % 2 == 0 ? 1 : 0), y: cell.y + 1};
     }, failure);
 };
 

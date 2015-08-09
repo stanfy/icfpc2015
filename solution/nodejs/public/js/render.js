@@ -85,7 +85,7 @@ function drawMap(map, state) {
 
     if (map.filledOpt) {
         for (var num in map.filledOpt) {
-           fill(num % 1000, num / 1000, filledColorTr);
+           fill(num % 1000, num / 1000, filledColor);
         }
     }
     //if (map.filled) {
