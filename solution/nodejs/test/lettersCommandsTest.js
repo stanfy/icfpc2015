@@ -25,6 +25,22 @@ describe("letter-commands", function () {
             expect(letters).to.equal("alabkdbb");
         });
 
+        it("commands-letters-commands", function () {
+
+            var commands = "SW SE SW E CC C E E";
+            var letters = letterCommandInterpretator.lettersFromCommands(commands);
+            var commands2 = letterCommandInterpretator.commandsFromLetters(letters);
+            expect(commands).to.equal(commands2);
+        });
+
+
+        it("letters-commands-letters", function () {
+
+            var letters = "abpladk";
+            var commands = letterCommandInterpretator.commandsFromLetters(letters);
+            var letters2 = letterCommandInterpretator.lettersFromCommands(commands);
+            expect(letters).to.equal(letters2);
+        });
 
     });
 });

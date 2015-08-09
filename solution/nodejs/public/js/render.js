@@ -259,7 +259,7 @@ function logCommand(command) {
         return;
     }
 
-    commandLog += command + "";
+    commandLog += command.trim() + " ";
     document.getElementById("commandLog").value = commandLog;
 }
 

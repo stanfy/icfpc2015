@@ -68,7 +68,7 @@ describe("astar", function () {
             var comsText = coms.join(",");
             console.log(comsText);
 
-            var letters = solver.lfc(comsText);
+            var letters = letterCommandInterpretator.lettersFromCommands(comsText);
 
             console.log(letters);
             expect(letters).to.equal("a");
@@ -90,7 +90,7 @@ describe("astar", function () {
             var comsText = coms.join(",");
             console.log(comsText);
 
-            var letters = solver.lfc(comsText);
+            var letters = letterCommandInterpretator.lettersFromCommands(comsText);
 
             console.log(letters);
             expect(letters).to.equal("l");
