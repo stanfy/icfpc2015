@@ -45,8 +45,14 @@ files.forEach(function(file) {
         } else {
             // initialize all!
             var solver = require("../logic/solver");
-            var result = solver.solveBoardForAllSeeds(json, phrases);
-            console.log(JSON.stringify(result));
+            var solution = require("../logic/oneSolution");
+
+            var solutions = solver.solveBoardForAllSeeds(json, phrases);
+
+            var jsonedSolutions = solutions.map(function (s) {
+                return solution.prepareJson(s);
+            });
+            console.log(JSON.stringify(jsonedSolutions));
         }
     });
 });

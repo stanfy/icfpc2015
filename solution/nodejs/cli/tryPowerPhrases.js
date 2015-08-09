@@ -32,7 +32,13 @@ fs.readFile(file, 'utf8', function (err,data) {
     } else {
         // initialize all!
         var solver = require("../logic/solver");
-        var result = solver.solveBoardForAllSeedsForLetters(json, letters);
-        console.log(result);
+        var solution = require("../logic/oneSolution");
+
+        var solutions = solver.solveBoardForAllSeedsForLetters(json, letters);
+
+        var jsonedSolutions = solutions.map(function (s) {
+            return solution.prepareJson(s);
+        });
+        console.log(JSON.stringify(jsonedSolutions));
     }
 });
