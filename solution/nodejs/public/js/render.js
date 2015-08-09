@@ -80,11 +80,16 @@ function drawMap(map, state) {
         + JSON.stringify(state, null, 4);
 
     drawBoard(map.width, map.height, cellSize, gapSize);
-    map.filled.forEach(function (item) {
-        fill(item.x, item.y, filledColor)
-    });
 
-
+    if (map.filledOpt) {
+        for (var num in map.filledOpt) {
+           fill(num / 1000, num % 1000);
+        }
+    } else {
+        map.filled.forEach(function (item) {
+            fill(item.x, item.y, filledColor)
+        });
+    }
 
     // Draw state
     if (state) {
