@@ -150,6 +150,7 @@ exports.getNextUnit = function (state) {
     var nexSeed = lcgValue.seed;
     var value = lcgValue.value;
     var unit = state.board.units[value % state.board.units.length];
+    unit.rot = 0;
     var updatedBoard = extend({}, state.board);
     updatedBoard.sourceLength = updatedBoard.sourceLength - 1;
 
@@ -263,6 +264,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
             return movePoint(mem, unit.pivot)
         });
         updatedUnit.pivot = movePoint(unit.pivot, unit.pivot);
+
         if (unitUpdate) {
             unitUpdate(updatedUnit);
         }

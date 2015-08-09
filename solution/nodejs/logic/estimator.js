@@ -113,6 +113,7 @@ exports.findBestPositionsForCurrentState = function (state) {
             rotatedUnit.members = lastUnit.members.map(function (mem) {
                 return transformations.rotateLeft(mem, unit.pivot)
             });
+            rotatedUnit.rot = lastUnit.rot ? (lastUnit.rot - 1 + 6) % 6 : 5;
             units.push(rotatedUnit);
             return units;
         }, [unit]);

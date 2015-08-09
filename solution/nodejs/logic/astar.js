@@ -158,7 +158,7 @@ function getHeap() {
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
-            if(! this.visited.some(function (x) { objectEquals( x, currentNode.state.state.unit)})) {
+            if(! this.visited.some(function (x) { return objectEquals( x, currentNode.state.state.unit)})) {
                 this.visited.push(currentNode.state.state.unit);
                 if(this.visited.length % 100 == 0) {
 
@@ -181,7 +181,7 @@ function getHeap() {
                     continue;
                 }
 
-                if(this.visited.some(function (x) { objectEquals( x, neighbor.state.state.unit)})){
+                if(this.visited.some(function (x) { return objectEquals( x, neighbor.state.state.unit)})){
                     continue;
                 }
                 // The g score is the shortest distance from start to current node.
@@ -331,7 +331,11 @@ Graph.prototype.neighbors = function(node) {
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
+<<<<<<< HEAD
             //this.grid.push(uniq);
+=======
+            // this.grid.push(uniq);
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
             var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
             nodeLeft.step = "W";
             nodeLeft.state = leftState;
@@ -353,7 +357,11 @@ Graph.prototype.neighbors = function(node) {
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
+<<<<<<< HEAD
             //this.grid.push(uniq);
+=======
+            // this.grid.push(uniq);
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
             var nodeRight = new GridNode(p.x, p.y, l, r, 1);
             nodeRight.step = "E";
             nodeRight.state = rightState;
@@ -372,7 +380,11 @@ Graph.prototype.neighbors = function(node) {
         var uniq = seState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+<<<<<<< HEAD
               //      this.grid.push(uniq);
+=======
+                    // this.grid.push(uniq);
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
             var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
             nodese.state = seState;
@@ -392,7 +404,11 @@ Graph.prototype.neighbors = function(node) {
         var uniq = swState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+<<<<<<< HEAD
             //this.grid.push(uniq);
+=======
+            // this.grid.push(uniq);
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
             var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
             nodesw.state = swState;
@@ -412,7 +428,11 @@ Graph.prototype.neighbors = function(node) {
         var uniq = ccState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+<<<<<<< HEAD
             //this.grid.push(uniq);
+=======
+            // this.grid.push(uniq);
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
             var nodecc = new GridNode(p.x, p.y, l, r, 1);
             nodecc.step = "CC";
             nodecc.state = ccState;
@@ -432,7 +452,11 @@ Graph.prototype.neighbors = function(node) {
         var uniq = cState.state.unit;
         var p = uniq.pivot;
         //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+<<<<<<< HEAD
             //this.grid.push(uniq);
+=======
+            // this.grid.push(uniq);
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
             var nodec = new GridNode(p.x, p.y, l, r, 1);
             nodec.step = "C";
             nodec.state = cState;
@@ -440,7 +464,15 @@ Graph.prototype.neighbors = function(node) {
             //}
 
     }
+<<<<<<< HEAD
 
+=======
+    //if(grid.length % 100 == 0) {
+    //
+    //
+    //    console.log(grid.length);
+    //}
+>>>>>>> 392780a2ac7e5d94376dcd78d59be12b71272668
     return ret;
 };
 
