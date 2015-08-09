@@ -50,11 +50,14 @@ exports.initTransform = function (board, seed) {
 };
 
 exports.unitHash = function (unit) {
-    return unit.members.reduce(function (cur, char) {
+    var hash = unit.members.reduce(function (cur, char) {
         var key = (((char.x >>> 0) << 16) + char.y);
         cur[key] = true;
         return cur;
-    }, {})
+    }, {});
+    hash["px" + unit.pivot.x] = true;
+    hash["py" + unit.pivot.y] = true;
+    return hash
 };
 
 exports.unitHashIsInHashes = function (hash, hashes) {
