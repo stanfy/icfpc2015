@@ -26,5 +26,10 @@ exports.prepareJson = function(solution) {
 
 
 var generateTag = function (boardId, seed, score) {
-    return "st_b_"+boardId + "_s_" + seed + "_sc_" + score + "_" + Date();
+    var date = new Date();
+    var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    var day = days[date.getDay()];
+    var minute = (date.getMinutes() < 10 ? "0"+date.getMinutes(): date.getMinutes());
+    var strDate = day + "_" + date.getHours() + ":" + minute;
+    return "b"+boardId + "_s" + seed + "_sc" + score + "_" + strDate;
 };
