@@ -3,6 +3,7 @@
  */
 
 var letterCommandInterpretator = require('./../public/js/letterCommandInterpretator');
+var _ =require('underscore')
 
 exports.powerWords = [
     "ei!",
@@ -80,11 +81,15 @@ var powerWordsWithAdditional = function(powerWords, additionalPowerWords) {
 
 exports.scoresForPowerWords = function(matchings, oldScores) {
     var powerScores = 0;
+    _.chain(matchings)
+     .map(function(m) { return m.powerWordIndex })
+     .uniq()
+     .each(function() { powerScores += 300 })
 
     matchings.forEach(function(matching) {
         powerScores += 2 * matching.powerWordLength;
     });
-    powerScores += 300;
+
     return oldScores + powerScores;
 };
 
@@ -169,6 +174,9 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
 
     matchingsIndex = sortedMathcing.length;
     while (matchingsIndex--) {
+        //console.log("@@@@@@@@@@@@@@@@@@@@@");
+        //console.log(sortedMathcing);
+
         var previousMatching = matchingsIndex > 0 ? sortedMathcing[matchingsIndex - 1] : null;
         if (!previousMatching) {
             break;
@@ -182,7 +190,10 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
         var endPreviousMatchingIndex = startPreviousMatchingIndex + previousWordLength - 1;
 
         if (startCurrentMatchingIndex <= endPreviousMatchingIndex) {
-            if (currentWordLength > previousWordLength) {
+            //console.log("~~~~~~~~~~~~~~~~~~~~~~~");
+            //console.log(currentMatching);
+            //console.log(previousMatching);
+            if (currentWordLength >= previousWordLength) {
                 sortedMathcing.splice(matchingsIndex - 1, 1);
             } else {
                 sortedMathcing.splice(matchingsIndex, 1)

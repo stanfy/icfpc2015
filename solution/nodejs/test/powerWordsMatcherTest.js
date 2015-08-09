@@ -50,8 +50,12 @@ describe('Power Words Matcher', function () {
     });
 
     it ('should calculate scores including power words', function() {
+        var commands = ['SW', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'CC', 'SW', 'CC', 'SE', 'SW', 'CC', 'SW', 'CC', 'C', 'SE', 'SW', 'W'];
         var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, 10);
-        assert.equal(lettersAndScores.scores, 330);
+        //console.log('~~~~~~~~~~~~~>')
+        //console.log(lettersAndScores.letters)
+        //console.log('~~~~~~~~~~~~~>')
+        assert.equal(lettersAndScores.scores, 636);
     })
 
     it ('should use additional power words and insert them if they match', function() {
