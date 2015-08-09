@@ -103,6 +103,7 @@ var solveBoardForLetters = function (board, seed, letters) {
 
 // --------------------------------------------
 
+
 // -> SW W E W E
 // <- aaaalllaalla
 var lettersFromCommands = function (commands) {
@@ -115,6 +116,7 @@ var lettersFromCommands = function (commands) {
     return letters;
 };
 
+exports.lfc = lettersFromCommands;
 
 var selectLetterFromCommand = function (command) {
     var letters = [];

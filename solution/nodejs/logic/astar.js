@@ -246,7 +246,7 @@ Graph.prototype.neighbors = function(node) {
         var p = leftState.state.unit.pivot;
         if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
             var nodeLeft = grid[p.x][p.y][l][r];
-            nodeLeft.step = "L";
+            nodeLeft.step = "W";
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
         }
@@ -264,7 +264,7 @@ Graph.prototype.neighbors = function(node) {
         var p = rightState.state.unit.pivot;
         if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
             var nodeRight = grid[p.x][p.y][l][r];
-            nodeRight.step = "R";
+            nodeRight.step = "E";
             nodeRight.state = rightState;
             ret.push(nodeRight);
         }
