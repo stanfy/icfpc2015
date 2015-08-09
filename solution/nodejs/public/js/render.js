@@ -296,7 +296,7 @@ function submitCommandAuto(sequence) {
 
             setTimeout(function (s) {
                 submitCommandAuto((nexSequence));
-            }, 100);
+            }, 10);
         }, current_state, "POST");
     }
 }
