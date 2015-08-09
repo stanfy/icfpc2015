@@ -26,9 +26,6 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
             var newSolution = solveBoard(board, oldSolution.seed, magicPhrases);
             if (newSolution.score > oldSolution.score) {
                 atLeastOneWasBetter = true;
-                if (partial_result) {
-                    partial_result([newSolution]);
-                }
                 return newSolution;
             }
             return oldSolution;
