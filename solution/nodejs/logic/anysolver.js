@@ -23,7 +23,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
     while (max_cycles > 0) {
         var atLeastOneWasBetter = false;
         solutions = solutions.map(function (oldSolution) {
-            var newSolution = solveBoard(board, oldSolution.seed, oldSolution.score);
+            var newSolution = solveBoard(board, oldSolution.seed, magicPhrases);
             if (newSolution.score > oldSolution.score) {
                 atLeastOneWasBetter = true;
                 return newSolution;
@@ -166,7 +166,7 @@ exports.makeNextMoveAndLock = function (st) {
 }
 
 
-var solveBoard = function (board, seed) {
+var solveBoard = function (board, seed, magicPhrases) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
     var lastState = state;
@@ -182,8 +182,7 @@ var solveBoard = function (board, seed) {
     console.log("=====================================");
     console.log("Solution found. Starting to generate leter");
     console.log("Score : " + score);
-    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands,score);
-
+    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, magicPhrases);
     var letters = lettersAndScores.letters;
     var newScores = lettersAndScores.scores;
 

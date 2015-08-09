@@ -34,9 +34,11 @@ String.prototype.splice = function(start, length, replacement) {
     return this.substr(0,start)+replacement+this.substr(start+length);
 }
 
-exports.lettersAndScoresWithPowerWords = function(commands, scores) {
+exports.lettersAndScoresWithPowerWords = function(commands, scores, additionalPowerWords) {
     var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    var matchings = this.powerWordsMatchingsThroughCommands(commands, this.powerWords);
+    var allPowerWords = powerWordsWithAdditional(this.powerWords, additionalPowerWords);
+
+    var matchings = this.powerWordsMatchingsThroughCommands(commands, allPowerWords);
 
     var that = this;
     matchings.forEach(function(matching) {
@@ -52,6 +54,30 @@ exports.lettersAndScoresWithPowerWords = function(commands, scores) {
     };
 };
 
+var powerWordsWithAdditional = function(powerWords, additionalPowerWords) {
+    if (additionalPowerWords === undefined || !additionalPowerWords) {
+        return powerWords;
+    } else if (powerWords === undefined || !powerWords) {
+        return additionalPowerWords;
+    }
+
+    var anyMatches = function(item, array) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === item) {
+                return true
+            }
+        }
+        return false
+    }
+
+    var filteredPowerWords = powerWords;
+    additionalPowerWords.forEach(function (additionalPowerWord) {
+        if (!anyMatches(additionalPowerWord, powerWords)) {
+            filteredPowerWords.push(additionalPowerWord)
+        }
+    })
+    return filteredPowerWords
+}
 
 exports.scoresForPowerWords = function(matchings, oldScores) {
     var powerScores = 0;
@@ -65,14 +91,14 @@ exports.scoresForPowerWords = function(matchings, oldScores) {
 
 
 /*
-* @return {Array<matchings>}
-*
-* matching = {
-*   powerWordIndex: Int
-*   powerWordLetterIndex: Int
-*   commandIndex: Int
-* }
-* */
+ * @return {Array<matchings>}
+ *
+ * matching = {
+ *   powerWordIndex: Int
+ *   powerWordLetterIndex: Int
+ *   commandIndex: Int
+ * }
+ * */
 
 exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
     var matchings = [];
@@ -144,10 +170,6 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
 
     matchingsIndex = sortedMathcing.length;
     while (matchingsIndex--) {
-        //console.log("~~~~~~~~~~~~~~~~~");
-        //console.log(matchingsIndex);
-        //console.log(sortedMathcing);
-
         var previousMatching = matchingsIndex > 0 ? sortedMathcing[matchingsIndex - 1] : null;
         if (!previousMatching) {
             break;
@@ -161,9 +183,6 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
         var endPreviousMatchingIndex = startPreviousMatchingIndex + previousWordLength - 1;
 
         if (startCurrentMatchingIndex <= endPreviousMatchingIndex) {
-            //console.log("@@@@@@@@@@@@@@@@@@@@@");
-            //console.log(currentMatching);
-            //console.log(previousMatching);
             if (currentWordLength > previousWordLength) {
                 sortedMathcing.splice(matchingsIndex - 1, 1);
             } else {
@@ -175,20 +194,3 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
 
     return matchings;
 };
-
-//var lettersForCommand = function (command) {
-//    switch (command) {
-//        case "W":
-//            return ["p", "'", "!", ".", "0", "3"];
-//        case "E":
-//            return ["b", "c", "e", "f", "y", "2"];
-//        case "SW":
-//            return ["a", "g", "h", "i", "j", "4"];
-//        case "SE":
-//            return ["l", "m", "n", "o", " ", "5"];
-//        case "C":
-//            return ["d", "q", "r", "v", "z", "1"];
-//        case "CC":
-//            return ["k", "s", "t", "u", "w", "x"]
-//    }
-//};
