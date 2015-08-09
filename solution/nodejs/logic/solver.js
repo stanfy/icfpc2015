@@ -1,6 +1,6 @@
 var player = require('./player');
 var solution = require('./oneSolution');
-var letterCommandInterpretator = require('./../public/js/letterCommandInterpretator');
+var pwMatcher = require('./powerWordsMatcher');
 
 exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result) {
     var seeds = json.sourceSeeds;
@@ -81,8 +81,10 @@ var solveBoard = function (board, seed) {
         score = lastState.state.score;
     }
 
-    var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
-    return solution.init(board.id, seed, letters, score);
+    //var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
+    var lettersWithPower = pwMatcher.lettersWithPowerWords(commands);
+
+    return solution.init(board.id, seed, lettersWithPower, score);
 };
 
 
