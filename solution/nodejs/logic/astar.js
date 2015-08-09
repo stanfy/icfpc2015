@@ -68,12 +68,20 @@ var astar = {
 
         openHeap.push(start);
 
+        var p = function(n){
+            console.log( "\t" + n.step + " (" + n.x + "," + n.y + ")")
+        };
         while(openHeap.size() > 0) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
-
+            console.log("current Heap content: ")
+            openHeap.content.forEach(p);
             // End case -- result has been found, return the traced path.
+            console.log("Current node now is :");
+            p(currentNode);
+            console.log("end node is:");
+            p(end);
             var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
             var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
             var pivotEq =  jsoncur === jsonEnd;
@@ -113,6 +121,8 @@ var astar = {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
+                    console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
+                    + " to parent " + currentNode.step + " (" + currentNode.x + "," + currentNode.y + ")");
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
@@ -126,6 +136,8 @@ var astar = {
                     }
 
                     if (!beenVisited) {
+                        console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
+                            + " to HEAP ");
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
                     }
