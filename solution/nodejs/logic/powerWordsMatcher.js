@@ -21,7 +21,6 @@ exports.powerWords = [
     ".....",
     "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn!",
     "conway",
-    "cocke",
     "hopcroft",
     "backus",
     "bigboote",
