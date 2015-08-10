@@ -308,7 +308,9 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
                 estimation: state.state.estimation
             }
         };
-        result.state.estimation = JSON.stringify(estimator.estimatePosition(result));
+        //result.state.estimation = JSON.stringify(estimator.estimatePosition(result));
+        //result.state.estimation = estimator.estimatePosition(result);
+
         return result;
     } else {
         if (failure) {
