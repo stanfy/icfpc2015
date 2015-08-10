@@ -136,7 +136,7 @@ function getHeap() {
 
         openHeap.push(start);
 
-        while(openHeap.size() > 0) {
+        while(openHeap.size() > 0 && openHeap.size() < 30000) {
 
             var currentNode = openHeap.pop();
             var me =  objectEquals(currentNode.state.state.unit, end.state.state.unit);
@@ -151,7 +151,7 @@ function getHeap() {
                 this.visitedList[currHash] = true;
                 this.visitedCount++;
                 if(this.visitedCount % 100 == 0) {
-                    console.log(this.visitedCount);
+                    console.log(this.visitedCount + " " + openHeap.size());
                 }
             }
             // Find all neighbors for the current node.
