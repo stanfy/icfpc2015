@@ -70,7 +70,7 @@ exports.makeNextMove = function (state) {
             var coms = res.map(function (command) {
                 return command.step;
             });
-            console.log("Commnds" + coms);
+            console.error("Commnds" + coms);
 
             var resultState = extend({}, state.state);
             resultState.estimatedPositions = value;
@@ -114,7 +114,7 @@ exports.makeNextMoveAndLock = function (st) {
         var coms = res.map(function (command) {
             return command.step;
         });
-        console.log("Commnds" + coms);
+        console.error("Commnds" + coms);
 
         var resultState = extend({}, state.state);
         resultState.estimatedPositions = value;
@@ -182,15 +182,15 @@ var solveBoard = function (board, seed, magicPhrases) {
         score = state.state.score ? state.state.score : score;
     }
 
-    console.log("=====================================");
-    console.log("Solution found. Starting to generate leter");
-    console.log("Score : " + score);
+    console.error("=====================================");
+    console.error("Solution found. Starting to generate leter");
+    console.error("Score : " + score);
     var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, magicPhrases);
     var letters = lettersAndScores.letters;
     var newScores = lettersAndScores.scores;
 
-    console.log("Final : " + newScores);
-    console.log("=============DONE =================");
+    console.error("Final : " + newScores);
+    console.error("=============DONE =================");
 
     return solution.init(board.id, seed, letters, newScores);
 };

@@ -105,7 +105,7 @@ exports.findBestPositionsForCurrentState = function (state) {
     var estimations = [];
     var unit = state.state.unit;
     if (!unit) {
-        console.log("FAILURE? " + JSON.stringify(state));
+        console.error("FAILURE? " + JSON.stringify(state));
         return;
     }
 

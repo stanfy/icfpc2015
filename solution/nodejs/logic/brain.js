@@ -242,7 +242,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
     // get active unit
     var unit = state.state.unit;
     var pivot = unit.pivot;
-    //console.log("Unit.memers" + JSON.stringify(unit.members));
+    //console.error("Unit.memers" + JSON.stringify(unit.members));
 
     var canMoveInDirection = unit.members.every(function (cell) {
         var nextCell = movePoint(cell, pivot);
@@ -433,7 +433,7 @@ exports.performSequence = function (state) {
     //console.error(state.sequence);
 
     if (state.sequence.length == 0) {
-        console.log("Command sequence is empty");
+        console.error("Command sequence is empty");
         return state;
     }
 
@@ -442,7 +442,7 @@ exports.performSequence = function (state) {
 
     for (var i = 0; i < sequence.length; i++) {
         var c = sequence[i];
-        console.log("Sequence execution. Current command: " + c);
+        console.error("Sequence execution. Current command: " + c);
 
         //console.error(state.state.state);
 

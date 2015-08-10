@@ -77,7 +77,7 @@ function getHeap() {
         return   "" + n.step + " (" + n.x + "," + n.y + ")";
     }
     var p = function(n){
-        // console.log(f(n) );
+        // console.error(f(n) );
 
 
     };
@@ -90,7 +90,7 @@ function getHeap() {
         return res.join(" ");
     }
     var sp = function(n){
-        console.log(sf(n));
+        console.error(sf(n));
     }
 
 
@@ -151,7 +151,7 @@ function getHeap() {
                 this.visitedList[currHash] = true;
                 this.visitedCount++;
                 if(this.visitedCount % 100 == 0) {
-                    console.log(this.visitedCount + " " + openHeap.size());
+                    console.error(this.visitedCount + " " + openHeap.size());
                 }
             }
             // Find all neighbors for the current node.
@@ -183,7 +183,7 @@ function getHeap() {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
-                   // console.log("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
+                   // console.error("adding node " + neighbor.step + " (" + neighbor.x + "," + neighbor.y + ")"
                    // + " to parent " + sf(currentNode) );
 
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
@@ -199,7 +199,7 @@ function getHeap() {
                     }
 
                     if (!beenVisited) {
-                        // console.log("adding node [" + sf(neighbor)+ "] to HEAP ");
+                        // console.error("adding node [" + sf(neighbor)+ "] to HEAP ");
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
                     }
@@ -675,7 +675,7 @@ BinaryHeap.prototype = {
             }
             else if (this[propName] instanceof Object && object2[propName] instanceof Object) {
                 // recurse into another objects
-                //console.log("Recursing to compare ", this[propName],"with",object2[propName], " both named \""+propName+"\"");
+                //console.error("Recursing to compare ", this[propName],"with",object2[propName], " both named \""+propName+"\"");
                 if (!this[propName].equals(object2[propName]))
                     return false;
             }
