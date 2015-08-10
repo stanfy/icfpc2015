@@ -100,35 +100,27 @@ exports.makeNextMoveAndLock = function (st) {
 
     var state = st;
 
-
-    commands = value.reduce(function (old, estimatedPoint) {
-        if (old) {
-            return old;
-        }
-        var mapStart = state;
-
+    var endStates = value.map(function (estimatedPoint) {
         var endState = extend({}, state.state);
         endState.unit = estimatedPoint.unit;
-        var mapEnd = {
+        return {
             board: state.board,
             state: endState
         };
-        var g = new astar.Graph(mapStart);
-        var res = astar.astar.search(g, mapStart, mapEnd);
-        var coms = res.map(function (command) {
-            return command.step;
-        });
-        console.error("Commnds" + coms);
+    });
 
-        var resultState = extend({}, state.state);
-        resultState.estimatedPositions = value;
-        resultState._nextCommands = coms;
+    var mapStart = state;
 
-        if (resultState._nextCommands && resultState._nextCommands.length) {
-            return resultState._nextCommands;
-        }
-        return old;
-    }, null);
+    var g = new astar.Graph(mapStart);
+
+    var res = astar.astar.search(g, mapStart, null, null, endStates);
+
+    var coms = res.map(function (command) {
+        return command.step;
+    });
+
+    console.error("Commnds" + coms);
+    commands = coms;
 
     if (commands) {
         var finalState = commands.reduce(function (state, command) {
