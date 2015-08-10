@@ -6,9 +6,10 @@ var estimator = require("../logic/estimator");
 var fastboard = require("../logic/fastboard");
 var astar = require("../logic/astar");
 var pwMatcher = require('./powerWordsMatcher');
+var timeToEnd = require('./timeToEnd');
 
 
-exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint) {
+exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint, millisecondsOfEnd) {
     var seeds = json.sourceSeeds;
     var board = json;
 
@@ -16,14 +17,15 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
         return solution.init(board.id, seed, "", 0)
     });
 
-    var max_cycles = max_cycles_constraint ? max_cycles_constraint : 10000;
+    var max_cycles = (max_cycles_constraint > 0) ? max_cycles_constraint : 10000;
     if (!partial_result) {
         max_cycles = 1;
     }
     while (max_cycles > 0) {
+
         var atLeastOneWasBetter = false;
         solutions = solutions.map(function (oldSolution) {
-            var newSolution = solveBoard(board, oldSolution.seed, magicPhrases);
+            var newSolution = solveBoard(board, oldSolution.seed, magicPhrases, millisecondsOfEnd);
             if (newSolution.score > oldSolution.score) {
                 atLeastOneWasBetter = true;
                 if (partial_result) {
@@ -37,6 +39,7 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
         if (partial_result && atLeastOneWasBetter) {
             partial_result(solutions);
         }
+
         max_cycles--;
     }
     return solutions;
@@ -166,33 +169,42 @@ exports.makeNextMoveAndLock = function (st) {
 
     return state;
 
-}
+};
 
 
-var solveBoard = function (board, seed, magicPhrases) {
+var solveBoard = function (board, seed, magicPhrases, millisecondsOfEnd) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
     var lastState = state;
     var score = state.state.score;
+    var tooLittleTimeLeft = false;
 
-    while (state && state.state.state != "finished") {
-
+    while (state && state.state.state != "finished" && !tooLittleTimeLeft) {
         state = exports.makeNextMoveAndLock(state);
         commands = state.state._commandsToReachThisState ? state.state._commandsToReachThisState : commands;
         score = state.state.score ? state.state.score : score;
+        tooLittleTimeLeft = timeToEnd.oneSecondToEnd(millisecondsOfEnd);
     }
 
     console.error("=====================================");
-    console.error("Solution found. Starting to generate leter");
     console.error("Score : " + score);
-    var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, magicPhrases);
-    var letters = lettersAndScores.letters;
-    var newScores = lettersAndScores.scores;
+    var resultLetters = "";
+    var resultScore = score;
 
-    console.error("Final : " + newScores);
+    if (tooLittleTimeLeft) {
+        console.error("Too little time left.. finishing");
+        resultLetters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
+    } else {
+        console.error("Solution found. Starting to generate letters");
+        var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, magicPhrases, millisecondsOfEnd);
+        resultLetters = lettersAndScores.letters;
+        resultScore = lettersAndScores.scores;
+    }
+
+    console.error("Final : " + resultScore);
     console.error("=============DONE =================");
 
-    return solution.init(board.id, seed, letters, newScores);
+    return solution.init(board.id, seed, resultLetters, resultScore);
 };
 
 

@@ -26,7 +26,8 @@ const time = program.time;
 const memory = program.memory;
 const cores = program.cores;
 const phrases = program.phrases ? program.phrases : [];
-
+const currentDate = new Date();
+const millisecondsOfEnd = currentDate.getTime() + (time ? time : 24 * 60 * 60 * 1000);
 
 // reading files
 
@@ -44,11 +45,10 @@ files.forEach(function(file) {
 
         } else {
             // initialize all!
-            var solver = require("../logic/solver");
             var anysolver = require("../logic/anysolver");
             var solution = require("../logic/oneSolution");
 
-            var solutions = anysolver.solveBoardForAllSeeds(json, phrases);
+            var solutions = anysolver.solveBoardForAllSeeds(json, phrases, null, 1, millisecondsOfEnd);
 
             var jsonedSolutions = solutions.map(function (s) {
                 return solution.prepareJson(s);

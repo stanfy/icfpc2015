@@ -3,7 +3,8 @@
  */
 
 var letterCommandInterpretator = require('./../public/js/letterCommandInterpretator');
-var _ =require('underscore')
+var timeToEnd = require('./timeToEnd');
+var _ = require('underscore')
 
 exports.powerWords = [
     "ei!",
@@ -32,18 +33,20 @@ exports.powerWords = [
     "icfp2015"
 ];
 
-String.prototype.splice = function(start, length, replacement) {
-    return this.substr(0,start)+replacement+this.substr(start+length);
+String.prototype.splice = function (start, length, replacement) {
+    return this.substr(0, start) + replacement + this.substr(start + length);
 }
 
-exports.lettersAndScoresWithPowerWords = function(commands, scores, additionalPowerWords) {
+exports.lettersAndScoresWithPowerWords = function (commands, scores, additionalPowerWords, millisecondsOfEnd) {
     var letters = letterCommandInterpretator.lettersFromCommands(commands.join(" "));
     var allPowerWords = powerWordsWithAdditional(this.powerWords, additionalPowerWords);
 
-    var matchings = this.powerWordsMatchingsThroughCommands(commands, allPowerWords);
+    var matchings = this.powerWordsMatchingsThroughCommands(commands, allPowerWords, millisecondsOfEnd);
+    if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) console.error("Too little time to next, skip some power phrases");
 
     var that = this;
-    matchings.forEach(function(matching) {
+    matchings.forEach(function (matching) {
+        if (timeToEnd.oneSecondToEnd(millisecondsOfEnd)) return;
         var powerWord = that.powerWords[matching.powerWordIndex]
         letters = letters.splice(matching.commandIndex, powerWord.length, powerWord)
     });
@@ -51,19 +54,19 @@ exports.lettersAndScoresWithPowerWords = function(commands, scores, additionalPo
     var newScores = this.scoresForPowerWords(matchings, scores);
 
     return {
-        "letters":letters,
-        "scores" : newScores
+        "letters": letters,
+        "scores": newScores
     };
 };
 
-var powerWordsWithAdditional = function(powerWords, additionalPowerWords) {
+var powerWordsWithAdditional = function (powerWords, additionalPowerWords) {
     if (additionalPowerWords === undefined || !additionalPowerWords) {
         return powerWords;
     } else if (powerWords === undefined || !powerWords) {
         return additionalPowerWords;
     }
 
-    var anyMatches = function(item, array) {
+    var anyMatches = function (item, array) {
         for (var i = 0; i < array.length; i++) {
             if (array[i] === item) {
                 return true
@@ -81,14 +84,18 @@ var powerWordsWithAdditional = function(powerWords, additionalPowerWords) {
     return filteredPowerWords
 }
 
-exports.scoresForPowerWords = function(matchings, oldScores) {
+exports.scoresForPowerWords = function (matchings, oldScores) {
     var powerScores = 0;
     _.chain(matchings)
-     .map(function(m) { return m.powerWordIndex })
-     .uniq()
-     .each(function() { powerScores += 300 })
+        .map(function (m) {
+            return m.powerWordIndex
+        })
+        .uniq()
+        .each(function () {
+            powerScores += 300
+        })
 
-    matchings.forEach(function(matching) {
+    matchings.forEach(function (matching) {
         powerScores += 2 * matching.powerWordLength;
     });
 
@@ -106,17 +113,23 @@ exports.scoresForPowerWords = function(matchings, oldScores) {
  * }
  * */
 
-exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
+exports.powerWordsMatchingsThroughCommands = function (commands, powerWords, millisecondsOfEnd) {
     var matchings = [];
     // in all commands
     for (var commandIndex = 0; commandIndex < commands.length; commandIndex++) {
+        if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
+
         // for all power-words
         for (var powerWordIndex = 0; powerWordIndex < powerWords.length; powerWordIndex++) {
+            if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
+
             // looping through each power-word letter
             for (var powerWordLetterIndex = 0; powerWordLetterIndex < powerWords[powerWordIndex].length; powerWordLetterIndex++) {
+                if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
                 // for all letters in command
                 var lettersInCommand = letterCommandInterpretator.allLettersForCommand(commands[commandIndex])
                 for (var commandLettersIndex = 0; commandLettersIndex < lettersInCommand.length; commandLettersIndex++) {
+                    if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
                     // if power-word starts with this letter
                     if (powerWordLetterIndex === 0) {
                         // if letters are equal
@@ -127,13 +140,14 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
                                 powerWordLetterIndex: powerWordLetterIndex,
                                 powerWordLength: powerWords[powerWordIndex].length,
                                 commandIndex: commandIndex
-                            })
+                            });
                         }
                     }
 
                     // check matchings for completing power-words
                     // in all matchings
                     for (var matchingsIndex = 0; matchingsIndex < matchings.length; matchingsIndex++) {
+                        if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
                         // if we're following correct commands sequence
                         if (matchings[matchingsIndex].commandIndex === commandIndex - 1) {
                             // for current power-word
@@ -170,7 +184,7 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
     }
 
     // remove intersects
-    var sortedMathcing = matchings.sort(function(match1, match2) {
+    var sortedMathcing = matchings.sort(function (match1, match2) {
         return match1.commandIndex - match2.commandIndex;
     });
 
