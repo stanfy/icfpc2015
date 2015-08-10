@@ -293,20 +293,14 @@ Graph.prototype.neighbors = function(node, visitedList) {
         grid = this.grid;
 
 
-    var potentialLeftMove = transform.moveUnitLeft(node.state.state.unit);
-
-    var currLeftHash = unitSimpleHash(potentialLeftMove);
-
-    if(!visitedList[currLeftHash]) {
-
+    var origialUnit = node.state.state.unit;
+    if(!visitedList[unitSimpleHash(transform.moveUnitLeftForHash(origialUnit))]) {
 
         var leftState = brain.moveLeft(node.state, function () {
             return "leftFailure"
         });
 
-        if (leftState === "leftFailure") {
-
-        } else if (leftState.state.state === "ok") {
+        if (leftState != "leftFailure" && leftState.state.state === "ok") {
             var uniq = leftState.state.unit;
             var p = uniq.pivot;
             //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
@@ -324,11 +318,7 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
      //right
 
-    var potentialRightMove = transform.moveUnitRight(node.state.state.unit);
-
-    var currRightHash = unitSimpleHash(potentialRightMove);
-
-    if(!visitedList[currRightHash]) {
+    if(!visitedList[unitSimpleHash(transform.moveUnitRightForHash(origialUnit))]) {
         var rightState = brain.moveRight(node.state, function () {
             return "rightFailure"
         });
@@ -352,11 +342,7 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
     //// se
 
-    var potentialSeMove = transform.moveUnitDownRight(node.state.state.unit);
-
-    var currSeHash = unitSimpleHash(potentialSeMove);
-
-    if(!visitedList[currSeHash]) {
+    if(!visitedList[unitSimpleHash(transform.moveUnitDownRightForHash(origialUnit))]) {
         var seState = brain.moveDownRight(node.state, function () {
             return "seFailure"
         });
@@ -379,11 +365,7 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
     //// sw
     //
-    var potentialSwMove = transform.moveUnitDownLeft(node.state.state.unit);
-
-    var currSwHash = unitSimpleHash(potentialSwMove);
-
-    if(!visitedList[currSwHash]) {
+    if(!visitedList[unitSimpleHash(transform.moveUnitDownLeftForHash(origialUnit))]) {
         var swState = brain.moveDownLeft(node.state, function () {
             return "swFailure"
         });
@@ -404,23 +386,18 @@ Graph.prototype.neighbors = function(node, visitedList) {
         }
     }
 
-    var nodeInfo = node.state.state.unit;
+    var nodeInfo = origialUnit;
     /// If we have single point figure, there's no sence to rotate it
 
-    if(nodeInfo.members.length === 1 &&
+    if (nodeInfo.members.length === 1 &&
         nodeInfo.members[0].x === nodeInfo.pivot.x &&
         nodeInfo.members[0].y === nodeInfo.pivot.y
-    )
-    {
+    ) {
         return ret;
     }
     //// rotateLeft
     //
-    var potentialCCMove = transform.rotateUnitLeft(node.state.state.unit);
-
-    var currCCHash = unitSimpleHash(potentialCCMove);
-
-    if(!visitedList[currCCHash]) {
+    if(!visitedList[unitSimpleHash(transform.rotateUnitLeftForHash(origialUnit))]) {
         var ccState = brain.rotateCC(node.state, function () {
             return "ccFailure"
         });
@@ -443,11 +420,7 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
     //// rotateRight
     //
-    var potentialCMove = transform.rotateUnitRight(node.state.state.unit);
-
-    var currCHash = unitSimpleHash(potentialCMove);
-
-    if(!visitedList[currCHash]) {
+    if(!visitedList[unitSimpleHash(transform.rotUnitRightForHash(origialUnit))]) {
         var cState = brain.rotateC(node.state, function () {
             return "cFailure"
         });
@@ -635,6 +608,7 @@ BinaryHeap.prototype = {
     }
 };
 
+/*
     // attach the .equals method to Array's prototype to call it on any array
     Array.prototype.equals = function (array) {
         // if the other array is a falsy value, return
@@ -693,7 +667,7 @@ BinaryHeap.prototype = {
             //Now the detail check and recursion
 
             //This returns the script back to the array comparing
-            /**REQUIRES Array.equals**/
+            /!**REQUIRES Array.equals**!/
             if (this[propName] instanceof Array && object2[propName] instanceof Array) {
                 // recurse into the nested arrays
                 if (!this[propName].equals(object2[propName]))
@@ -713,6 +687,7 @@ BinaryHeap.prototype = {
         //If everything passed, let's say YES
         return true;
     };
+*/
 
     return {
         astar: astar,

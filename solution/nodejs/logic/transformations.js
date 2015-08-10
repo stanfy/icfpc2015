@@ -184,68 +184,35 @@ exports.moveSE = function (point) {
     return {x: hexed.q, y: hexed.r};
 }
 
-exports.rotateUnitLeft = function (unit) {
+// CC Rotation
+exports.rotateUnitLeftForHash = function (unit) {
     var pivot = unit.pivot;
-    var rotatedMembers = [];
-    unit.members.forEach(function (member) {
-        var rotated = exports.rotateLeft(member, pivot);
-        rotatedMembers.push(rotated);
-    });
-    return {pivot: pivot, members: rotatedMembers};
-
+    return {pivot: pivot, rot: unit.rot ? (unit.rot - 1 + 6) % 6 : 5}
 }
 
-exports.rotateUnitRight = function (unit) {
+exports.rotUnitRightForHash = function (unit) {
     var pivot = unit.pivot;
-    var rotatedMembers = [];
-    unit.members.forEach(function (member) {
-        var rotated = exports.rotateRight(member, pivot);
-        rotatedMembers.push(rotated);
-    });
-    return {pivot: pivot, members: rotatedMembers};
-}
-exports.moveUnitLeft = function (unit) {
-    var pivot =  exports.moveLeft( unit.pivot);
-    var rotatedMembers = [];
-    unit.members.forEach(function (member) {
-        var rotated = exports.moveLeft(member);
-        rotatedMembers.push(rotated);
-    });
-    return {pivot: pivot, members: rotatedMembers};
-
+    return {pivot: pivot, rot: unit.rot ? (unit.rot + 1) % 6 : 1}
 }
 
-exports.moveUnitRight = function (unit) {
-    var pivot =  exports.moveRight( unit.pivot);
-    var rotatedMembers = [];
-    unit.members.forEach(function (member) {
-        var rotated = exports.moveRight(member);
-        rotatedMembers.push(rotated);
-    });
-    return {pivot: pivot, members: rotatedMembers};
-
+exports.moveUnitLeftForHash = function (unit) {
+    var pivot = exports.moveLeft(unit.pivot);
+    return {pivot: pivot, rot: unit.rot};
 }
 
-exports.moveUnitDownRight = function (unit) {
-    var pivot =  exports.moveSE( unit.pivot);
-    var rotatedMembers = [];
-    unit.members.forEach(function (member) {
-        var rotated = exports.moveSE(member);
-        rotatedMembers.push(rotated);
-    });
-    return {pivot: pivot, members: rotatedMembers};
-
+exports.moveUnitRightForHash = function (unit) {
+    var pivot = exports.moveRight(unit.pivot);
+    return {pivot: pivot, rot: unit.rot};
 }
 
-exports.moveUnitDownLeft = function (unit) {
-    var pivot =  exports.moveSW( unit.pivot);
-    var rotatedMembers = [];
-    unit.members.forEach(function (member) {
-        var rotated = exports.moveSW(member);
-        rotatedMembers.push(rotated);
-    });
-    return {pivot: pivot, members: rotatedMembers};
+exports.moveUnitDownRightForHash = function (unit) {
+    var pivot = exports.moveSE(unit.pivot);
+    return {pivot: pivot, rot: unit.rot};
+}
 
+exports.moveUnitDownLeftForHash = function (unit) {
+    var pivot = exports.moveSW(unit.pivot);
+    return {pivot: pivot, rot: unit.rot};
 }
 
 

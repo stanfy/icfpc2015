@@ -88,7 +88,7 @@ describe("rotation", function () {
                 pivot: {x: 0, y: 0},
                 members: [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 2}]
             };
-            var rotated = transform.rotateUnitRight(unit);
+            var rotated = transform.rotUnitRightForHash(unit);
             expect(rotated).to.deep.equal(expectedRotated);
         });
 
@@ -101,7 +101,7 @@ describe("rotation", function () {
                 pivot: {x: 0, y: 0},
                 members: [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 2}]
             };
-            var rotated = transform.rotateUnitLeft(unit);
+            var rotated = transform.rotateUnitLeftForHash(unit);
             expect(rotated).to.deep.equal(expectedRotated);
         });
 

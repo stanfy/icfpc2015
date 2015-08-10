@@ -244,24 +244,14 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
     var pivot = unit.pivot;
     //console.log("Unit.memers" + JSON.stringify(unit.members));
 
-    var canMoveInDirection = unit.members.reduce(function (prev, cell) {
-        if (!prev) {
-            return false;
-        }
+    var canMoveInDirection = unit.members.every(function (cell) {
         var nextCell = movePoint(cell, pivot);
-
-        if (pointIsBlockedAtBoard(state.board, nextCell.x, nextCell.y)) {
-            //console.error(" Board is filled at " + nextCell.x + "," + nextCell.y + "sattBoard " + state.board.width);
-            return false;
-        }
-        return true
-    }, true);
+        return !fastboard.isCellFilledAtBoard(state.board, nextCell.x, nextCell.y);
+    });
 
     //console.error(" Can movePoint " + name + " ? " + canMoveInDirection);
     if (canMoveInDirection) {
 
-        // update all points with move point
-        // update pivot with move point
         var updatedUnit = extend({}, unit);
         updatedUnit.members = unit.members.map(function (mem) {
             return movePoint(mem, unit.pivot)
@@ -272,10 +262,6 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
             unitUpdate(updatedUnit);
         }
 
-        //check next hash
-        ////console.error("Original unit : " + JSON.stringify(unit))
-        ////console.error("Original unit hash: " + JSON.stringify(exports.unitHash(unit)))
-        ////console.error("Next unit : " + JSON.stringify(updatedUnit))
         var updatedUnitHash = exports.unitHash(updatedUnit);
 
         ////console.error("Next unit hash: " + JSON.stringify(updatedUnitHash))
