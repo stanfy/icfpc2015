@@ -44,15 +44,13 @@ If you're interested, you can find sources in such languages:
 ![pic](solution/visualizer/viz.png?raw=true)
 
 
-# Power phrases
+# Power phrases (we conjectured)
 
 Our solutions don't use many of them, but this is our suggestion list:
 
     "ei!",
     "cthulhu",
     "as2h2",
-    "galois",
-    "aleister",
     "davar",
     "pentagram",
     "lambda",
@@ -72,6 +70,20 @@ Our solutions don't use many of them, but this is our suggestion list:
     "monkeyboy",
     "ether",
     "icfp2015"
+
+
+# Videos
+
+Algo solving map 19
+https://www.youtube.com/watch?v=CKe1RYMj_Rw&feature=youtu.be
+
+
+"Optimized" aka drunk A* algo solving problem 24
+https://www.youtube.com/watch?v=-2EmujTho6Q
+
+
+Commits visualization
+https://www.youtube.com/watch?v=KrCUs4naT3M&feature=youtu.be
 
 
 # It was awesome and fun
