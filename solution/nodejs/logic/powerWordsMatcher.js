@@ -26,7 +26,11 @@ exports.powerWords = [
     "backus",
     "bigboote",
     "big-booty",
-    "bigboo-tay"
+    "bigboo-tay",
+    "pluto",
+    "monkeyboy",
+    "ether",
+    "icfp2015"
 ];
 
 String.prototype.splice = function(start, length, replacement) {
