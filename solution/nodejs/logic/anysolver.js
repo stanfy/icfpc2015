@@ -167,8 +167,9 @@ exports.makeNextMoveAndLock = function (st) {
 
     // TODO : Try harde or just exit? for now - lets' finish an return
 
-    var finalCommands = solver.solveStateAndReturnCommands(state, state.state.seed, (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []));
-    state.state._commandsToReachThisState = finalCommands;
+    var commandsAndScores = solver.solveStateAndReturnCommands(state, state.state.seed, (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []));
+    state.state._commandsToReachThisState = commandsAndScores.commands;
+    state.state.score = commandsAndScores.score;
     state.state.state = "finished";
 
     return state;

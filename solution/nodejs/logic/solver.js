@@ -75,10 +75,9 @@ exports.solveStateAndReturnCommands = function (sstate, seed, scommands) {
         score = lastState.state.score;
     }
 
-    return commands;
+    return {"commands" : commands, "score" : score};
+};
 
-
-}
 
 var solveBoard = function (board, seed, magicWords) {
     var state = player.initializeOneBoard(board, seed);
