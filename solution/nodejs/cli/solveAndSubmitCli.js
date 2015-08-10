@@ -94,7 +94,17 @@ function solveProblemAndRewrite() {
 
             if (scores > bestScoreForThisSeed) {
                 shouldRewriteFile = true;
-                _previousSolution[partial_solutions.indexOf(s)] = solution.prepareJson(s);
+
+                // find which seed was updated
+                var seedIndexes = _previousSolution.map(function(sol){
+                    return sol.seed;
+                });
+                var indexToUpdate = seedIndexes ? seedIndexes.indexOf(seed) : 0;
+                indexToUpdate = indexToUpdate >= 0 ? indexToUpdate : 0;
+                console.log("~~~~~~~~~~~~~~~~~~~~ seedIndexes " + seedIndexes);
+                console.log("~~~~~~~~~~~~~~~~~~~~ indexToUpdate " + indexToUpdate);
+
+                _previousSolution[indexToUpdate] = solution.prepareJson(s);
                 _bestScores[seed] = scores;
                 iteration++;
                 console.log("found better solution for problem " + _problem.id + " for seed " + seed +
@@ -106,9 +116,7 @@ function solveProblemAndRewrite() {
             fs = require('fs');
             fs.writeFileSync(_outputFile, JSON.stringify(_previousSolution, null, "\t"));
             fs.writeFileSync(_bestResultFile, JSON.stringify(_bestScores, null, "\t"));
-        }
-        if (iteration == maxIterations) {
-        	submitFoundSolution();
+            submitFoundSolution();
         }
     }, maxIterations);
 }

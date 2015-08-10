@@ -10,12 +10,10 @@ exports.powerWords = [
     "cthulhu",
     "as2h2",
     "galois",
-    "bee",
     "aleister",
     "davar",
     "pentagram",
     "lambda",
-    "oga",
     "ia! ia!",
     "turing",
     "r'lyeh!",
@@ -28,7 +26,11 @@ exports.powerWords = [
     "backus",
     "bigboote",
     "big-booty",
-    "bigboo-tay"
+    "bigboo-tay",
+    "pluto",
+    "monkeyboy",
+    "ether",
+    "icfp2015"
 ];
 
 String.prototype.splice = function(start, length, replacement) {
