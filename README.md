@@ -41,7 +41,7 @@ If you're interested, you can find sources in such languages:
 - python. First visualizator was written on python
 - node.js/javascript. Last tool and we used most. Visualizer, brain, estimator, a*, cli - everything is written on javascript. To play with visualizer, please, start "npm start" and open "localhost:3000" in browser.
 
-![pic](solution/vis.png)
+![pic](solution/visualizer/vis.png?raw=true )
 
 
 # Power phrases
