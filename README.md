@@ -1,44 +1,79 @@
-# Info  
-Site: http://icfpcontest.org/  
-Twitter: https://twitter.com/icfpcontest2015    
-Dates: This year, the contest starts on [Friday 7 August 2015 at 12:00 UTC](http://www.timeanddate.com/countdown/generic?p0=1440&iso=20150807T12&msg=ICFP%20Programming%20Contest%202015) and ends on [Monday 10 August 2015 at 12:00 UTC](http://www.timeanddate.com/countdown/generic?p0=1440&iso=20150810T12&msg=ICFP%20Programming%20Contest%202015). There will be a lightning division, ending on [Saturday 8 August 2015 at 12:00 UTC](http://www.timeanddate.com/countdown/generic?p0=1440&iso=20150808T12&msg=ICFP%20Programming%20Contest%202015).
-
-# Participants  
-To make sure that you all know, where this repository is and all rights are correct, please add yourself to the participants list:  
-
-1. Paul Taykalo  (95% of time, From 7 August to 10 August) (Objective-C, Java, Swift O_o, Python, Haskell, Scala)
-2. Vixentael (80%)
-3. Alexander Voronov (85%)
-4. Oleg Taykalo (partly Friday, full saturday, full sunday)   
-5. Olexandr Tereshchuk (30%)
-6. Misha Pustovit (40%)
-7. Pasha Bashmakov (20%) - across all time zones
-8. Oleksiy Syvokon (70%) -- Fri, Sat, Sun (Python, Clojure, Some Haskell)
-
-# Channels    
-Now in [Slack chat](https://stanfy-icfp2015.slack.com/messages)
-
-# Language  
-Java/Scala/Kotlin/Groovy ..
-
-# Sqwiggle - online video presence tool
-Quick for press and talks + always see who is available for quick talk.
-Channel: https://www.sqwiggle.com/signup/fe4552c9dffc7f3a8e525b07165c0439
-
-# Trello
-https://trello.com/b/7ayQ86lb/icfp2015
+We will post more details later... 
 
 
-# Process
-Read [here](PROCESS.md)
+# Dependencies
 
-# Submisison
-https://davar.icfpcontest.org/#/teams
+Program needs node.js server. 
 
-Submit solutions to: https://davar.icfpcontest.org/teams/6/solutions
+You can download it from
+https://nodejs.org/
 
-Your API token is: zSbouMJS0cYhLXgghheLt9alzo8aAHtpku9hiWAVR6U=
+or we have added script inside Makefile that should download it automatically.
 
-# Power words
+play_icfp2015 is command line js file, that post result to console.
 
-[Power](POWER.md)
+
+
+# Output
+
+Program writes debug into to std:err and result to std:out.
+https://twitter.com/ICFPContest2015/status/630667692370886656
+
+
+
+# Solving problems
+1. Program makes simple loop among all seeds. For each seed algo is the same.
+2. "Brain" is our engine. It controlls all steps and decides what to do (play hex-tris or post cats to twitter :))
+2. Everything starts when new unit appears. "Estimator" finds top 10 best positions for it to move next. Estimator uses bunch of coefficients to select positions. It tries to "fill holes" and to create full-lines. 
+2. Then A* algo finds way to best positions.
+3. Unit moves to position that is reachable. 
+4. It continues until no reachable positions found for last unit.
+5. Command interpretator transforms commands into letters, trying to use power phrases.
+6. And output json is generated :)
+
+
+# Code base
+
+If you're interested, you can find sources in such languages:
+
+- obj-c (command line tool and iPhone app). Used to post results on lightning round
+- scala. We started from scala, but then moved to obj-c :)
+- python. First visualizator was written on python
+- node.js/javascript. Last tool and we used most. Visualizer, brain, estimator, a*, cli - everything is written on javascript. To play with visualizer, please, start "npm start" and open "localhost:3000" in browser.
+
+![pic](solution/vis.png)
+
+
+# Power phrases
+
+Our solutions don't use many of them, but this is our suggestion list:
+
+    "ei!",
+    "cthulhu",
+    "as2h2",
+    "galois",
+    "aleister",
+    "davar",
+    "pentagram",
+    "lambda",
+    "ia! ia!",
+    "turing",
+    "r'lyeh!",
+    "yuggot",
+    ".....",
+    "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn!",
+    "conway",
+    "hopcroft",
+    "backus",
+    "bigboote",
+    "big-booty",
+    "bigboo-tay",
+    "pluto",
+    "monkeyboy",
+    "ether",
+    "icfp2015"
+
+
+# It was awesome and fun
+
+Stanfy+ team <3 you and we're waiting for next year. Hope to perform better that this time.
