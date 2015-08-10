@@ -408,6 +408,17 @@ Graph.prototype.neighbors = function(node) {
 
     }
 
+
+    var nodeInfo = node.state.state.unit;
+    /// If we have single point figure, there's no sence to rotate it
+
+    if(nodeInfo.members.length === 1 &&
+        nodeInfo.members[0].x === nodeInfo.pivot.x &&
+        nodeInfo.members[0].y === nodeInfo.pivot.y
+    )
+    {
+        return ret;
+    }
     //// rotateLeft
     //
     var ccState = brain.rotateCC(node.state, function(){return "ccFailure"});
