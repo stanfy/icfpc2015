@@ -1,3 +1,6 @@
+SHELL := /bin/bash
+NODE_PATH = $(shell ./find-node-or-install.sh)
+PATH := $(NODE_PATH):$(shell echo $$PATH)
+
 all:
-	xcodebuild -project solution/objc/icfpcli/icfpcli.xcodeproj -configuration Release
-	cp solution/objc/icfpcli/build/Release/icfpcli play_icfp2015
+	ln -s solution/nodejs/cli/cli.js play_icfp2015

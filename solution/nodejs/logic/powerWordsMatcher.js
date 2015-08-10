@@ -176,8 +176,8 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
 
     matchingsIndex = sortedMathcing.length;
     while (matchingsIndex--) {
-        //console.log("@@@@@@@@@@@@@@@@@@@@@");
-        //console.log(sortedMathcing);
+        //console.error("@@@@@@@@@@@@@@@@@@@@@");
+        //console.error(sortedMathcing);
 
         var previousMatching = matchingsIndex > 0 ? sortedMathcing[matchingsIndex - 1] : null;
         if (!previousMatching) {
@@ -192,9 +192,9 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords) {
         var endPreviousMatchingIndex = startPreviousMatchingIndex + previousWordLength - 1;
 
         if (startCurrentMatchingIndex <= endPreviousMatchingIndex) {
-            //console.log("~~~~~~~~~~~~~~~~~~~~~~~");
-            //console.log(currentMatching);
-            //console.log(previousMatching);
+            //console.error("~~~~~~~~~~~~~~~~~~~~~~~");
+            //console.error(currentMatching);
+            //console.error(previousMatching);
             if (currentWordLength >= previousWordLength) {
                 sortedMathcing.splice(matchingsIndex - 1, 1);
             } else {
