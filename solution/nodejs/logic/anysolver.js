@@ -123,12 +123,8 @@ exports.makeNextMoveAndLock = function (st) {
         resultState.estimatedPositions = value;
         resultState._nextCommands = coms;
 
-        var res = {
-            board: state.board,
-            state: resultState
-        };
-        if (res && res.state && res.state._nextCommands && res.state._nextCommands.length) {
-            return res.state._nextCommands;
+        if (resultState._nextCommands && resultState._nextCommands.length) {
+            return resultState._nextCommands;
         }
         return old;
     }, null);
@@ -140,22 +136,26 @@ exports.makeNextMoveAndLock = function (st) {
                 console.error(" ALARMAAAAAA!!!!!  On calling "  + command);
                 console.error(" Commands here are '" + commands +"'") ;
                 console.error(" last state is '" + JSON.stringify(state)) ;
+                state.state.state = "KILL ME";
+                return state;
             }
 
             return nextState;
         }, state);
 
-        // Okay, let's lock it
-        var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
-            var nextState = player.nextState(finalState, {"command": command});
-            if (nextState.state.state == "BOOM!") {
-                return false;
-            }
-            return nextState.state.score != finalState.state.score;
-        });
+        if (finalState && finalState.state.state != "KILL ME") {
+            // Okay, let's lock it
+            var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
+                var nextState = player.nextState(finalState, {"command": command});
+                if (nextState.state.state == "BOOM!") {
+                    return false;
+                }
+                return nextState.state.score != finalState.state.score;
+            });
 
-        commands.push(lockCommands[0]);
-        finalState = player.nextState(finalState, {"command": lockCommands[0]});
+            commands.push(lockCommands[0]);
+            finalState = player.nextState(finalState, {"command": lockCommands[0]});
+        }
 
         finalState.state._nextCommands = commands;
         finalState.state._commandsToReachThisState = (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []).concat(commands);

@@ -276,7 +276,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
         }
 
         var nextUnit = updatedUnit;
-        var nextHashes = state.state.hashes.splice(0);
+        var nextHashes = state.state.hashes.slice();
         if (nextUnit.pivot.y != unit.pivot.y) {
             nextHashes = []
         }
@@ -424,7 +424,8 @@ exports.lockUnit = function (state) {
             state: "locked",
             unit: unit,
             score: state.state.score,
-            seed: state.state.seed
+            seed: state.state.seed,
+            hashes: []
         }
     }
 };

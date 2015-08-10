@@ -47,32 +47,6 @@ function getHeap() {
         }
         return count;
     };
-    function objectEquals(v1, v2) {
-        return brain.unitsAreEqual(v1,v2);
-        if (typeof(v1) !== typeof(v2)) {
-            return false;
-        }
-
-        if (typeof(v1) === "function") {
-            return v1.toString() === v2.toString();
-        }
-
-        if (v1 instanceof Object && v2 instanceof Object) {
-            if (countProps(v1) !== countProps(v2)) {
-                return false;
-            }
-            var r = true;
-            for (k in v1) {
-                r = objectEquals(v1[k], v2[k]);
-                if (!r) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return v1 === v2;
-        }
-    }
     var f = function(n){
         return   "" + n.step + " (" + n.x + "," + n.y + ")";
     }
@@ -136,10 +110,10 @@ function getHeap() {
 
         openHeap.push(start);
 
-        while(openHeap.size() > 0 && openHeap.size() < 30000) {
+        while(openHeap.size() > 0 && openHeap.size() < 10000) {
 
             var currentNode = openHeap.pop();
-            var me =  objectEquals(currentNode.state.state.unit, end.state.state.unit);
+            var me =  brain.unitsAreEqual(currentNode.state.state.unit, end.state.state.unit);
             if(me  ) {
                 return pathTo(currentNode);
             }
@@ -293,10 +267,12 @@ Graph.prototype.neighbors = function(node, visitedList) {
         grid = this.grid;
 
 
-    var origialUnit = node.state.state.unit;
-    if(!visitedList[unitSimpleHash(transform.moveUnitLeftForHash(origialUnit))]) {
+    var originalState = node.state;
+    var originalUnit = originalState.state.unit;
 
-        var leftState = brain.moveLeft(node.state, function () {
+    if(!visitedList[unitSimpleHash(transform.moveUnitLeftForHash(originalUnit))]) {
+
+        var leftState = brain.moveLeft(originalState, function () {
             return "leftFailure"
         });
 
@@ -318,8 +294,8 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
      //right
 
-    if(!visitedList[unitSimpleHash(transform.moveUnitRightForHash(origialUnit))]) {
-        var rightState = brain.moveRight(node.state, function () {
+    if(!visitedList[unitSimpleHash(transform.moveUnitRightForHash(originalUnit))]) {
+        var rightState = brain.moveRight(originalState, function () {
             return "rightFailure"
         });
 
@@ -342,8 +318,8 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
     //// se
 
-    if(!visitedList[unitSimpleHash(transform.moveUnitDownRightForHash(origialUnit))]) {
-        var seState = brain.moveDownRight(node.state, function () {
+    if(!visitedList[unitSimpleHash(transform.moveUnitDownRightForHash(originalUnit))]) {
+        var seState = brain.moveDownRight(originalState, function () {
             return "seFailure"
         });
 
@@ -365,8 +341,8 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
     //// sw
     //
-    if(!visitedList[unitSimpleHash(transform.moveUnitDownLeftForHash(origialUnit))]) {
-        var swState = brain.moveDownLeft(node.state, function () {
+    if(!visitedList[unitSimpleHash(transform.moveUnitDownLeftForHash(originalUnit))]) {
+        var swState = brain.moveDownLeft(originalState, function () {
             return "swFailure"
         });
 
@@ -386,7 +362,7 @@ Graph.prototype.neighbors = function(node, visitedList) {
         }
     }
 
-    var nodeInfo = origialUnit;
+    var nodeInfo = originalUnit;
     /// If we have single point figure, there's no sence to rotate it
 
     if (nodeInfo.members.length === 1 &&
@@ -397,8 +373,8 @@ Graph.prototype.neighbors = function(node, visitedList) {
     }
     //// rotateLeft
     //
-    if(!visitedList[unitSimpleHash(transform.rotateUnitLeftForHash(origialUnit))]) {
-        var ccState = brain.rotateCC(node.state, function () {
+    if(!visitedList[unitSimpleHash(transform.rotateUnitLeftForHash(originalUnit))]) {
+        var ccState = brain.rotateCC(originalState, function () {
             return "ccFailure"
         });
 
@@ -420,24 +396,34 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
     //// rotateRight
     //
-    if(!visitedList[unitSimpleHash(transform.rotUnitRightForHash(origialUnit))]) {
-        var cState = brain.rotateC(node.state, function () {
+    if (!visitedList[unitSimpleHash(transform.rotUnitRightForHash(originalUnit))]) {
+        var cState = brain.rotateC(originalState, function () {
             return "cFailure"
         });
 
         if (cState === "cFailure") {
 
         } else if (cState.state.state === "ok") {
+
+            //if (cState.state.hashes.length == 0) {
+            //    console.error("HASHSES FAILED TO CREADTE fTER ROTATION :" + JSON.stringify(originalState));
+            //    console.error("HASHSES FAILED TO CREADTE fTER ROTATION :" + JSON.stringify(cState));
+            //}
+            //if (node.step == "C" && node.parent.step == "C") {
+            //    console.error("---------------------------");
+            //
+            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.parent.state.state.hashes));
+            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.state.state.hashes));
+            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(cState.state.hashes));
+            //
+            //}
             var uniq = cState.state.unit;
             var p = uniq.pivot;
-            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
             var nodec = new GridNode(p.x, p.y, l, r, 1);
             nodec.step = "C";
             nodec.state = cState;
             ret.push(nodec);
-            //}
-
         }
     }
     return ret;
@@ -607,87 +593,6 @@ BinaryHeap.prototype = {
         }
     }
 };
-
-/*
-    // attach the .equals method to Array's prototype to call it on any array
-    Array.prototype.equals = function (array) {
-        // if the other array is a falsy value, return
-        if (!array)
-            return false;
-
-        // compare lengths - can save a lot of time
-        if (this.length != array.length)
-            return false;
-
-        for (var i = 0, l=this.length; i < l; i++) {
-            // Check if we have nested arrays
-            if (this[i] instanceof Array && array[i] instanceof Array) {
-                // recurse into the nested arrays
-                if (!this[i].equals(array[i]))
-                    return false;
-            }
-            else if (this[i] != array[i]) {
-                // Warning - two different object instances will never be equal: {x:20} != {x:20}
-                return false;
-            }
-        }
-        return true;
-    };
-
-
-    Object.prototype.equals = function(object2) {
-        //For the first loop, we only check for types
-        for (propName in this) {
-            //Check for inherited methods and properties - like .equals itself
-            //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
-            //Return false if the return value is different
-            if (this.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
-                return false;
-            }
-            //Check instance type
-            else if (typeof this[propName] != typeof object2[propName]) {
-                //Different types => not equal
-                return false;
-            }
-        }
-        //Now a deeper check using other objects property names
-        for(propName in object2) {
-            //We must check instances anyway, there may be a property that only exists in object2
-            //I wonder, if remembering the checked values from the first loop would be faster or not
-            if (this.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
-                return false;
-            }
-            else if (typeof this[propName] != typeof object2[propName]) {
-                return false;
-            }
-            //If the property is inherited, do not check any more (it must be equa if both objects inherit it)
-            if(!this.hasOwnProperty(propName))
-                continue;
-
-            //Now the detail check and recursion
-
-            //This returns the script back to the array comparing
-            /!**REQUIRES Array.equals**!/
-            if (this[propName] instanceof Array && object2[propName] instanceof Array) {
-                // recurse into the nested arrays
-                if (!this[propName].equals(object2[propName]))
-                    return false;
-            }
-            else if (this[propName] instanceof Object && object2[propName] instanceof Object) {
-                // recurse into another objects
-                //console.error("Recursing to compare ", this[propName],"with",object2[propName], " both named \""+propName+"\"");
-                if (!this[propName].equals(object2[propName]))
-                    return false;
-            }
-            //Normal value comparison for strings and numbers
-            else if(this[propName] != object2[propName]) {
-                return false;
-            }
-        }
-        //If everything passed, let's say YES
-        return true;
-    };
-*/
 
     return {
         astar: astar,

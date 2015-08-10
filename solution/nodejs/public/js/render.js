@@ -360,7 +360,7 @@ function submitLettersAuto(sequence) {
 
             setTimeout(function (s) {
                 submitLettersAuto((nexSequence));
-            }, 10);
+            }, 1);
         }, current_state, "POST");
     }
 }
