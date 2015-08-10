@@ -1,5 +1,5 @@
 var canvas = document.getElementById('c');
-var cellSize = 5;
+var cellSize = 10;
 var gapSize = 2;
 
 var defaultColor = '#eee';
@@ -360,7 +360,7 @@ function submitLettersAuto(sequence) {
 
             setTimeout(function (s) {
                 submitLettersAuto((nexSequence));
-            }, 10);
+            }, 1);
         }, current_state, "POST");
     }
 }

@@ -106,6 +106,7 @@ exports.findBestPositionsForCurrentState = function (state) {
     var unit = state.state.unit;
     if (!unit) {
         console.log("FAILURE? " + JSON.stringify(state));
+        console.log("FAILURE? " + state.state._commandsToReachThisState.join(" "));
         return;
     }
 

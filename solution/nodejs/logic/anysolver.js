@@ -70,7 +70,7 @@ exports.makeNextMove = function (state) {
             var coms = res.map(function (command) {
                 return command.step;
             });
-            console.log("Commnds" + coms);
+            console.error("Commnds" + coms);
 
             var resultState = extend({}, state.state);
             resultState.estimatedPositions = value;
@@ -114,7 +114,7 @@ exports.makeNextMoveAndLock = function (st) {
         var coms = res.map(function (command) {
             return command.step;
         });
-        console.log("Commnds" + coms);
+        console.error("Commnds" + coms);
 
         var resultState = extend({}, state.state);
         resultState.estimatedPositions = value;
@@ -125,6 +125,14 @@ exports.makeNextMoveAndLock = function (st) {
             state: resultState
         };
         if (res && res.state && res.state._nextCommands && res.state._nextCommands.length) {
+            console.error("===========");
+
+            console.error("ASKED FROM :\n" + JSON.stringify(mapStart));
+            console.error("AKED TO :\n" + JSON.stringify(mapEnd));
+            console.error("===========");
+
+            res.state.from  = mapStart;
+            res.state.to  = mapEnd;
             return res.state._nextCommands;
         }
         return old;
@@ -137,22 +145,26 @@ exports.makeNextMoveAndLock = function (st) {
                 console.error(" ALARMAAAAAA!!!!!  On calling "  + command);
                 console.error(" Commands here are '" + commands +"'") ;
                 console.error(" last state is '" + JSON.stringify(state)) ;
+                state.state.state = "KILL ME";
+                return state;
             }
 
             return nextState;
         }, state);
 
-        // Okay, let's lock it
-        var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
-            var nextState = player.nextState(finalState, {"command": command});
-            if (nextState.state.state == "BOOM!") {
-                return false;
-            }
-            return nextState.state.score != finalState.state.score;
-        });
+        if (finalState && finalState.state.state != "KILL ME") {
+            // Okay, let's lock it
+            var lockCommands = ["E", "SW", "W", "SE"].filter(function(command){
+                var nextState = player.nextState(finalState, {"command": command});
+                if (nextState.state.state == "BOOM!") {
+                    return false;
+                }
+                return nextState.state.score != finalState.state.score;
+            });
 
-        commands.push(lockCommands[0]);
-        finalState = player.nextState(finalState, {"command": lockCommands[0]});
+            commands.push(lockCommands[0]);
+            finalState = player.nextState(finalState, {"command": lockCommands[0]});
+        }
 
         finalState.state._nextCommands = commands;
         finalState.state._commandsToReachThisState = (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []).concat(commands);
@@ -182,15 +194,15 @@ var solveBoard = function (board, seed, magicPhrases) {
         score = state.state.score ? state.state.score : score;
     }
 
-    console.log("=====================================");
-    console.log("Solution found. Starting to generate leter");
-    console.log("Score : " + score);
+    console.error("=====================================");
+    console.error("Solution found. Starting to generate leter");
+    console.error("Score : " + score);
     var lettersAndScores = pwMatcher.lettersAndScoresWithPowerWords(commands, score, magicPhrases);
     var letters = lettersAndScores.letters;
     var newScores = lettersAndScores.scores;
 
-    console.log("Final : " + newScores);
-    console.log("=============DONE =================");
+    console.error("Final : " + newScores);
+    console.error("=============DONE =================");
 
     return solution.init(board.id, seed, letters, newScores);
 };

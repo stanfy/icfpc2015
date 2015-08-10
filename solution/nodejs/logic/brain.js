@@ -424,7 +424,8 @@ exports.lockUnit = function (state) {
             state: "locked",
             unit: unit,
             score: state.state.score,
-            seed: state.state.seed
+            seed: state.state.seed,
+            hashes: []
         }
     }
 };
