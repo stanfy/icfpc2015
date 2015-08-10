@@ -155,11 +155,11 @@ exports.findBestPositionsForCurrentState = function (state) {
                         var estimation = exports.estimatePosition(stateAfterPlacing);
                         estimations.push({x: x, y: y, est: estimation, unit: stateAfterPlacing.state.unit});
 
-                        if (estimations.length > 50) {
+                        if (estimations.length > 100) {
                             estimations = estimations.sort(function (est1, est2) {
                                 return est2.est.value - est1.est.value;
                             });
-                            estimations = estimations.slice(0, 100);
+                            estimations = estimations.slice(0, 50);
                         }
                     }
                 }
@@ -169,7 +169,7 @@ exports.findBestPositionsForCurrentState = function (state) {
     estimations = estimations.sort(function (est1, est2) {
         return est2.est.value - est1.est.value;
     });
-    estimations = estimations.slice(0, 10);
+    estimations = estimations.slice(0, 50);
 
     return estimations;
 
