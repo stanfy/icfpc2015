@@ -276,7 +276,7 @@ var moveWithMovementFunction = function (state, name, movePoint, failure, unitUp
         }
 
         var nextUnit = updatedUnit;
-        var nextHashes = state.state.hashes.splice(0);
+        var nextHashes = state.state.hashes.slice();
         if (nextUnit.pivot.y != unit.pivot.y) {
             nextHashes = []
         }

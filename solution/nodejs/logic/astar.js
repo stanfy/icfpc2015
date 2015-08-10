@@ -405,11 +405,18 @@ Graph.prototype.neighbors = function(node, visitedList) {
 
         } else if (cState.state.state === "ok") {
 
-            if (node.step == "C" && node.parent.step == "C") {
-                console.error("Trying to rotate from origianl State :" + JSON.stringify(originalState));
-                console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.parent.state));
-
-            }
+            //if (cState.state.hashes.length == 0) {
+            //    console.error("HASHSES FAILED TO CREADTE fTER ROTATION :" + JSON.stringify(originalState));
+            //    console.error("HASHSES FAILED TO CREADTE fTER ROTATION :" + JSON.stringify(cState));
+            //}
+            //if (node.step == "C" && node.parent.step == "C") {
+            //    console.error("---------------------------");
+            //
+            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.parent.state.state.hashes));
+            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.state.state.hashes));
+            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(cState.state.hashes));
+            //
+            //}
             var uniq = cState.state.unit;
             var p = uniq.pivot;
 

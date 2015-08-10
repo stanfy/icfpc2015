@@ -120,20 +120,8 @@ exports.makeNextMoveAndLock = function (st) {
         resultState.estimatedPositions = value;
         resultState._nextCommands = coms;
 
-        var res = {
-            board: state.board,
-            state: resultState
-        };
-        if (res && res.state && res.state._nextCommands && res.state._nextCommands.length) {
-            console.error("===========");
-
-            console.error("ASKED FROM :\n" + JSON.stringify(mapStart));
-            console.error("AKED TO :\n" + JSON.stringify(mapEnd));
-            console.error("===========");
-
-            res.state.from  = mapStart;
-            res.state.to  = mapEnd;
-            return res.state._nextCommands;
+        if (resultState._nextCommands && resultState._nextCommands.length) {
+            return resultState._nextCommands;
         }
         return old;
     }, null);
