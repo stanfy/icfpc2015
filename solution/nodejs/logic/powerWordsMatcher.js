@@ -8,29 +8,10 @@ var _ = require('underscore')
 
 exports.powerWords = [
     "ei!",
-    "cthulhu",
-    "as2h2",
-    "galois",
-    "aleister",
-    "davar",
-    "pentagram",
-    "lambda",
     "ia! ia!",
-    "turing",
     "r'lyeh!",
     "yuggot",
-    ".....",
-    "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn!",
-    "conway",
-    "hopcroft",
-    "backus",
-    "bigboote",
-    "big-booty",
-    "bigboo-tay",
-    "pluto",
-    "monkeyboy",
-    "ether",
-    "icfp2015"
+    "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn!"
 ];
 
 String.prototype.splice = function (start, length, replacement) {
@@ -114,62 +95,7 @@ exports.scoresForPowerWords = function (matchings, oldScores) {
  * */
 
 exports.powerWordsMatchingsThroughCommands = function (commands, powerWords, millisecondsOfEnd) {
-    var matchings = [];
-    // in all commands
-    for (var commandIndex = 0; commandIndex < commands.length; commandIndex++) {
-        if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
-
-        // for all power-words
-        for (var powerWordIndex = 0; powerWordIndex < powerWords.length; powerWordIndex++) {
-            if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
-
-            // looping through each power-word letter
-            for (var powerWordLetterIndex = 0; powerWordLetterIndex < powerWords[powerWordIndex].length; powerWordLetterIndex++) {
-                if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
-                // for all letters in command
-                var lettersInCommand = letterCommandInterpretator.allLettersForCommand(commands[commandIndex])
-                for (var commandLettersIndex = 0; commandLettersIndex < lettersInCommand.length; commandLettersIndex++) {
-                    if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
-                    // if power-word starts with this letter
-                    if (powerWordLetterIndex === 0) {
-                        // if letters are equal
-                        if (lettersInCommand[commandLettersIndex].toLowerCase() === powerWords[powerWordIndex][powerWordLetterIndex].toLowerCase()) {
-                            // then add it into matchings
-                            matchings.push({
-                                powerWordIndex: powerWordIndex,
-                                powerWordLetterIndex: powerWordLetterIndex,
-                                powerWordLength: powerWords[powerWordIndex].length,
-                                commandIndex: commandIndex
-                            });
-                        }
-                    }
-
-                    // check matchings for completing power-words
-                    // in all matchings
-                    for (var matchingsIndex = 0; matchingsIndex < matchings.length; matchingsIndex++) {
-                        if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) break;
-                        // if we're following correct commands sequence
-                        if (matchings[matchingsIndex].commandIndex === commandIndex - 1) {
-                            // for current power-word
-                            if (matchings[matchingsIndex].powerWordIndex === powerWordIndex) {
-                                // if not yet completed
-                                if (matchings[matchingsIndex].powerWordLetterIndex < powerWords[matchings[matchingsIndex].powerWordIndex].length) {
-                                    // if we're following correct power-word letters sequence
-                                    if (matchings[matchingsIndex].powerWordLetterIndex === powerWordLetterIndex - 1) {
-                                        // if letters are equal
-                                        if (lettersInCommand[commandLettersIndex].toLowerCase() === powerWords[powerWordIndex][powerWordLetterIndex].toLowerCase()) {
-                                            matchings[matchingsIndex].powerWordLetterIndex = powerWordLetterIndex
-                                            matchings[matchingsIndex].commandIndex = commandIndex
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    var matchings = getAllMatchings(commands, powerWords, millisecondsOfEnd);
 
     // remove uncompleted matchings
     matchingsIndex = matchings.length
@@ -220,3 +146,65 @@ exports.powerWordsMatchingsThroughCommands = function (commands, powerWords, mil
 
     return matchings;
 };
+
+
+function getAllMatchings (commands, powerWords, millisecondsOfEnd) {
+    var matchings = [];
+
+    // in all commands
+    for (var commandIndex = 0; commandIndex < commands.length; commandIndex++) {
+
+        // for all power-words
+        for (var powerWordIndex = 0; powerWordIndex < powerWords.length; powerWordIndex++) {
+
+            // looping through each power-word letter
+            for (var powerWordLetterIndex = 0; powerWordLetterIndex < powerWords[powerWordIndex].length; powerWordLetterIndex++) {
+
+                // for all letters in command
+                var lettersInCommand = letterCommandInterpretator.allLettersForCommand(commands[commandIndex])
+                for (var commandLettersIndex = 0; commandLettersIndex < lettersInCommand.length; commandLettersIndex++) {
+
+                    // if power-word starts with this letter
+                    if (powerWordLetterIndex === 0) {
+                        // if letters are equal
+                        if (lettersInCommand[commandLettersIndex].toLowerCase() === powerWords[powerWordIndex][powerWordLetterIndex].toLowerCase()) {
+                            // then add it into matchings
+                            matchings.push({
+                                powerWordIndex: powerWordIndex,
+                                powerWordLetterIndex: powerWordLetterIndex,
+                                powerWordLength: powerWords[powerWordIndex].length,
+                                commandIndex: commandIndex
+                            });
+                        }
+                    }
+
+                    // check matchings for completing power-words
+                    // in all matchings
+                    for (var matchingsIndex = 0; matchingsIndex < matchings.length; matchingsIndex++) {
+
+                        // if we're following correct commands sequence
+                        if (matchings[matchingsIndex].commandIndex === commandIndex - 1) {
+                            // for current power-word
+                            if (matchings[matchingsIndex].powerWordIndex === powerWordIndex) {
+                                // if not yet completed
+                                if (matchings[matchingsIndex].powerWordLetterIndex < powerWords[matchings[matchingsIndex].powerWordIndex].length) {
+                                    // if we're following correct power-word letters sequence
+                                    if (matchings[matchingsIndex].powerWordLetterIndex === powerWordLetterIndex - 1) {
+                                        // if letters are equal
+                                        if (lettersInCommand[commandLettersIndex].toLowerCase() === powerWords[powerWordIndex][powerWordLetterIndex].toLowerCase()) {
+                                            matchings[matchingsIndex].powerWordLetterIndex = powerWordLetterIndex
+                                            matchings[matchingsIndex].commandIndex = commandIndex
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (timeToEnd.twoSecondsToEnd(millisecondsOfEnd)) return matchings;
+                }
+            }
+        }
+    }
+    return matchings;
+}
