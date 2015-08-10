@@ -94,11 +94,11 @@ function getHeap() {
     }
 
 
-
+    var unitSimpleHash =  function (unit) {
+        return unit.pivot.y * 10000 + unit.pivot.x * 10 + (unit.rot ? unit.rot : 0);
+    };
     var astar = {
-        unitSimpleHash: function (unit) {
-            return unit.pivot.y * 10000 + unit.pivot.x * 10 + (unit.rot ? unit.rot : 0);
-        },
+
         /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
@@ -138,32 +138,15 @@ function getHeap() {
 
         while(openHeap.size() > 0) {
 
-            //console.log("current Heap content: ")
-            //openHeap.content.forEach(sp);
-            // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
-            // End case -- result has been found, return the traced path.
-            // console.log("Current node now is :");
-            //p(currentNode);
-            //sp(currentNode);
-            // console.log("end node is:");
-            //p(end);
-            //var jsoncur = JSON.stringify(currentNode.state.state.unit.pivot);
-            //var jsonEnd = JSON.stringify(end.state.state.unit.pivot);
-            // var pe=  objectEquals(currentNode.state.state.unit.pivot, end.state.state.unit.pivot);
-           // var pivotEq =  jsoncur === jsonEnd;
-            //var jsonMemCur = JSON.stringify(currentNode.state.state.unit.members);
-            //var jsonMemEnd = JSON.stringify(end.state.state.unit.members);
-            //var membersEq = jsonMemCur == jsonMemEnd;
             var me =  objectEquals(currentNode.state.state.unit, end.state.state.unit);
-            //var me = currentNode.state.state.unit.members.deepEquals(end.state.state.unit.members);
             if(me  ) {
                 return pathTo(currentNode);
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
-            var currHash = this.unitSimpleHash(currentNode.state.state.unit);
+            var currHash = unitSimpleHash(currentNode.state.state.unit);
             if(!this.visitedList[currHash]) {
                 this.visitedList[currHash] = true;
                 this.visitedCount++;
@@ -172,8 +155,7 @@ function getHeap() {
                 }
             }
             // Find all neighbors for the current node.
-
-            var neighbors = graph.neighbors(currentNode);
+        var neighbors = graph.neighbors(currentNode, this.visitedList);
 
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
@@ -186,7 +168,7 @@ function getHeap() {
                     continue;
                 }
 
-                var neighborHash = this.unitSimpleHash(neighbor.state.state.unit);
+                var neighborHash = unitSimpleHash(neighbor.state.state.unit);
                 if (this.visitedList[neighborHash]) {
                     continue;
                 }
@@ -279,24 +261,7 @@ function Graph(state, options){
     this.diagonal = !!options.diagonal;
     this.grid = [];
     this.state = state;
-    //for (var x = 0; x < maxX; x++) {
-    //    this.grid[x] = [];
-    //
-    //    for (var y = 0; y < maxY; y++) {
-    //        this.grid[x][y] = [];
-    //        for ( var l =0; l< maxL; l++){
-    //            this.grid[x][y][l] = [];
-    //            for(var r =0; r<maxR; r++) {
-    //                // initialization of potential states
-    //                var node = new GridNode(x, y, l, r, 1);
-    //
-    //                this.grid[x][y][l][r] = node;
-    //                this.nodes.push(node);
-    //            }
-    //        }
-    //
-    //    }
-    //}
+
     this.init = function() {
         this.dirtyNodes = [];
         for (var i = 0; i < this.nodes.length; i++) {
@@ -318,7 +283,7 @@ Graph.prototype.markDirty = function(node) {
     this.dirtyNodes.push(node);
 };
 
-Graph.prototype.neighbors = function(node) {
+Graph.prototype.neighbors = function(node, visitedList) {
     var ret = [],
         x = node.x,
         y = node.y,
@@ -328,15 +293,23 @@ Graph.prototype.neighbors = function(node) {
         grid = this.grid;
 
 
-    var leftState = brain.moveLeft(node.state, function(){return "leftFailure"});
+    var potentialLeftMove = transform.moveUnitLeft(node.state.state.unit);
 
-    if(leftState === "leftFailure"){
+    var currLeftHash = unitSimpleHash(potentialLeftMove);
 
-    }else
-    if(leftState.state.state === "ok") {
-        var uniq = leftState.state.unit;
-        var p = uniq.pivot;
-        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+    if(!visitedList[currLeftHash]) {
+
+
+        var leftState = brain.moveLeft(node.state, function () {
+            return "leftFailure"
+        });
+
+        if (leftState === "leftFailure") {
+
+        } else if (leftState.state.state === "ok") {
+            var uniq = leftState.state.unit;
+            var p = uniq.pivot;
+            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
 
             var nodeLeft = new GridNode(p.x, p.y, l, r, 1);
@@ -344,21 +317,28 @@ Graph.prototype.neighbors = function(node) {
             nodeLeft.state = leftState;
             ret.push(nodeLeft);
 
-        //}
+            //}
+        }
     }
 
 
      //right
 
-    var rightState = brain.moveRight(node.state, function(){return "rightFailure"});
+    var potentialRightMove = transform.moveUnitRight(node.state.state.unit);
 
-    if(rightState === "rightFailure"){
+    var currRightHash = unitSimpleHash(potentialRightMove);
 
-    }else
-    if(rightState.state.state === "ok") {
-        var uniq = rightState.state.unit;
-        var p = uniq.pivot;
-        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+    if(!visitedList[currRightHash]) {
+        var rightState = brain.moveRight(node.state, function () {
+            return "rightFailure"
+        });
+
+        if (rightState === "rightFailure") {
+
+        } else if (rightState.state.state === "ok") {
+            var uniq = rightState.state.unit;
+            var p = uniq.pivot;
+            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
 
             var nodeRight = new GridNode(p.x, p.y, l, r, 1);
@@ -367,18 +347,26 @@ Graph.prototype.neighbors = function(node) {
             ret.push(nodeRight);
             //}
 
+        }
     }
 
     //// se
-    var seState = brain.moveDownRight(node.state, function(){return "seFailure"});
 
-    if(seState === "seFailure"){
+    var potentialSeMove = transform.moveUnitDownRight(node.state.state.unit);
 
-    }else
-    if(seState.state.state === "ok") {
-        var uniq = seState.state.unit;
-        var p = uniq.pivot;
-        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+    var currSeHash = unitSimpleHash(potentialSeMove);
+
+    if(!visitedList[currSeHash]) {
+        var seState = brain.moveDownRight(node.state, function () {
+            return "seFailure"
+        });
+
+        if (seState === "seFailure") {
+
+        } else if (seState.state.state === "ok") {
+            var uniq = seState.state.unit;
+            var p = uniq.pivot;
+            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
             var nodese = new GridNode(p.x, p.y, l, r, 1);
             nodese.step = "SE";
@@ -386,19 +374,26 @@ Graph.prototype.neighbors = function(node) {
             ret.push(nodese);
             //}
 
+        }
     }
 
     //// sw
     //
-    var swState = brain.moveDownLeft(node.state, function(){return "swFailure"});
+    var potentialSwMove = transform.moveUnitDownLeft(node.state.state.unit);
 
-    if(swState === "swFailure"){
+    var currSwHash = unitSimpleHash(potentialSwMove);
 
-    }else
-    if(swState.state.state === "ok") {
-        var uniq = swState.state.unit;
-        var p = uniq.pivot;
-        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+    if(!visitedList[currSwHash]) {
+        var swState = brain.moveDownLeft(node.state, function () {
+            return "swFailure"
+        });
+
+        if (swState === "swFailure") {
+
+        } else if (swState.state.state === "ok") {
+            var uniq = swState.state.unit;
+            var p = uniq.pivot;
+            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
             var nodesw = new GridNode(p.x, p.y, l, r, 1);
             nodesw.step = "SW";
@@ -406,8 +401,8 @@ Graph.prototype.neighbors = function(node) {
             ret.push(nodesw);
             //}
 
+        }
     }
-
 
     var nodeInfo = node.state.state.unit;
     /// If we have single point figure, there's no sence to rotate it
@@ -421,15 +416,21 @@ Graph.prototype.neighbors = function(node) {
     }
     //// rotateLeft
     //
-    var ccState = brain.rotateCC(node.state, function(){return "ccFailure"});
+    var potentialCCMove = transform.rotateUnitLeft(node.state.state.unit);
 
-    if(ccState === "ccFailure"){
+    var currCCHash = unitSimpleHash(potentialCCMove);
 
-    }else
-    if(ccState.state.state === "ok") {
-        var uniq = ccState.state.unit;
-        var p = uniq.pivot;
-        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+    if(!visitedList[currCCHash]) {
+        var ccState = brain.rotateCC(node.state, function () {
+            return "ccFailure"
+        });
+
+        if (ccState === "ccFailure") {
+
+        } else if (ccState.state.state === "ok") {
+            var uniq = ccState.state.unit;
+            var p = uniq.pivot;
+            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
             var nodecc = new GridNode(p.x, p.y, l, r, 1);
             nodecc.step = "CC";
@@ -437,19 +438,26 @@ Graph.prototype.neighbors = function(node) {
             ret.push(nodecc);
             //}
 
+        }
     }
 
     //// rotateRight
     //
-    var cState = brain.rotateC(node.state, function(){return "cFailure"});
+    var potentialCMove = transform.rotateUnitRight(node.state.state.unit);
 
-    if(cState === "cFailure"){
+    var currCHash = unitSimpleHash(potentialCMove);
 
-    }else
-    if(cState.state.state === "ok") {
-        var uniq = cState.state.unit;
-        var p = uniq.pivot;
-        //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
+    if(!visitedList[currCHash]) {
+        var cState = brain.rotateC(node.state, function () {
+            return "cFailure"
+        });
+
+        if (cState === "cFailure") {
+
+        } else if (cState.state.state === "ok") {
+            var uniq = cState.state.unit;
+            var p = uniq.pivot;
+            //if (grid[p.x] && grid[p.x][p.y] && grid[p.x][p.y][l] && grid[p.x][p.y][l][r]) {
 
             var nodec = new GridNode(p.x, p.y, l, r, 1);
             nodec.step = "C";
@@ -457,8 +465,8 @@ Graph.prototype.neighbors = function(node) {
             ret.push(nodec);
             //}
 
+        }
     }
-
     return ret;
 };
 

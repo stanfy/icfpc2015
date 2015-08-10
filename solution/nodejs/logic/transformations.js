@@ -204,6 +204,50 @@ exports.rotateUnitRight = function (unit) {
     });
     return {pivot: pivot, members: rotatedMembers};
 }
+exports.moveUnitLeft = function (unit) {
+    var pivot =  exports.moveLeft( unit.pivot);
+    var rotatedMembers = [];
+    unit.members.forEach(function (member) {
+        var rotated = exports.moveLeft(member);
+        rotatedMembers.push(rotated);
+    });
+    return {pivot: pivot, members: rotatedMembers};
+
+}
+
+exports.moveUnitRight = function (unit) {
+    var pivot =  exports.moveRight( unit.pivot);
+    var rotatedMembers = [];
+    unit.members.forEach(function (member) {
+        var rotated = exports.moveRight(member);
+        rotatedMembers.push(rotated);
+    });
+    return {pivot: pivot, members: rotatedMembers};
+
+}
+
+exports.moveUnitDownRight = function (unit) {
+    var pivot =  exports.moveSE( unit.pivot);
+    var rotatedMembers = [];
+    unit.members.forEach(function (member) {
+        var rotated = exports.moveSE(member);
+        rotatedMembers.push(rotated);
+    });
+    return {pivot: pivot, members: rotatedMembers};
+
+}
+
+exports.moveUnitDownLeft = function (unit) {
+    var pivot =  exports.moveSW( unit.pivot);
+    var rotatedMembers = [];
+    unit.members.forEach(function (member) {
+        var rotated = exports.moveSW(member);
+        rotatedMembers.push(rotated);
+    });
+    return {pivot: pivot, members: rotatedMembers};
+
+}
+
 
 exports.moveUnitAt = function (unit, x, y) {
     var pivot = unit.pivot;
