@@ -34,6 +34,52 @@ exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, ma
 };
 
 
+exports.solveStateAndReturnCommands = function (sstate, seed, scommands) {
+    var state = sstate;
+    var commands = scommands.slice();
+    var lastState = state;
+    var score = state.state.score;
+
+    while (state) {
+        // generate state
+        var alreadyUsedCommands = [];
+        var possibleCommand = generateNextCommand(null, seed, alreadyUsedCommands);
+        var possibleState = player.nextState(state, {"command": possibleCommand});
+
+        // if state is error - try another command
+        var stateAfterCommand = possibleState ? possibleState.state.state : null;
+
+        if (!possibleState
+            || stateAfterCommand == "BOOM!"
+            || stateAfterCommand == "finished") {
+
+            // but don't repeat commands
+            var anotherCommand = possibleCommand;
+
+            do {
+                alreadyUsedCommands.push(anotherCommand);
+                anotherCommand = generateNextCommand(null, seed, alreadyUsedCommands, commands.last);
+                possibleState = player.nextState(state, {"command": anotherCommand});
+                stateAfterCommand = possibleState ? possibleState.state.state : null;
+            } while ((possibleState == null
+            || stateAfterCommand == "BOOM!")
+            && anotherCommand);
+
+            possibleCommand = anotherCommand;
+        }
+
+        if (possibleCommand) commands.push(possibleCommand);
+
+        state = possibleState;
+        lastState = possibleState ? possibleState : lastState;
+        score = lastState.state.score;
+    }
+
+    return commands;
+
+
+}
+
 var solveBoard = function (board, seed, magicWords) {
     var state = player.initializeOneBoard(board, seed);
     var commands = [];
@@ -116,7 +162,7 @@ var generateNextCommand = function (board, seed, alreadyUsedCommands, previousCo
         "E", "E", "E", "E",
         "E", "E", "E", "E",
         "W", "W"
-        ,"CC", "C"
+        , "CC", "C"
     ];
 
     var commandToFilter = null;

@@ -7,6 +7,7 @@ var fastboard = require("../logic/fastboard");
 var astar = require("../logic/astar");
 var pwMatcher = require('./powerWordsMatcher');
 var timeToEnd = require('./timeToEnd');
+var solver = require('./solver');
 
 
 exports.solveBoardForAllSeeds = function (json, magicPhrases, partial_result, max_cycles_constraint, millisecondsOfEnd) {
@@ -165,6 +166,9 @@ exports.makeNextMoveAndLock = function (st) {
     // TODO :What to do here if we weren't able to reach it ?
 
     // TODO : Try harde or just exit? for now - lets' finish an return
+
+    var finalCommands = solver.solveStateAndReturnCommands(state, state.state.seed, (state.state._commandsToReachThisState ? state.state._commandsToReachThisState : []));
+    state.state._commandsToReachThisState = finalCommands;
     state.state.state = "finished";
 
     return state;

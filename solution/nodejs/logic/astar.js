@@ -90,7 +90,6 @@ function getHeap() {
         start.state = startState;
         start.step = "initial";
 
-
         end = new GridNode(endState.state.unit.pivot.x, endState.state.unit.pivot.y, 0,0, 1);
         this.cleanNode(end);
         end.state = endState;
@@ -110,7 +109,7 @@ function getHeap() {
 
         openHeap.push(start);
 
-        while(openHeap.size() > 0 && openHeap.size() < 10000) {
+        while(openHeap.size() > 0 && openHeap.size() < 3000) {
 
             var currentNode = openHeap.pop();
             var me =  brain.unitsAreEqual(currentNode.state.state.unit, end.state.state.unit);
@@ -404,19 +403,6 @@ Graph.prototype.neighbors = function(node, visitedList) {
         if (cState === "cFailure") {
 
         } else if (cState.state.state === "ok") {
-
-            //if (cState.state.hashes.length == 0) {
-            //    console.error("HASHSES FAILED TO CREADTE fTER ROTATION :" + JSON.stringify(originalState));
-            //    console.error("HASHSES FAILED TO CREADTE fTER ROTATION :" + JSON.stringify(cState));
-            //}
-            //if (node.step == "C" && node.parent.step == "C") {
-            //    console.error("---------------------------");
-            //
-            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.parent.state.state.hashes));
-            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(node.state.state.hashes));
-            //    console.error("Trying to rotate from origianl State PARENT STATE :" + JSON.stringify(cState.state.hashes));
-            //
-            //}
             var uniq = cState.state.unit;
             var p = uniq.pivot;
 
