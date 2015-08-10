@@ -96,7 +96,10 @@ function getHeap() {
 
 
     var astar = {
-    /**
+        unitSimpleHash: function (unit) {
+            return unit.pivot.y * 10000 + unit.pivot.x * 10 + (unit.rot ? unit.rot : 0);
+        },
+        /**
      * Perform an A* Search on a graph given a start and end node.
      * @param {Graph} graph
      * @param {state} start
@@ -119,6 +122,8 @@ function getHeap() {
         end.state = endState;
 
         this.visited = [];
+        this.visitedList = {};
+        this.visitedCount = 0;
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
@@ -158,12 +163,12 @@ function getHeap() {
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
-            if(! this.visited.some(function (x) { return objectEquals( x, currentNode.state.state.unit)})) {
-                this.visited.push(currentNode.state.state.unit);
-                if(this.visited.length % 100 == 0) {
-
-
-                    console.log(this.visited.length);
+            var currHash = this.unitSimpleHash(currentNode.state.state.unit);
+            if(!this.visitedList[currHash]) {
+                this.visitedList[currHash] = true;
+                this.visitedCount++;
+                if(this.visitedCount % 100 == 0) {
+                    console.log(this.visitedCount);
                 }
             }
             // Find all neighbors for the current node.
@@ -181,9 +186,11 @@ function getHeap() {
                     continue;
                 }
 
-                if(this.visited.some(function (x) { return objectEquals( x, neighbor.state.state.unit)})){
+                var neighborHash = this.unitSimpleHash(neighbor.state.state.unit);
+                if (this.visitedList[neighborHash]) {
                     continue;
                 }
+
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
                 var gScore = currentNode.g + neighbor.getCost(currentNode),
