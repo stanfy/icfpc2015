@@ -63,3 +63,11 @@ https://www.youtube.com/watch?v=KrCUs4naT3M&feature=youtu.be
 # It was awesome and fun
 
 Stanfy+ team <3 you and we're waiting for next year. Hope to perform better that this time.
+
+#### TEAM
+
+[Kilew](https://github.com/PaulTaykalo), [Vixentael](https://github.com/vixentael), [Fix](https://github.com/mungobungo), [Alex Voronov](https://github.com/a-voronov), [Lampapos](https://github.com/lampapos), Silver
+
+Moral support:
+
+[Bexcite](https://github.com/bexcite), [Vandalko](https://github.com/Vandalko)
