@@ -45,7 +45,6 @@ If you're interested, you can find sources in such languages:
 4. It continues until no reachable positions found for last unit.
 5. Command interpretator transforms commands into letters, trying to use power phrases.
 6. And output json is generated :)
-7. 
 
 # Videos
 
