@@ -1,7 +1,7 @@
 # Read our dairy on medium
 https://medium.com/@stanfy/cthulhu-fhtagn-d07e076368bf
 
-pics and our thoughts during contest
+Pics and our thoughts during contest. At this moment Stanfy+ team is on 122 place :( Could be better :)
 
 
 ## Dependencies
