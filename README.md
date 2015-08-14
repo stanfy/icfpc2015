@@ -66,7 +66,7 @@ Stanfy+ team <3 you and we're waiting for next year. Hope to perform better that
 
 #### TEAM
 
-[Kilew](https://github.com/PaulTaykalo), [Vixentael](https://github.com/vixentael), [Fix](https://github.com/mungobungo), [Alex Voronov](https://github.com/a-voronov), [Lampapos](https://github.com/lampapos), Silver
+[Kilew](https://github.com/PaulTaykalo), [Vixentael](https://github.com/vixentael), [Fix](https://github.com/mungobungo), [Alex Voronov](https://github.com/a-voronov), [Lampapos](https://github.com/lampapos), [Silver](https://github.com/asivokon)
 
 Moral support:
 
