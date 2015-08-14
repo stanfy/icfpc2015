@@ -1,7 +1,10 @@
-We will post more details later... 
+# Read our dairy on medium
+https://medium.com/@stanfy/cthulhu-fhtagn-d07e076368bf
+
+pics and our thoughts during contest
 
 
-# Dependencies
+## Dependencies
 
 Program needs node.js server. 
 
@@ -14,22 +17,10 @@ play_icfp2015 is command line js file, that post result to console.
 
 
 
-# Output
+## Output
 
 Program writes debug into to std:err and result to std:out.
 https://twitter.com/ICFPContest2015/status/630667692370886656
-
-
-
-# Solving problems
-1. Program makes simple loop among all seeds. For each seed algo is the same.
-2. "Brain" is our engine. It controlls all steps and decides what to do (play hex-tris or post cats to twitter :))
-2. Everything starts when new unit appears. "Estimator" finds top 10 best positions for it to move next. Estimator uses bunch of coefficients to select positions. It tries to "fill holes" and to create full-lines. 
-2. Then A* algo finds way to best positions.
-3. Unit moves to position that is reachable. 
-4. It continues until no reachable positions found for last unit.
-5. Command interpretator transforms commands into letters, trying to use power phrases.
-6. And output json is generated :)
 
 
 # Code base
@@ -44,33 +35,17 @@ If you're interested, you can find sources in such languages:
 ![pic](solution/visualizer/viz.png?raw=true)
 
 
-# Power phrases (we conjectured)
+## Solving problems
 
-Our solutions don't use many of them, but this is our suggestion list:
-
-    "ei!",
-    "cthulhu",
-    "as2h2",
-    "davar",
-    "pentagram",
-    "lambda",
-    "ia! ia!",
-    "turing",
-    "r'lyeh!",
-    "yuggot",
-    ".....",
-    "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn!",
-    "conway",
-    "hopcroft",
-    "backus",
-    "bigboote",
-    "big-booty",
-    "bigboo-tay",
-    "pluto",
-    "monkeyboy",
-    "ether",
-    "icfp2015"
-
+1. Program makes simple loop among all seeds. For each seed algo is the same.
+2. "Brain" is our engine. It controlls all steps and decides what to do (play hex-tris or post cats to twitter :))
+2. Everything starts when new unit appears. "Estimator" finds top 10 best positions for it to move next. Estimator uses bunch of coefficients to select positions. It tries to "fill holes" and to create full-lines. 
+2. Then A* algo finds way to best positions.
+3. Unit moves to position that is reachable. 
+4. It continues until no reachable positions found for last unit.
+5. Command interpretator transforms commands into letters, trying to use power phrases.
+6. And output json is generated :)
+7. 
 
 # Videos
 
